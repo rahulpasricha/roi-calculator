@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ROI Calculator</title>
+  <!-- Include Tailwind CSS for styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+  <div class="container mx-auto mt-8">
+    <h1 class="text-2xl font-bold text-center mb-4">ROI Calculator</h1>
+    <div id="tiers-table" class="p-4 bg-white shadow-md rounded">
+      <h2 class="text-xl font-semibold mb-4">Pricing Tiers</h2>
+      <table class="min-w-full table-auto border-collapse border border-gray-300">
+        <thead>
+          <tr class="bg-gray-200">
+            <th class="border border-gray-300 px-4 py-2">From</th>
+            <th class="border border-gray-300 px-4 py-2">To</th>
+            <th class="border border-gray-300 px-4 py-2">Price per Page</th>
+          </tr>
+        </thead>
+        <tbody id="tiers-body">
+          <!-- Rows will be populated dynamically -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js"></script>
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCTNI8ZOfSVRFm1w_V2kgVKlIfuMQoLFyc",
+      authDomain: "roi-calculator-5c4a4.firebaseapp.com",
+      projectId: "roi-calculator-5c4a4",
+      storageBucket: "roi-calculator-5c4a4.firebasestorage.app",
+      messagingSenderId: "484775728997",
+      appId: "1:484775728997:web:a97bc3a93338f14518338c"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Fetch tiers from Firestore and populate the table
+    async function fetchTiers() {
+      const tiersCol = db.collection('tiers');
+      const snapshot = await tiersCol.get();
+      const tiers = snapshot.docs.map(doc => doc.data());
+      
+      const tbody = document.getElementById('tiers-body');
+      tiers.forEach(tier => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="border border-gray-300 px-4 py-2">${tier.from}</td>
+          <td class="border border-gray-300 px-4 py-2">${tier.to}</td>
+          <td class="border border-gray-300 px-4 py-2">$${tier.price}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    fetchTiers();
+  </script>
+</body>
+</html>
