@@ -17,94 +17,90 @@
       <h2 class="text-xl font-semibold mb-4">Enter Your Details</h2>
 
       <form id="roi-form" class="space-y-6">
-        <!-- General Inputs -->
+        <!-- General Input -->
         <div>
           <label for="num-pages" class="block text-sm font-medium">Average # of Monthly Pages (C4)</label>
           <input type="number" id="num-pages" class="w-full mt-1 p-2 border rounded focus:ring focus:ring-blue-300" placeholder="e.g., 1000">
         </div>
 
-        <!-- Offshore Team Inputs -->
-        <h3 class="text-lg font-semibold mt-6">Offshore Team</h3>
-        <div class="grid grid-cols-3 gap-4">
-          <div>
-            <label for="off-ft" class="block text-sm font-medium">Full-Time Members (C10)</label>
-            <input type="number" id="off-ft" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 5">
-          </div>
-          <div>
-            <label for="off-ft-time" class="block text-sm font-medium">% Time Spent (C11)</label>
-            <input type="number" id="off-ft-time" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 50">
-          </div>
-          <div>
-            <label for="off-ft-rate" class="block text-sm font-medium">Hourly Rate (USD) (C12)</label>
-            <input type="number" id="off-ft-rate" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 20">
-          </div>
-        </div>
-        <div class="grid grid-cols-3 gap-4">
-          <div>
-            <label for="off-pt" class="block text-sm font-medium">Part-Time Members (C14)</label>
-            <input type="number" id="off-pt" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 2">
-          </div>
-          <div>
-            <label for="off-pt-time" class="block text-sm font-medium">% Time Spent (C15)</label>
-            <input type="number" id="off-pt-time" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 40">
-          </div>
-          <div>
-            <label for="off-pt-rate" class="block text-sm font-medium">Hourly Rate (USD) (C16)</label>
-            <input type="number" id="off-pt-rate" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 15">
+        <!-- Toggles for Offshore/USA Teams -->
+        <div>
+          <label class="block text-sm font-medium mb-2">Team Configurations</label>
+          <div class="flex items-center space-x-4">
+            <label class="flex items-center">
+              <input type="checkbox" id="toggle-offshore" class="mr-2">
+              <span>Use Offshore Team Configuration</span>
+            </label>
+            <label class="flex items-center">
+              <input type="checkbox" id="toggle-usa" class="mr-2">
+              <span>Use USA Team Configuration</span>
+            </label>
           </div>
         </div>
 
-        <!-- USA Team Inputs -->
-        <h3 class="text-lg font-semibold mt-6">USA Team</h3>
-        <div class="grid grid-cols-3 gap-4">
-          <div>
-            <label for="usa-ft" class="block text-sm font-medium">Full-Time Members (C18)</label>
-            <input type="number" id="usa-ft" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 3">
+        <!-- Offshore Team Inputs (Initially Hidden) -->
+        <div id="offshore-section" class="hidden border-t border-gray-300 pt-4">
+          <h3 class="text-lg font-semibold mt-4">Offshore Team</h3>
+          <div class="grid grid-cols-3 gap-4">
+            <div>
+              <label for="off-ft" class="block text-sm font-medium">Full-Time Members (C10)</label>
+              <input type="number" id="off-ft" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 5">
+            </div>
+            <div>
+              <label for="off-ft-time" class="block text-sm font-medium">% Time Spent (C11)</label>
+              <input type="number" id="off-ft-time" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 50">
+            </div>
+            <div>
+              <label for="off-ft-rate" class="block text-sm font-medium">Hourly Rate (USD) (C12)</label>
+              <input type="number" id="off-ft-rate" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 20">
+            </div>
           </div>
-          <div>
-            <label for="usa-ft-time" class="block text-sm font-medium">% Time Spent (C19)</label>
-            <input type="number" id="usa-ft-time" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 60">
+          <div class="grid grid-cols-3 gap-4">
+            <div>
+              <label for="off-pt" class="block text-sm font-medium">Part-Time Members (C14)</label>
+              <input type="number" id="off-pt" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 2">
+            </div>
+            <div>
+              <label for="off-pt-time" class="block text-sm font-medium">% Time Spent (C15)</label>
+              <input type="number" id="off-pt-time" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 40">
+            </div>
+            <div>
+              <label for="off-pt-rate" class="block text-sm font-medium">Hourly Rate (USD) (C16)</label>
+              <input type="number" id="off-pt-rate" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 15">
+            </div>
           </div>
-          <div>
-            <label for="usa-ft-rate" class="block text-sm font-medium">Hourly Rate (USD) (C20)</label>
-            <input type="number" id="usa-ft-rate" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 30">
-          </div>
-        </div>
-        <div class="grid grid-cols-3 gap-4">
-          <div>
-            <label for="usa-leads" class="block text-sm font-medium">Team Leads (C22)</label>
-            <input type="number" id="usa-leads" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 1">
-          </div>
-          <div>
-            <label for="usa-leads-time" class="block text-sm font-medium">% Time Spent (C23)</label>
-            <input type="number" id="usa-leads-time" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 25">
-          </div>
-          <div>
-            <label for="usa-leads-rate" class="block text-sm font-medium">Hourly Rate (USD) (C24)</label>
-            <input type="number" id="usa-leads-rate" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 40">
-          </div>
-        </div>
-
-        <!-- Business Impact Inputs -->
-        <h3 class="text-lg font-semibold mt-6">Business Impact</h3>
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label for="impact-1" class="block text-sm font-medium">Impact Factor 1 (C39)</label>
-            <input type="number" id="impact-1" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 1000">
-          </div>
-          <!-- Add more inputs for C40, C41, C42, C43 -->
         </div>
 
-        <!-- Projected Savings Inputs -->
-        <h3 class="text-lg font-semibold mt-6">Projected Savings</h3>
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label for="savings-year-1" class="block text-sm font-medium">Year 1 Savings (%) (C49)</label>
-            <input type="number" id="savings-year-1" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 20">
+        <!-- USA Team Inputs (Initially Hidden) -->
+        <div id="usa-section" class="hidden border-t border-gray-300 pt-4">
+          <h3 class="text-lg font-semibold mt-4">USA Team</h3>
+          <div class="grid grid-cols-3 gap-4">
+            <div>
+              <label for="usa-ft" class="block text-sm font-medium">Full-Time Members (C18)</label>
+              <input type="number" id="usa-ft" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 3">
+            </div>
+            <div>
+              <label for="usa-ft-time" class="block text-sm font-medium">% Time Spent (C19)</label>
+              <input type="number" id="usa-ft-time" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 60">
+            </div>
+            <div>
+              <label for="usa-ft-rate" class="block text-sm font-medium">Hourly Rate (USD) (C20)</label>
+              <input type="number" id="usa-ft-rate" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 30">
+            </div>
           </div>
-          <div>
-            <label for="savings-year-2" class="block text-sm font-medium">Year 2 Savings (%) (C51)</label>
-            <input type="number" id="savings-year-2" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 30">
+          <div class="grid grid-cols-3 gap-4">
+            <div>
+              <label for="usa-leads" class="block text-sm font-medium">Team Leads (C22)</label>
+              <input type="number" id="usa-leads" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 1">
+            </div>
+            <div>
+              <label for="usa-leads-time" class="block text-sm font-medium">% Time Spent (C23)</label>
+              <input type="number" id="usa-leads-time" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 25">
+            </div>
+            <div>
+              <label for="usa-leads-rate" class="block text-sm font-medium">Hourly Rate (USD) (C24)</label>
+              <input type="number" id="usa-leads-rate" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 40">
+            </div>
           </div>
         </div>
 
@@ -117,5 +113,18 @@
       </form>
     </div>
   </div>
+
+  <!-- Add JavaScript -->
+  <script>
+    document.getElementById('toggle-offshore').addEventListener('change', (e) => {
+      const section = document.getElementById('offshore-section');
+      section.classList.toggle('hidden', !e.target.checked);
+    });
+
+    document.getElementById('toggle-usa').addEventListener('change', (e) => {
+      const section = document.getElementById('usa-section');
+      section.classList.toggle('hidden', !e.target.checked);
+    });
+  </script>
 </body>
 </html>
