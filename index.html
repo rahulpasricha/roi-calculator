@@ -8,109 +8,109 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans">
-  <div class="container mx-auto mt-8">
-    <!-- Header -->
-    <h1 class="text-3xl font-bold text-center mb-6">ROI Calculator</h1>
+  <div class="max-w-full mx-auto">
+    <!-- Top Header -->
+    <header class="bg-blue-600 text-white py-4">
+      <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-2xl font-bold">ROI Calculator</h1>
+        <span class="text-sm">Analyze your operational costs and savings</span>
+      </div>
+    </header>
 
-    <!-- Inputs Section -->
-    <div id="input-section" class="bg-white p-6 rounded shadow-md max-w-4xl mx-auto">
-      <h2 class="text-xl font-semibold mb-4">Enter Your Details</h2>
+    <!-- Main Content -->
+    <div class="container mx-auto flex mt-6">
+      <!-- Sidebar -->
+      <aside class="w-1/4 bg-white shadow-md p-4">
+        <h2 class="text-lg font-semibold mb-4">Navigation</h2>
+        <ul class="space-y-2">
+          <li><a href="#general-inputs" class="text-blue-600 hover:underline">General Inputs</a></li>
+          <li><a href="#team-configurations" class="text-blue-600 hover:underline">Team Inputs</a></li>
+          <li><a href="#business-impact" class="text-blue-600 hover:underline">Business Impact</a></li>
+        </ul>
+      </aside>
 
-      <form id="roi-form" class="space-y-6">
-        <!-- General Input -->
-        <div>
-          <label for="num-pages" class="block text-sm font-medium">Average # of Monthly Pages (C4)</label>
-          <input type="number" id="num-pages" class="w-full mt-1 p-2 border rounded focus:ring focus:ring-blue-300" placeholder="e.g., 1000">
-        </div>
+      <!-- Main Form -->
+      <main class="w-3/4 bg-white p-6 rounded shadow-md">
+        <form id="roi-form" class="space-y-6">
+          <!-- General Input -->
+          <section id="general-inputs">
+            <h2 class="text-xl font-semibold mb-4">General Inputs</h2>
+            <div>
+              <label for="num-pages" class="block text-sm font-medium">Average # of Monthly Pages (C4)</label>
+              <input type="number" id="num-pages" class="w-full mt-1 p-2 border rounded focus:ring focus:ring-blue-300" placeholder="e.g., 1000">
+            </div>
+          </section>
 
-        <!-- Toggles for Offshore/USA Teams -->
-        <div>
-          <label class="block text-sm font-medium mb-2">Team Configurations</label>
-          <div class="flex items-center space-x-4">
-            <label class="flex items-center">
-              <input type="checkbox" id="toggle-offshore" class="mr-2">
-              <span>Use Offshore Team Configuration</span>
-            </label>
-            <label class="flex items-center">
-              <input type="checkbox" id="toggle-usa" class="mr-2">
-              <span>Use USA Team Configuration</span>
-            </label>
+          <!-- Team Configurations -->
+          <section id="team-configurations">
+            <h2 class="text-xl font-semibold mb-4">Team Inputs</h2>
+            <!-- USA Section -->
+            <div id="usa-section">
+              <h3 class="text-lg font-semibold mt-4">USA Data Entry</h3>
+              <div class="grid grid-cols-3 gap-4">
+                <div>
+                  <label for="usa-ft" class="block text-sm font-medium">Full-Time Members (C18)</label>
+                  <input type="number" id="usa-ft" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 3">
+                </div>
+                <div>
+                  <label for="usa-ft-time" class="block text-sm font-medium">% Time Spent (C19)</label>
+                  <input type="number" id="usa-ft-time" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 60">
+                </div>
+                <div>
+                  <label for="usa-ft-rate" class="block text-sm font-medium">Hourly Rate (USD) (C20)</label>
+                  <input type="number" id="usa-ft-rate" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 30">
+                </div>
+              </div>
+            </div>
+
+            <!-- Offshore Toggle -->
+            <div class="mt-6">
+              <label class="flex items-center">
+                <input type="checkbox" id="toggle-offshore" class="mr-2">
+                <span>I also have data entry Offshore</span>
+              </label>
+            </div>
+
+            <!-- Offshore Section (Hidden by Default) -->
+            <div id="offshore-section" class="hidden border-t border-gray-300 pt-4">
+              <h3 class="text-lg font-semibold mt-4">Offshore Data Entry</h3>
+              <div class="grid grid-cols-3 gap-4">
+                <div>
+                  <label for="off-ft" class="block text-sm font-medium">Full-Time Members (C10)</label>
+                  <input type="number" id="off-ft" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 5">
+                </div>
+                <div>
+                  <label for="off-ft-time" class="block text-sm font-medium">% Time Spent (C11)</label>
+                  <input type="number" id="off-ft-time" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 50">
+                </div>
+                <div>
+                  <label for="off-ft-rate" class="block text-sm font-medium">Hourly Rate (USD) (C12)</label>
+                  <input type="number" id="off-ft-rate" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 20">
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Business Impact Inputs -->
+          <section id="business-impact">
+            <h2 class="text-xl font-semibold mb-4">Business Impact</h2>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label for="impact-1" class="block text-sm font-medium">Impact Factor 1 (C39)</label>
+                <input type="number" id="impact-1" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 1000">
+              </div>
+              <!-- Add more fields for C40:C43 -->
+            </div>
+          </section>
+
+          <!-- Submit Button -->
+          <div>
+            <button type="button" id="calculate-btn" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
+              Calculate ROI
+            </button>
           </div>
-        </div>
-
-        <!-- Offshore Team Inputs (Initially Hidden) -->
-        <div id="offshore-section" class="hidden border-t border-gray-300 pt-4">
-          <h3 class="text-lg font-semibold mt-4">Offshore Team</h3>
-          <div class="grid grid-cols-3 gap-4">
-            <div>
-              <label for="off-ft" class="block text-sm font-medium">Full-Time Members (C10)</label>
-              <input type="number" id="off-ft" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 5">
-            </div>
-            <div>
-              <label for="off-ft-time" class="block text-sm font-medium">% Time Spent (C11)</label>
-              <input type="number" id="off-ft-time" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 50">
-            </div>
-            <div>
-              <label for="off-ft-rate" class="block text-sm font-medium">Hourly Rate (USD) (C12)</label>
-              <input type="number" id="off-ft-rate" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 20">
-            </div>
-          </div>
-          <div class="grid grid-cols-3 gap-4">
-            <div>
-              <label for="off-pt" class="block text-sm font-medium">Part-Time Members (C14)</label>
-              <input type="number" id="off-pt" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 2">
-            </div>
-            <div>
-              <label for="off-pt-time" class="block text-sm font-medium">% Time Spent (C15)</label>
-              <input type="number" id="off-pt-time" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 40">
-            </div>
-            <div>
-              <label for="off-pt-rate" class="block text-sm font-medium">Hourly Rate (USD) (C16)</label>
-              <input type="number" id="off-pt-rate" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 15">
-            </div>
-          </div>
-        </div>
-
-        <!-- USA Team Inputs (Initially Hidden) -->
-        <div id="usa-section" class="hidden border-t border-gray-300 pt-4">
-          <h3 class="text-lg font-semibold mt-4">USA Team</h3>
-          <div class="grid grid-cols-3 gap-4">
-            <div>
-              <label for="usa-ft" class="block text-sm font-medium">Full-Time Members (C18)</label>
-              <input type="number" id="usa-ft" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 3">
-            </div>
-            <div>
-              <label for="usa-ft-time" class="block text-sm font-medium">% Time Spent (C19)</label>
-              <input type="number" id="usa-ft-time" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 60">
-            </div>
-            <div>
-              <label for="usa-ft-rate" class="block text-sm font-medium">Hourly Rate (USD) (C20)</label>
-              <input type="number" id="usa-ft-rate" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 30">
-            </div>
-          </div>
-          <div class="grid grid-cols-3 gap-4">
-            <div>
-              <label for="usa-leads" class="block text-sm font-medium">Team Leads (C22)</label>
-              <input type="number" id="usa-leads" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 1">
-            </div>
-            <div>
-              <label for="usa-leads-time" class="block text-sm font-medium">% Time Spent (C23)</label>
-              <input type="number" id="usa-leads-time" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 25">
-            </div>
-            <div>
-              <label for="usa-leads-rate" class="block text-sm font-medium">Hourly Rate (USD) (C24)</label>
-              <input type="number" id="usa-leads-rate" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 40">
-            </div>
-          </div>
-        </div>
-
-        <!-- Submit Button -->
-        <div>
-          <button type="button" id="calculate-btn" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
-            Calculate ROI
-          </button>
-        </div>
-      </form>
+        </form>
+      </main>
     </div>
   </div>
 
@@ -118,11 +118,6 @@
   <script>
     document.getElementById('toggle-offshore').addEventListener('change', (e) => {
       const section = document.getElementById('offshore-section');
-      section.classList.toggle('hidden', !e.target.checked);
-    });
-
-    document.getElementById('toggle-usa').addEventListener('change', (e) => {
-      const section = document.getElementById('usa-section');
       section.classList.toggle('hidden', !e.target.checked);
     });
   </script>
