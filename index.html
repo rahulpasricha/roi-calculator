@@ -4,67 +4,118 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ROI Calculator</title>
-  <!-- Include Tailwind CSS for styling  -->
+  <!-- Include Tailwind CSS for styling -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans">
   <div class="container mx-auto mt-8">
-    <h1 class="text-2xl font-bold text-center mb-4">ROI Calculator</h1>
-    <div id="tiers-table" class="p-4 bg-white shadow-md rounded">
-      <h2 class="text-xl font-semibold mb-4">Pricing Tiers</h2>
-      <table class="min-w-full table-auto border-collapse border border-gray-300">
-        <thead>
-          <tr class="bg-gray-200">
-            <th class="border border-gray-300 px-4 py-2">From</th>
-            <th class="border border-gray-300 px-4 py-2">To</th>
-            <th class="border border-gray-300 px-4 py-2">Price per Page</th>
-          </tr>
-        </thead>
-        <tbody id="tiers-body">
-          <!-- Rows will be populated dynamically -->
-        </tbody>
-      </table>
+    <!-- Header -->
+    <h1 class="text-3xl font-bold text-center mb-6">ROI Calculator</h1>
+
+    <!-- Inputs Section -->
+    <div id="input-section" class="bg-white p-6 rounded shadow-md max-w-4xl mx-auto">
+      <h2 class="text-xl font-semibold mb-4">Enter Your Details</h2>
+
+      <form id="roi-form" class="space-y-6">
+        <!-- General Inputs -->
+        <div>
+          <label for="num-pages" class="block text-sm font-medium">Average # of Monthly Pages (C4)</label>
+          <input type="number" id="num-pages" class="w-full mt-1 p-2 border rounded focus:ring focus:ring-blue-300" placeholder="e.g., 1000">
+        </div>
+
+        <!-- Offshore Team Inputs -->
+        <h3 class="text-lg font-semibold mt-6">Offshore Team</h3>
+        <div class="grid grid-cols-3 gap-4">
+          <div>
+            <label for="off-ft" class="block text-sm font-medium">Full-Time Members (C10)</label>
+            <input type="number" id="off-ft" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 5">
+          </div>
+          <div>
+            <label for="off-ft-time" class="block text-sm font-medium">% Time Spent (C11)</label>
+            <input type="number" id="off-ft-time" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 50">
+          </div>
+          <div>
+            <label for="off-ft-rate" class="block text-sm font-medium">Hourly Rate (USD) (C12)</label>
+            <input type="number" id="off-ft-rate" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 20">
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+          <div>
+            <label for="off-pt" class="block text-sm font-medium">Part-Time Members (C14)</label>
+            <input type="number" id="off-pt" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 2">
+          </div>
+          <div>
+            <label for="off-pt-time" class="block text-sm font-medium">% Time Spent (C15)</label>
+            <input type="number" id="off-pt-time" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 40">
+          </div>
+          <div>
+            <label for="off-pt-rate" class="block text-sm font-medium">Hourly Rate (USD) (C16)</label>
+            <input type="number" id="off-pt-rate" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 15">
+          </div>
+        </div>
+
+        <!-- USA Team Inputs -->
+        <h3 class="text-lg font-semibold mt-6">USA Team</h3>
+        <div class="grid grid-cols-3 gap-4">
+          <div>
+            <label for="usa-ft" class="block text-sm font-medium">Full-Time Members (C18)</label>
+            <input type="number" id="usa-ft" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 3">
+          </div>
+          <div>
+            <label for="usa-ft-time" class="block text-sm font-medium">% Time Spent (C19)</label>
+            <input type="number" id="usa-ft-time" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 60">
+          </div>
+          <div>
+            <label for="usa-ft-rate" class="block text-sm font-medium">Hourly Rate (USD) (C20)</label>
+            <input type="number" id="usa-ft-rate" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 30">
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+          <div>
+            <label for="usa-leads" class="block text-sm font-medium">Team Leads (C22)</label>
+            <input type="number" id="usa-leads" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 1">
+          </div>
+          <div>
+            <label for="usa-leads-time" class="block text-sm font-medium">% Time Spent (C23)</label>
+            <input type="number" id="usa-leads-time" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 25">
+          </div>
+          <div>
+            <label for="usa-leads-rate" class="block text-sm font-medium">Hourly Rate (USD) (C24)</label>
+            <input type="number" id="usa-leads-rate" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 40">
+          </div>
+        </div>
+
+        <!-- Business Impact Inputs -->
+        <h3 class="text-lg font-semibold mt-6">Business Impact</h3>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="impact-1" class="block text-sm font-medium">Impact Factor 1 (C39)</label>
+            <input type="number" id="impact-1" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 1000">
+          </div>
+          <!-- Add more inputs for C40, C41, C42, C43 -->
+        </div>
+
+        <!-- Projected Savings Inputs -->
+        <h3 class="text-lg font-semibold mt-6">Projected Savings</h3>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="savings-year-1" class="block text-sm font-medium">Year 1 Savings (%) (C49)</label>
+            <input type="number" id="savings-year-1" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 20">
+          </div>
+          <div>
+            <label for="savings-year-2" class="block text-sm font-medium">Year 2 Savings (%) (C51)</label>
+            <input type="number" id="savings-year-2" class="w-full mt-1 p-2 border rounded" placeholder="e.g., 30">
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div>
+          <button type="button" id="calculate-btn" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
+            Calculate ROI
+          </button>
+        </div>
+      </form>
     </div>
   </div>
-
-  <!-- Firebase compatibility SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  
-  <script>
-    // Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyCTNI8ZOfSVRFm1w_V2kgVKlIfuMQoLFyc",
-      authDomain: "roi-calculator-5c4a4.firebaseapp.com",
-      projectId: "roi-calculator-5c4a4",
-      storageBucket: "roi-calculator-5c4a4.firebasestorage.app",
-      messagingSenderId: "484775728997",
-      appId: "1:484775728997:web:02fcfea46b9f568418338c"
-    };
-
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-
-    // Fetch tiers from Firestore and populate the table
-    async function fetchTiers() {
-      const tiersCol = db.collection('tiers');
-      const snapshot = await tiersCol.get();
-      const tiers = snapshot.docs.map(doc => doc.data());
-      
-      const tbody = document.getElementById('tiers-body');
-      tiers.forEach(tier => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td class="border border-gray-300 px-4 py-2">${tier.from}</td>
-          <td class="border border-gray-300 px-4 py-2">${tier.to}</td>
-          <td class="border border-gray-300 px-4 py-2">$${tier.price}</td>
-        `;
-        tbody.appendChild(row);
-      });
-    }
-
-    fetchTiers();
-  </script>
 </body>
 </html>
