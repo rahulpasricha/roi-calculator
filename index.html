@@ -17,103 +17,139 @@
   </header>
 
   <!-- Main Content -->
-  <main class="max-w-7xl mx-auto mt-8 px-6">
-    <form class="space-y-8">
-      <!-- General Inputs -->
-      <div class="space-y-6 bg-white px-6 py-5 shadow sm:rounded-lg sm:p-6">
-        <h3 class="text-lg font-medium leading-6 text-gray-900">General Inputs</h3>
-        <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-          <!-- Average Pages -->
-          <div class="sm:col-span-3">
-            <label for="num-pages" class="block text-sm font-medium text-gray-700">Average # of Monthly Pages</label>
-            <input type="number" id="num-pages" name="num-pages"
-              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="e.g., 1000">
-          </div>
-          <!-- Document Types -->
-          <div class="sm:col-span-3">
-            <label for="doc-types" class="block text-sm font-medium text-gray-700">Document Types</label>
-            <select id="doc-types" name="doc-types" multiple
-              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-              <option>Invoices</option>
-              <option>Contracts</option>
-              <option>Purchase Orders</option>
-              <option>Delivery Notes</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <!-- USA Data Entry -->
-      <div class="space-y-6 bg-white px-6 py-5 shadow sm:rounded-lg sm:p-6">
-        <h3 class="text-lg font-medium leading-6 text-gray-900">USA Data Entry (Default)</h3>
-        <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-          <!-- Full-Time Inputs -->
-          <div class="sm:col-span-2">
-            <label for="usa-ft" class="block text-sm font-medium text-gray-700">Full-Time Members</label>
-            <input type="number" id="usa-ft" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-          </div>
-          <div class="sm:col-span-2">
-            <label for="usa-ft-time" class="block text-sm font-medium text-gray-700">% Time Spent</label>
-            <input type="number" id="usa-ft-time" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-          </div>
-          <div class="sm:col-span-2">
-            <label for="usa-ft-rate" class="block text-sm font-medium text-gray-700">Hourly Rate (USD)</label>
-            <input type="number" id="usa-ft-rate" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6 mt-6">
-          <!-- Part-Time Inputs -->
-          <div class="sm:col-span-2">
-            <label for="usa-pt" class="block text-sm font-medium text-gray-700">Part-Time Members</label>
-            <input type="number" id="usa-pt" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-          </div>
-          <div class="sm:col-span-2">
-            <label for="usa-pt-time" class="block text-sm font-medium text-gray-700">% Time Spent</label>
-            <input type="number" id="usa-pt-time" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-          </div>
-          <div class="sm:col-span-2">
-            <label for="usa-pt-rate" class="block text-sm font-medium text-gray-700">Hourly Rate (USD)</label>
-            <input type="number" id="usa-pt-rate" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-          </div>
-        </div>
-      </div>
-
-      <!-- Offshore Toggle -->
+  <main class="max-w-7xl mx-auto mt-8 px-6 space-y-12">
+    <!-- General Inputs -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white px-6 py-8 shadow sm:rounded-lg">
       <div>
-        <label class="flex items-center">
-          <input type="checkbox" id="toggle-offshore" class="mr-2 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-          <span class="text-gray-700">I also have data entry Offshore</span>
-        </label>
+        <h3 class="text-lg font-medium text-gray-900">General Inputs</h3>
+        <p class="mt-1 text-sm text-gray-500">Provide details about monthly pages and document types.</p>
       </div>
+      <div class="space-y-6">
+        <div>
+          <label for="num-pages" class="block text-sm font-medium text-gray-700">Average # of Monthly Pages</label>
+          <input type="number" id="num-pages" name="num-pages"
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="e.g., 1000">
+        </div>
+        <div>
+          <label for="doc-types" class="block text-sm font-medium text-gray-700">Document Types</label>
+          <select id="doc-types" name="doc-types" multiple
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            <option>Invoices</option>
+            <option>Contracts</option>
+            <option>Purchase Orders</option>
+            <option>Delivery Notes</option>
+          </select>
+        </div>
+      </div>
+    </section>
 
-      <!-- Offshore Data Entry -->
-      <div id="offshore-section" class="hidden space-y-6 bg-white px-6 py-5 shadow sm:rounded-lg sm:p-6">
-        <h3 class="text-lg font-medium leading-6 text-gray-900">Offshore Data Entry</h3>
-        <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-          <!-- Full-Time Inputs -->
-          <div class="sm:col-span-2">
-            <label for="off-ft" class="block text-sm font-medium text-gray-700">Full-Time Members</label>
-            <input type="number" id="off-ft" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+    <!-- Data Entry Inputs -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white px-6 py-8 shadow sm:rounded-lg">
+      <div>
+        <h3 class="text-lg font-medium text-gray-900">Data Entry Inputs</h3>
+        <p class="mt-1 text-sm text-gray-500">Provide team configuration details for USA and Offshore data entry teams.</p>
+      </div>
+      <div class="space-y-6">
+        <!-- USA Data Entry -->
+        <div>
+          <h4 class="text-md font-semibold text-gray-900">USA Data Entry (Default)</h4>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label for="usa-ft" class="block text-sm font-medium text-gray-700">Full-Time Members</label>
+              <input type="number" id="usa-ft"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            </div>
+            <div>
+              <label for="usa-ft-time" class="block text-sm font-medium text-gray-700">% Time Spent</label>
+              <input type="number" id="usa-ft-time"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            </div>
+            <div>
+              <label for="usa-ft-rate" class="block text-sm font-medium text-gray-700">Hourly Rate (USD)</label>
+              <input type="number" id="usa-ft-rate"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            </div>
           </div>
-          <div class="sm:col-span-2">
-            <label for="off-ft-time" class="block text-sm font-medium text-gray-700">% Time Spent</label>
-            <input type="number" id="off-ft-time" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+            <div>
+              <label for="usa-pt" class="block text-sm font-medium text-gray-700">Part-Time Members</label>
+              <input type="number" id="usa-pt"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            </div>
+            <div>
+              <label for="usa-pt-time" class="block text-sm font-medium text-gray-700">% Time Spent</label>
+              <input type="number" id="usa-pt-time"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            </div>
+            <div>
+              <label for="usa-pt-rate" class="block text-sm font-medium text-gray-700">Hourly Rate (USD)</label>
+              <input type="number" id="usa-pt-rate"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            </div>
           </div>
-          <div class="sm:col-span-2">
-            <label for="off-ft-rate" class="block text-sm font-medium text-gray-700">Hourly Rate (USD)</label>
-            <input type="number" id="off-ft-rate" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+        </div>
+
+        <!-- Offshore Toggle -->
+        <div class="flex items-center mt-4">
+          <input type="checkbox" id="toggle-offshore"
+            class="mr-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+          <label for="toggle-offshore" class="text-sm text-gray-700">I also have data entry Offshore</label>
+        </div>
+
+        <!-- Offshore Data Entry -->
+        <div id="offshore-section" class="hidden mt-6 space-y-4">
+          <h4 class="text-md font-semibold text-gray-900">Offshore Data Entry</h4>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label for="off-ft" class="block text-sm font-medium text-gray-700">Full-Time Members</label>
+              <input type="number" id="off-ft"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            </div>
+            <div>
+              <label for="off-ft-time" class="block text-sm font-medium text-gray-700">% Time Spent</label>
+              <input type="number" id="off-ft-time"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            </div>
+            <div>
+              <label for="off-ft-rate" class="block text-sm font-medium text-gray-700">Hourly Rate (USD)</label>
+              <input type="number" id="off-ft-rate"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+            <div>
+              <label for="off-pt" class="block text-sm font-medium text-gray-700">Part-Time Members</label>
+              <input type="number" id="off-pt"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            </div>
+            <div>
+              <label for="off-pt-time" class="block text-sm font-medium text-gray-700">% Time Spent</label>
+              <input type="number" id="off-pt-time"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            </div>
+            <div>
+              <label for="off-pt-rate" class="block text-sm font-medium text-gray-700">Hourly Rate (USD)</label>
+              <input type="number" id="off-pt-rate"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            </div>
           </div>
         </div>
       </div>
+    </section>
 
-      <!-- Business Impact -->
-      <div class="space-y-6 bg-white px-6 py-5 shadow sm:rounded-lg sm:p-6">
-        <h3 class="text-lg font-medium leading-6 text-gray-900">Business Impact</h3>
+    <!-- Business Impact -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white px-6 py-8 shadow sm:rounded-lg">
+      <div>
+        <h3 class="text-lg font-medium text-gray-900">Business Impact</h3>
+        <p class="mt-1 text-sm text-gray-500">Provide descriptions and dollar values for impacts.</p>
+      </div>
+      <div>
         <div id="business-impact-section" class="space-y-4">
           <div class="grid grid-cols-3 gap-4 items-center">
-            <input type="text" placeholder="Description" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-            <input type="number" placeholder="Dollar Value" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            <input type="text" placeholder="Description"
+              class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            <input type="number" placeholder="Dollar Value"
+              class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
             <button type="button" class="text-red-500 hover:text-red-700">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6h18M9 6v12m6-12v12m-9 12h12" />
@@ -121,16 +157,17 @@
             </button>
           </div>
         </div>
-        <button type="button" id="add-impact-btn" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Add Business Impact</button>
+        <button type="button" id="add-impact-btn"
+          class="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Add Business Impact</button>
       </div>
+    </section>
 
-      <!-- Submit Button -->
-      <div>
-        <button type="button" id="calculate-btn" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded">
-          Calculate ROI
-        </button>
-      </div>
-    </form>
+    <!-- Submit -->
+    <section>
+      <button type="button" id="calculate-btn" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded">
+        Calculate ROI
+      </button>
+    </section>
   </main>
 
   <!-- JavaScript -->
