@@ -29,6 +29,16 @@
             class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 appearance-none" 
             placeholder="e.g., 1000">
         </div>
+        <div class="mt-4">
+          <label for="doc-types" class="block text-sm font-medium">Document Types</label>
+          <select id="doc-types" name="doc-types" multiple
+            class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+            <option>Invoices</option>
+            <option>Contracts</option>
+            <option>Purchase Orders</option>
+            <option>Delivery Notes</option>
+          </select>
+        </div>
       </div>
 
       <!-- Team Inputs -->
@@ -120,7 +130,7 @@
           <input type="number" placeholder="Dollar Value" class="block w-full rounded-md bg-white border px-3 py-1.5 appearance-none">
           <button type="button" class="text-red-500 hover:text-red-700">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m2 0a9 9 0 11-6-8.486M12 3v9" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6h18M9 6v12m6-12v12m-9 12h12" />
             </svg>
           </button>
         </div>
@@ -154,7 +164,7 @@
         <input type="number" placeholder="Dollar Value" class="block w-full rounded-md bg-white border px-3 py-1.5 appearance-none">
         <button type="button" class="text-red-500 hover:text-red-700">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m2 0a9 9 0 11-6-8.486M12 3v9" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6h18M9 6v12m6-12v12m-9 12h12" />
           </svg>
         </button>
       `;
@@ -162,8 +172,8 @@
     });
 
     document.addEventListener('click', (e) => {
-      if (e.target.closest('button') && e.target.closest('button').classList.contains('remove-impact')) {
-        e.target.closest('div').remove();
+      if (e.target.closest('button') && e.target.closest('button').classList.contains('text-red-500')) {
+        e.target.closest('.grid').remove();
       }
     });
   </script>
