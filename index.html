@@ -40,15 +40,15 @@
           <div class="grid sm:grid-cols-1 md:grid-cols-3 gap-4">
             <!-- Full-Time Inputs -->
             <div>
-              <label for="usa-ft" class="block text-sm font-medium">Full-Time Members (C18)</label>
+              <label for="usa-ft" class="block text-sm font-medium">Full-Time Members</label>
               <input type="number" id="usa-ft" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline-indigo-600">
             </div>
             <div>
-              <label for="usa-ft-time" class="block text-sm font-medium">% Time Spent (C19)</label>
+              <label for="usa-ft-time" class="block text-sm font-medium">% Time Spent</label>
               <input type="number" id="usa-ft-time" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline-indigo-600">
             </div>
             <div>
-              <label for="usa-ft-rate" class="block text-sm font-medium">Hourly Rate (USD) (C20)</label>
+              <label for="usa-ft-rate" class="block text-sm font-medium">Hourly Rate (USD)</label>
               <input type="number" id="usa-ft-rate" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline-indigo-600">
             </div>
             <!-- Part-Time Inputs -->
@@ -65,6 +65,14 @@
               <input type="number" id="usa-pt-rate" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline-indigo-600">
             </div>
           </div>
+        </div>
+
+        <!-- Offshore Toggle -->
+        <div class="mt-6">
+          <label class="flex items-center">
+            <input type="checkbox" id="toggle-offshore" class="mr-2">
+            <span>I also have data entry Offshore</span>
+          </label>
         </div>
 
         <!-- Offshore Section -->
@@ -125,7 +133,7 @@
     </div>
   </main>
 
-  <!-- JavaScript -->
+  <!-- Toggle Logic -->
   <script>
     // Add/Remove Business Impact Rows
     document.getElementById('add-impact-btn').addEventListener('click', () => {
