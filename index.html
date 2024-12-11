@@ -54,7 +54,6 @@
         <p class="mt-1 text-sm text-gray-500">Provide team configuration details for USA and Offshore data entry teams.</p>
       </div>
       <div class="space-y-6">
-        <!-- USA Data Entry -->
         <div>
           <h4 class="text-md font-semibold text-gray-900 mb-4">USA Data Entry (Default)</h4>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -107,6 +106,45 @@
       </div>
     </section>
 
+    <!-- Business Impact Section -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <h3 class="text-lg font-medium text-gray-900">Business Impact</h3>
+        <p class="mt-1 text-sm text-gray-500">Provide descriptions and dollar values for impacts. Optional suggestions are provided below.</p>
+      </div>
+      <div>
+        <div id="business-impact-section" class="space-y-4">
+          <!-- First row with labels -->
+          <div class="grid grid-cols-3 gap-4 items-center">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Impact Description (Optional)</label>
+              <input type="text" list="impact-options" placeholder="Description"
+                class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+              <datalist id="impact-options">
+                <option value="Losing business to competitors due to lack of technology edge">
+                <option value="Business lost due to slow turnaround time associated with Data Extraction">
+                <option value="Cost of Error associated with manual data processing">
+                <option value="Hiring and managing Data Entry Team">
+                <option value="Cost of Employee training related to data entry">
+              </datalist>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Dollar Value (Optional)</label>
+              <input type="number" placeholder="Value in USD"
+                class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            </div>
+            <button type="button" class="text-red-500 hover:text-red-700">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6h18M9 6v12m6-12v12m-9 12h12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <button type="button" id="add-impact-btn"
+          class="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Add Business Impact</button>
+      </div>
+    </section>
+
     <!-- Buttons -->
     <section class="flex gap-4">
       <button type="button" id="calculate-btn" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
@@ -148,6 +186,33 @@
         docTypesInput.value = "";
         e.preventDefault();
       }
+    });
+
+    // Add/Remove Business Impact Rows
+    const businessImpactSection = document.getElementById("business-impact-section");
+    const addImpactBtn = document.getElementById("add-impact-btn");
+
+    addImpactBtn.addEventListener("click", () => {
+      const row = document.createElement("div");
+      row.className = "grid grid-cols-3 gap-4 items-center";
+
+      row.innerHTML = `
+        <input type="text" placeholder="Description" 
+          class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+        <input type="number" placeholder="Dollar Value" 
+          class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+        <button type="button" class="text-red-500 hover:text-red-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6h18M9 6v12m6-12v12m-9 12h12" />
+          </svg>
+        </button>
+      `;
+
+      row.querySelector("button").addEventListener("click", () => {
+        row.remove();
+      });
+
+      businessImpactSection.appendChild(row);
     });
   </script>
 </body>
