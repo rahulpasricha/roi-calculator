@@ -29,16 +29,6 @@
             class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 appearance-none" 
             placeholder="e.g., 1000">
         </div>
-        <div class="mt-4">
-          <label for="doc-types" class="block text-sm font-medium">Document Types</label>
-          <select id="doc-types" name="doc-types" multiple
-            class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
-            <option>Invoices</option>
-            <option>Contracts</option>
-            <option>Purchase Orders</option>
-            <option>Delivery Notes</option>
-          </select>
-        </div>
       </div>
 
       <!-- Team Inputs -->
@@ -60,6 +50,19 @@
             <div>
               <label for="usa-ft-rate" class="block text-sm font-medium">Hourly Rate (USD)</label>
               <input type="number" id="usa-ft-rate" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline-indigo-600 appearance-none">
+            </div>
+            <!-- Part-Time Inputs -->
+            <div>
+              <label for="usa-pt" class="block text-sm font-medium">Part-Time Members</label>
+              <input type="number" id="usa-pt" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline-indigo-600 appearance-none">
+            </div>
+            <div>
+              <label for="usa-pt-time" class="block text-sm font-medium">% Time Spent</label>
+              <input type="number" id="usa-pt-time" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline-indigo-600 appearance-none">
+            </div>
+            <div>
+              <label for="usa-pt-rate" class="block text-sm font-medium">Hourly Rate (USD)</label>
+              <input type="number" id="usa-pt-rate" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline-indigo-600 appearance-none">
             </div>
           </div>
         </div>
@@ -89,6 +92,19 @@
               <label for="off-ft-rate" class="block text-sm font-medium">Hourly Rate (USD)</label>
               <input type="number" id="off-ft-rate" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline-indigo-600 appearance-none">
             </div>
+            <!-- Part-Time Inputs -->
+            <div>
+              <label for="off-pt" class="block text-sm font-medium">Part-Time Members</label>
+              <input type="number" id="off-pt" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline-indigo-600 appearance-none">
+            </div>
+            <div>
+              <label for="off-pt-time" class="block text-sm font-medium">% Time Spent</label>
+              <input type="number" id="off-pt-time" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline-indigo-600 appearance-none">
+            </div>
+            <div>
+              <label for="off-pt-rate" class="block text-sm font-medium">Hourly Rate (USD)</label>
+              <input type="number" id="off-pt-rate" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline-indigo-600 appearance-none">
+            </div>
           </div>
         </div>
       </div>
@@ -108,7 +124,6 @@
             </svg>
           </button>
         </div>
-        <!-- Repeat similar rows (5 total by default) -->
       </div>
       <button type="button" id="add-impact-btn" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Add Business Impact</button>
     </div>
