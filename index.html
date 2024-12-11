@@ -20,8 +20,8 @@
   <main class="max-w-7xl mx-auto py-8 px-6">
     <!-- Grid Layout -->
     <section class="grid lg:grid-cols-3 gap-8">
-      <!-- General Inputs (Shorter Width) -->
-      <div class="bg-white shadow rounded-lg p-6 lg:col-span-1">
+      <!-- General Inputs -->
+      <div class="p-6 lg:col-span-1">
         <h3 class="text-xl font-semibold mb-4">General Inputs</h3>
         <div>
           <label for="num-pages" class="block text-sm font-medium">Average # of Monthly Pages (C4)</label>
@@ -31,13 +31,13 @@
         </div>
       </div>
 
-      <!-- Team Inputs (Longer Width) -->
-      <div class="bg-white shadow rounded-lg p-6 lg:col-span-2">
+      <!-- Team Inputs -->
+      <div class="p-6 lg:col-span-2">
         <h3 class="text-xl font-semibold mb-4">Team Inputs</h3>
         <!-- USA Section -->
         <div>
           <h4 class="text-lg font-semibold mb-4">USA Data Entry (Default)</h4>
-          <div class="grid grid-cols-3 gap-4">
+          <div class="grid sm:grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label for="usa-ft" class="block text-sm font-medium">Full-Time Members (C18)</label>
               <input type="number" id="usa-ft" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline-indigo-600">
@@ -64,7 +64,7 @@
         <!-- Offshore Section -->
         <div id="offshore-section" class="hidden border-t border-gray-200 pt-4">
           <h4 class="text-lg font-semibold mb-4">Offshore Data Entry</h4>
-          <div class="grid grid-cols-3 gap-4">
+          <div class="grid sm:grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label for="off-ft" class="block text-sm font-medium">Full-Time Members (C10)</label>
               <input type="number" id="off-ft" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline-indigo-600">
@@ -83,7 +83,7 @@
     </section>
 
     <!-- Business Impact -->
-    <div class="bg-white shadow rounded-lg p-6 mt-8">
+    <div class="p-6 mt-8">
       <h3 class="text-xl font-semibold mb-4">Business Impact</h3>
       <div class="grid grid-cols-2 gap-4">
         <div>
