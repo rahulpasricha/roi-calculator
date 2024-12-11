@@ -51,19 +51,6 @@
               <label for="usa-ft-rate" class="block text-sm font-medium">Hourly Rate (USD)</label>
               <input type="number" id="usa-ft-rate" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline-indigo-600">
             </div>
-            <!-- Part-Time Inputs -->
-            <div>
-              <label for="usa-pt" class="block text-sm font-medium">Part-Time Members</label>
-              <input type="number" id="usa-pt" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline-indigo-600">
-            </div>
-            <div>
-              <label for="usa-pt-time" class="block text-sm font-medium">% Time Spent</label>
-              <input type="number" id="usa-pt-time" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline-indigo-600">
-            </div>
-            <div>
-              <label for="usa-pt-rate" class="block text-sm font-medium">Hourly Rate (USD)</label>
-              <input type="number" id="usa-pt-rate" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline-indigo-600">
-            </div>
           </div>
         </div>
 
@@ -92,25 +79,12 @@
               <label for="off-ft-rate" class="block text-sm font-medium">Hourly Rate (USD)</label>
               <input type="number" id="off-ft-rate" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline-indigo-600">
             </div>
-            <!-- Part-Time Inputs -->
-            <div>
-              <label for="off-pt" class="block text-sm font-medium">Part-Time Members</label>
-              <input type="number" id="off-pt" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline-indigo-600">
-            </div>
-            <div>
-              <label for="off-pt-time" class="block text-sm font-medium">% Time Spent</label>
-              <input type="number" id="off-pt-time" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline-indigo-600">
-            </div>
-            <div>
-              <label for="off-pt-rate" class="block text-sm font-medium">Hourly Rate (USD)</label>
-              <input type="number" id="off-pt-rate" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline-indigo-600">
-            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Business Impact -->
+    <!-- Business Impact Section -->
     <div class="p-6 mt-8">
       <h3 class="text-xl font-semibold mb-4">Business Impact</h3>
       <div id="business-impact-section" class="space-y-4">
@@ -133,8 +107,14 @@
     </div>
   </main>
 
-  <!-- Toggle Logic -->
+  <!-- JavaScript -->
   <script>
+    // Show/Hide Offshore Section
+    document.getElementById('toggle-offshore').addEventListener('change', (e) => {
+      const section = document.getElementById('offshore-section');
+      section.classList.toggle('hidden', !e.target.checked);
+    });
+
     // Add/Remove Business Impact Rows
     document.getElementById('add-impact-btn').addEventListener('click', () => {
       const section = document.getElementById('business-impact-section');
