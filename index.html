@@ -253,27 +253,32 @@
       "Cost of employee training related to data entry",
       "Losing business to competitor due to lack of technology edge",
     ];
-  
+
     const businessImpactSection = document.getElementById("business-impact-section");
     const addImpactBtn = document.getElementById("add-impact-btn");
-  
+
+    // Button to add a new row dynamically
     addImpactBtn.addEventListener("click", () => {
       const row = createImpactRow();
       businessImpactSection.appendChild(row);
     });
-  
+
+    // Dynamically create a row for Business Impact
     function createImpactRow(selectedValue = "") {
       const row = document.createElement("div");
       row.className = "grid grid-cols-12 gap-4 items-center";
-  
+
       const availableOptions = availableImpacts.filter((impact) => impact !== selectedValue);
-  
+
       row.innerHTML = `
         <div class="col-span-7">
           <select class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm">
-            <option value="">Select an Impact</option>
+            <option value="" disabled ${!selectedValue ? "selected" : ""}>Select an Impact</option>
             ${availableOptions
-              .map((impact) => `<option value="${impact}">${impact}</option>`)
+              .map(
+                (impact) =>
+                  `<option value="${impact}" ${selectedValue === impact ? "selected" : ""}>${impact}</option>`
+              )
               .join("")}
           </select>
         </div>
@@ -287,10 +292,10 @@
           </button>
         </div>
       `;
-  
+
       const select = row.querySelector("select");
       const removeBtn = row.querySelector(".remove-row-btn");
-  
+
       // Handle row removal
       removeBtn.addEventListener("click", () => {
         const selectedOption = select.value;
@@ -299,7 +304,7 @@
         }
         row.remove();
       });
-  
+
       // Prevent the same option from being used twice
       select.addEventListener("change", () => {
         const selectedOption = select.value;
@@ -307,8 +312,17 @@
           availableImpacts.splice(availableImpacts.indexOf(selectedOption), 1);
         }
       });
-  
+
       return row;
+    }
+
+    // Add Default Business Impact Options
+    function renderDefaultImpactOptions() {
+      // This ensures only dropdown values are rendered by default.
+      availableImpacts.forEach((impact) => {
+        const row = createImpactRow();
+        businessImpactSection.appendChild(row);
+      });
     }
   </script>
 </body>
