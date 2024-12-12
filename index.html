@@ -316,6 +316,33 @@
     }
 
     addImpactBtn.addEventListener("click", createImpactRow);
+
+    // Reset everything when the reset button is clicked
+    const resetBtn = document.getElementById("reset-btn");
+
+    resetBtn.addEventListener("click", () => {
+      // Clear all document type chips
+      docTypesContainer.innerHTML = ""; // Remove all chips
+      addedDocTypes.clear(); // Clear the set of added document types
+
+      // Reset all input fields
+      const inputs = document.querySelectorAll("input");
+      inputs.forEach((input) => {
+        input.value = input.type === "number" ? "0" : ""; // Reset numbers to 0, others to empty
+      });
+
+      // Reset dropdowns
+      const selects = document.querySelectorAll("select");
+      selects.forEach((select) => (select.selectedIndex = 0)); // Reset to first option
+
+      // Clear all dynamically added business impact rows
+      businessImpactSection.innerHTML = "";
+
+      // Hide offshore section
+      offshoreSection.classList.add("hidden");
+      offshoreToggle.checked = false; // Reset toggle
+    });
+
   </script>
 </body>
 </html>
