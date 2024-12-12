@@ -6,10 +6,12 @@
   <title>ROI Calculator</title>
   <!-- Include Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Include Font Awesome for Trash Icon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body class="bg-gray-50">
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100">
   <!-- Header -->
-  <header class="bg-blue-600">
+  <header class="bg-gradient-to-r from-blue-500 to-indigo-600">
     <div class="max-w-7xl mx-auto py-4 px-6 flex justify-between items-center">
       <h1 class="text-2xl font-bold text-white">ROI Calculator</h1>
       <p class="text-white text-sm">Analyze Costs & Savings with Intelligent Document Processing</p>
@@ -118,7 +120,7 @@
         <div id="business-impact-section" class="space-y-4">
           <!-- First row with labels -->
           <div class="grid grid-cols-3 gap-4 items-center">
-            <div>
+            <div class="col-span-2">
               <label class="block text-sm font-medium text-gray-700">Impact Description (Optional)</label>
               <input type="text" placeholder="Description"
                 class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
@@ -129,9 +131,7 @@
                 class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
             </div>
             <button type="button" class="text-red-500 hover:text-red-700 remove-row-btn">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6h18M9 6v12m6-12v12m-9 12h12" />
-              </svg>
+              <i class="fas fa-trash"></i>
             </button>
           </div>
         </div>
@@ -214,14 +214,14 @@
       row.className = "grid grid-cols-3 gap-4 items-center";
 
       row.innerHTML = `
-        <input type="text" placeholder="Description"
-          class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+        <div class="col-span-2">
+          <input type="text" placeholder="Description"
+            class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+        </div>
         <input type="number" placeholder="Dollar Value"
           class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
         <button type="button" class="text-red-500 hover:text-red-700 remove-row-btn">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6h18M9 6v12m6-12v12m-9 12h12" />
-          </svg>
+          <i class="fas fa-trash"></i>
         </button>
       `;
 
