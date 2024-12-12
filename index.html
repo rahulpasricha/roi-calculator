@@ -63,22 +63,32 @@
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label for="usa-ft" class="block text-sm font-medium text-gray-700">Full-Time Members</label>
-              <input type="number" id="usa-ft"
+              <input type="number" id="usa-ft" value="0"
                 class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
             </div>
             <div>
               <label for="usa-ft-time" class="block text-sm font-medium text-gray-700">% Time Spent</label>
-              <input type="number" id="usa-ft-time"
+              <input type="number" id="usa-ft-time" value="100"
                 class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
             </div>
             <div>
               <label for="usa-ft-rate" class="block text-sm font-medium text-gray-700">Hourly Rate (USD)</label>
-              <input type="number" id="usa-ft-rate"
+              <input type="number" id="usa-ft-rate" value="0"
                 class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
             </div>
             <div>
               <label for="usa-pt" class="block text-sm font-medium text-gray-700">Part-Time Members</label>
-              <input type="number" id="usa-pt"
+              <input type="number" id="usa-pt" value="0"
+                class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            </div>
+            <div>
+              <label for="usa-pt-time" class="block text-sm font-medium text-gray-700">% Time Spent</label>
+              <input type="number" id="usa-pt-time" value="0"
+                class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            </div>
+            <div>
+              <label for="usa-pt-rate" class="block text-sm font-medium text-gray-700">Hourly Rate (USD)</label>
+              <input type="number" id="usa-pt-rate" value="0"
                 class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
             </div>
           </div>
@@ -97,22 +107,32 @@
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label for="off-ft" class="block text-sm font-medium text-gray-700">Full-Time Members</label>
-              <input type="number" id="off-ft"
+              <input type="number" id="off-ft" value="0"
                 class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
             </div>
             <div>
               <label for="off-ft-time" class="block text-sm font-medium text-gray-700">% Time Spent</label>
-              <input type="number" id="off-ft-time"
+              <input type="number" id="off-ft-time" value="100"
                 class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
             </div>
             <div>
               <label for="off-ft-rate" class="block text-sm font-medium text-gray-700">Hourly Rate (USD)</label>
-              <input type="number" id="off-ft-rate"
+              <input type="number" id="off-ft-rate" value="0"
                 class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
             </div>
             <div>
               <label for="off-pt" class="block text-sm font-medium text-gray-700">Part-Time Members</label>
-              <input type="number" id="off-pt"
+              <input type="number" id="off-pt" value="0"
+                class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            </div>
+            <div>
+              <label for="off-pt-time" class="block text-sm font-medium text-gray-700">% Time Spent</label>
+              <input type="number" id="off-pt-time" value="0"
+                class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            </div>
+            <div>
+              <label for="off-pt-rate" class="block text-sm font-medium text-gray-700">Hourly Rate (USD)</label>
+              <input type="number" id="off-pt-rate" value="0"
                 class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
             </div>
           </div>
@@ -132,8 +152,14 @@
           <div class="grid grid-cols-12 gap-4 items-center">
             <div class="col-span-7">
               <label class="block text-sm font-medium text-gray-700">Impact Description</label>
-              <input type="text" placeholder="Description"
+              <input type="text" list="impact-suggestions" placeholder="Description"
                 class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+              <datalist id="impact-suggestions">
+                <option value="Business lost due to slow turnaround time">
+                <option value="Cost of errors">
+                <option value="Hiring and managing data entry team">
+                <option value="Cost of employee training related to data entry">
+              </datalist>
             </div>
             <div class="col-span-4">
               <label class="block text-sm font-medium text-gray-700">Dollar Value</label>
@@ -180,10 +206,12 @@
       row.className = 'grid grid-cols-12 gap-4 items-center';
       row.innerHTML = `
         <div class="col-span-7">
-          <input type="text" placeholder="Description" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm">
+          <input type="text" list="impact-suggestions" placeholder="Description"
+            class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm">
         </div>
         <div class="col-span-4">
-          <input type="number" placeholder="Value in USD" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm">
+          <input type="number" placeholder="Value in USD"
+            class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm">
         </div>
         <div class="col-span-1 flex justify-center items-center">
           <button type="button" class="text-red-500 hover:text-red-700 remove-row-btn">
