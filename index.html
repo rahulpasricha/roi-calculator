@@ -6,7 +6,7 @@
   <title>ROI Calculator</title>
   <!-- Include Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Include Font Awesome for Trash Icon -->
+  <!-- Include Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -37,16 +37,15 @@
           <div id="doc-types-container" class="flex flex-wrap items-center gap-2 border border-gray-300 rounded-md p-3 bg-white">
             <!-- Chips for selected document types will appear here -->
           </div>
-          <div class="relative">
-            <select id="doc-types-dropdown" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-              <option value="" disabled selected>Type or select document types</option>
-              <option value="Invoices">Invoices</option>
-              <option value="Contracts">Contracts</option>
-              <option value="Bank Statements">Bank Statements</option>
-              <option value="Policy Declaration">Policy Declaration</option>
-              <option value="Engineering Diagram">Engineering Diagram</option>
-            </select>
-          </div>
+          <input type="text" id="doc-types-input" placeholder="Type or select document types"
+            class="block w-full mt-2 rounded-md bg-gray-100 border border-gray-300 px-3 py-1.5 shadow-sm text-sm focus:border-indigo-500 focus:ring-indigo-500">
+          <datalist id="doc-types-suggestions">
+            <option value="Invoices">
+            <option value="Contracts">
+            <option value="Bank Statements">
+            <option value="Policy Declaration">
+            <option value="Engineering Diagram">
+          </datalist>
         </div>
       </div>
     </section>
@@ -77,6 +76,7 @@
               <input type="number" id="usa-ft-rate" value="0"
                 class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
             </div>
+            <!-- Part-Time Members -->
             <div>
               <label for="usa-pt" class="block text-sm font-medium text-gray-700">Part-Time Members</label>
               <input type="number" id="usa-pt" value="0"
@@ -121,6 +121,7 @@
               <input type="number" id="off-ft-rate" value="0"
                 class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
             </div>
+            <!-- Part-Time Members -->
             <div>
               <label for="off-pt" class="block text-sm font-medium text-gray-700">Part-Time Members</label>
               <input type="number" id="off-pt" value="0"
@@ -149,24 +150,7 @@
       </div>
       <div>
         <div id="business-impact-section" class="space-y-4">
-          <!-- First row -->
-          <div class="grid grid-cols-12 gap-4 items-center">
-            <div class="col-span-7">
-              <label class="block text-sm font-medium text-gray-700">Impact Description</label>
-              <input type="text" id="impact-description" placeholder="Select or type an impact"
-                class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-            </div>
-            <div class="col-span-4">
-              <label class="block text-sm font-medium text-gray-700">Dollar Value</label>
-              <input type="number" placeholder="Value in USD"
-                class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-            </div>
-            <div class="col-span-1 flex justify-center items-center">
-              <button type="button" class="text-red-500 hover:text-red-700 remove-row-btn">
-                <i class="fas fa-trash"></i>
-              </button>
-            </div>
-          </div>
+          <!-- Business Impact Rows -->
         </div>
         <button type="button" id="add-impact-btn"
           class="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Add Business Impact</button>
@@ -187,36 +171,19 @@
     </section>
   </main>
 
-  <!-- JavaScript -->
   <script>
-    // Toggle Offshore Section
+    // Offshore Toggle Functionality
     const offshoreToggle = document.getElementById("toggle-offshore");
     const offshoreSection = document.getElementById("offshore-section");
-    offshoreToggle.addEventListener("change", (event) => {
-      offshoreSection.classList.toggle("hidden", !event.target.checked);
+    offshoreToggle.addEventListener("change", () => {
+      offshoreSection.classList.toggle("hidden", !offshoreToggle.checked);
     });
 
-    // Document Types Chips with Suggestions
+    // Document Type Chips
     const docTypesContainer = document.getElementById("doc-types-container");
     const docTypesInput = document.getElementById("doc-types-input");
-    const defaultDocTypes = ["Invoices", "Contracts", "Bank Statements", "Policy Declaration", "Engineering Diagram"];
+    const docTypesSuggestions = ["Invoices", "Contracts", "Bank Statements", "Policy Declaration", "Engineering Diagram"];
     const addedDocTypes = new Set();
-
-    // Populate suggestions dynamically
-    function populateDocTypeSuggestions() {
-      const datalist = document.createElement("datalist");
-      datalist.id = "doc-types-suggestions";
-      defaultDocTypes.forEach((type) => {
-        const option = document.createElement("option");
-        option.value = type;
-        datalist.appendChild(option);
-      });
-      document.body.appendChild(datalist);
-      docTypesInput.setAttribute("list", "doc-types-suggestions");
-    }
-
-    // Initialize suggestions
-    populateDocTypeSuggestions();
 
     docTypesInput.addEventListener("keydown", (event) => {
       if (event.key === "Enter" && docTypesInput.value.trim()) {
@@ -235,8 +202,7 @@
       if (!addedDocTypes.has(type)) {
         addedDocTypes.add(type);
         const chip = document.createElement("span");
-        chip.className =
-          "chip inline-flex items-center bg-blue-100 text-blue-800 text-sm font-medium px-3 py-0.5 rounded-full";
+        chip.className = "inline-flex items-center bg-blue-100 text-blue-800 text-sm font-medium px-3 py-0.5 rounded-full";
         chip.innerHTML = `${type} <button class="ml-2 text-blue-500 hover:text-blue-600 focus:outline-none">&times;</button>`;
         chip.querySelector("button").addEventListener("click", () => {
           chip.remove();
@@ -247,7 +213,9 @@
       }
     }
 
-    // Business Impact Rows with Default Options
+    // Business Impact Rows
+    const businessImpactSection = document.getElementById("business-impact-section");
+    const addImpactBtn = document.getElementById("add-impact-btn");
     const availableImpacts = [
       "Business lost due to slow turnaround time",
       "Cost of errors",
@@ -256,73 +224,34 @@
       "Losing business to competitor due to lack of technology edge",
     ];
 
-    const businessImpactSection = document.getElementById("business-impact-section");
-    const addImpactBtn = document.getElementById("add-impact-btn");
-
-    // Function to dynamically create a Business Impact row
-    function createImpactRow(selectedValue = "") {
+    function createImpactRow() {
       const row = document.createElement("div");
       row.className = "grid grid-cols-12 gap-4 items-center";
-
-      const availableOptions = availableImpacts.filter((impact) => impact !== selectedValue);
 
       row.innerHTML = `
         <div class="col-span-7">
           <select class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm">
-            <option value="" disabled ${!selectedValue ? "selected" : ""}>Select an Impact</option>
-            ${availableOptions
-              .map(
-                (impact) =>
-                  `<option value="${impact}" ${selectedValue === impact ? "selected" : ""}>${impact}</option>`
-              )
-              .join("")}
+            <option value="" disabled selected>Select an Impact</option>
+            ${availableImpacts.map((impact) => `<option value="${impact}">${impact}</option>`).join("")}
           </select>
         </div>
         <div class="col-span-4">
-          <input type="number" placeholder="Value in USD"
-            class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm">
+          <input type="number" placeholder="Value in USD" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm">
         </div>
         <div class="col-span-1 flex justify-center items-center">
-          <button type="button" class="text-red-500 hover:text-red-700 remove-row-btn">
+          <button type="button" class="text-red-500 hover:text-red-700">
             <i class="fas fa-trash"></i>
           </button>
         </div>
       `;
 
-      const select = row.querySelector("select");
-      const removeBtn = row.querySelector(".remove-row-btn");
+      const removeBtn = row.querySelector("button");
+      removeBtn.addEventListener("click", () => row.remove());
 
-      // Handle row removal
-      removeBtn.addEventListener("click", () => {
-        const selectedOption = select.value;
-        if (selectedOption) {
-          availableImpacts.push(selectedOption); // Restore option to dropdown
-        }
-        row.remove();
-      });
-
-      // Prevent duplicates in dropdown
-      select.addEventListener("change", () => {
-        const selectedOption = select.value;
-        if (selectedOption && availableImpacts.includes(selectedOption)) {
-          availableImpacts.splice(availableImpacts.indexOf(selectedOption), 1); // Remove selected option
-        }
-      });
-
-      return row;
-    }
-
-    // Button to add a new row dynamically
-    addImpactBtn.addEventListener("click", () => {
-      const row = createImpactRow();
       businessImpactSection.appendChild(row);
-    });
-
-    // Initialize Business Impact section (No default rows added initially)
-    function initializeImpactSection() {
-      // Dropdown values available for user to select; no rows rendered by default
     }
-    initializeImpactSection();
+
+    addImpactBtn.addEventListener("click", createImpactRow);
   </script>
 </body>
 </html>
