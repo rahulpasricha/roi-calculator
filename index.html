@@ -186,38 +186,56 @@
     const defaultDocTypes = ["Invoices", "Contracts", "Bank Statements", "Policy Declaration", "Engineering Diagram"];
     const addedDocTypes = new Set();
 
-    // Display suggestions when typing
+    // Populate dropdown dynamically
+    function populateDocTypeDropdown() {
+      docTypesDropdown.innerHTML = ""; // Clear dropdown
+      const availableOptions = defaultDocTypes.filter((type) => !addedDocTypes.has(type));
+
+      if (availableOptions.length > 0) {
+        availableOptions.forEach((type) => {
+          const li = document.createElement("li");
+          li.textContent = type;
+          li.className = "cursor-pointer px-3 py-2 hover:bg-indigo-100 text-gray-700";
+          li.addEventListener("click", () => {
+            addChip(type);
+            docTypesDropdown.classList.add("hidden"); // Hide dropdown after selection
+          });
+          docTypesDropdown.appendChild(li);
+        });
+        docTypesDropdown.classList.remove("hidden"); // Show dropdown
+      } else {
+        docTypesDropdown.classList.add("hidden"); // Hide if no options available
+      }
+    }
+
+    // Show dropdown on input focus or click
+    docTypesInput.addEventListener("focus", populateDocTypeDropdown);
+    docTypesInput.addEventListener("click", populateDocTypeDropdown);
+
+    // Filter dropdown as user types
     docTypesInput.addEventListener("input", () => {
       const inputValue = docTypesInput.value.toLowerCase();
       docTypesDropdown.innerHTML = "";
 
-      // Filter suggestions
-      const suggestions = defaultDocTypes.filter(
+      const filteredOptions = defaultDocTypes.filter(
         (type) => type.toLowerCase().includes(inputValue) && !addedDocTypes.has(type)
       );
 
-      // Show suggestions
-      if (suggestions.length > 0) {
-        suggestions.forEach((type) => {
+      if (filteredOptions.length > 0) {
+        filteredOptions.forEach((type) => {
           const li = document.createElement("li");
           li.textContent = type;
-          li.className =
-            "cursor-pointer px-3 py-2 hover:bg-indigo-100 text-gray-700";
+          li.className = "cursor-pointer px-3 py-2 hover:bg-indigo-100 text-gray-700";
           li.addEventListener("click", () => {
             addChip(type);
-            docTypesDropdown.classList.add("hidden");
+            docTypesDropdown.classList.add("hidden"); // Hide dropdown after selection
           });
           docTypesDropdown.appendChild(li);
         });
-        docTypesDropdown.classList.remove("hidden");
+        docTypesDropdown.classList.remove("hidden"); // Show dropdown
       } else {
-        docTypesDropdown.classList.add("hidden");
+        docTypesDropdown.classList.add("hidden"); // Hide if no matching options
       }
-    });
-
-    // Hide dropdown on blur
-    docTypesInput.addEventListener("blur", () => {
-      setTimeout(() => docTypesDropdown.classList.add("hidden"), 200);
     });
 
     // Add chip for selected type
@@ -232,9 +250,14 @@
           addedDocTypes.delete(type);
         });
         docTypesContainer.appendChild(chip);
-        docTypesInput.value = "";
+        docTypesInput.value = ""; // Clear input field
       }
     }
+
+    // Hide dropdown on blur with a slight delay to handle click events
+    docTypesInput.addEventListener("blur", () => {
+      setTimeout(() => docTypesDropdown.classList.add("hidden"), 150);
+    });
 
     // Business Impact Rows
     const businessImpactSection = document.getElementById("business-impact-section");
