@@ -325,10 +325,10 @@
       docTypesContainer.innerHTML = ""; // Remove all chips
       addedDocTypes.clear(); // Clear the set of added document types
 
-      // Reset all input fields
+      // Reset all input fields (including numeric ones)
       const inputs = document.querySelectorAll("input");
       inputs.forEach((input) => {
-        input.value = input.type === "number" ? "0" : ""; // Reset numbers to 0, others to empty
+        input.value = ""; // Reset all inputs to blank (including numeric fields)
       });
 
       // Reset dropdowns
