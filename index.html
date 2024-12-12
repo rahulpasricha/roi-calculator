@@ -37,7 +37,7 @@
           <div id="doc-types-container" class="flex flex-wrap items-center gap-2 border border-gray-300 rounded-md p-3 bg-white">
             <!-- Chips for selected document types will appear here -->
           </div>
-          <input type="text" id="doc-types-input" placeholder="Type or select document types"
+          <input type="text" id="doc-types-input" list="doc-types-suggestions" placeholder="Type or select document types"
             class="mt-2 block w-full rounded-md bg-gray-100 border-gray-200 px-3 py-1.5 text-sm focus:ring-indigo-500 focus:border-indigo-500">
           <datalist id="doc-types-suggestions">
             <option value="Invoices">
@@ -76,6 +76,11 @@
               <input type="number" id="usa-ft-rate"
                 class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
             </div>
+            <div>
+              <label for="usa-pt" class="block text-sm font-medium text-gray-700">Part-Time Members</label>
+              <input type="number" id="usa-pt"
+                class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            </div>
           </div>
         </div>
 
@@ -103,6 +108,11 @@
             <div>
               <label for="off-ft-rate" class="block text-sm font-medium text-gray-700">Hourly Rate (USD)</label>
               <input type="number" id="off-ft-rate"
+                class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            </div>
+            <div>
+              <label for="off-pt" class="block text-sm font-medium text-gray-700">Part-Time Members</label>
+              <input type="number" id="off-pt"
                 class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
             </div>
           </div>
