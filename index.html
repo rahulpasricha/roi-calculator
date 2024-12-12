@@ -195,29 +195,42 @@
     offshoreToggle.addEventListener("change", (event) => {
       offshoreSection.classList.toggle("hidden", !event.target.checked);
     });
-  
+
     // Document Types Chips with Suggestions
     const docTypesContainer = document.getElementById("doc-types-container");
     const docTypesInput = document.getElementById("doc-types-input");
     const defaultDocTypes = ["Invoices", "Contracts", "Bank Statements", "Policy Declaration", "Engineering Diagram"];
     const addedDocTypes = new Set();
-  
-    const docTypesDropdown = document.getElementById("doc-types-dropdown");
-    docTypesDropdown.addEventListener("change", (event) => {
-      const selectedType = event.target.value;
-      if (selectedType) {
-        addChip(selectedType);
-        // Reset dropdown back to placeholder
-        docTypesDropdown.selectedIndex = 0;
+
+    // Populate suggestions dynamically
+    function populateDocTypeSuggestions() {
+      const datalist = document.createElement("datalist");
+      datalist.id = "doc-types-suggestions";
+      defaultDocTypes.forEach((type) => {
+        const option = document.createElement("option");
+        option.value = type;
+        datalist.appendChild(option);
+      });
+      document.body.appendChild(datalist);
+      docTypesInput.setAttribute("list", "doc-types-suggestions");
+    }
+
+    // Initialize suggestions
+    populateDocTypeSuggestions();
+
+    docTypesInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && docTypesInput.value.trim()) {
+        addChip(docTypesInput.value.trim());
+        event.preventDefault();
       }
     });
-  
+
     docTypesInput.addEventListener("blur", () => {
       if (docTypesInput.value.trim()) {
         addChip(docTypesInput.value.trim());
       }
     });
-  
+
     function addChip(type) {
       if (!addedDocTypes.has(type)) {
         addedDocTypes.add(type);
@@ -233,19 +246,8 @@
         docTypesInput.value = "";
       }
     }
-  
-    // Populate document type suggestions dynamically
-    docTypesInput.setAttribute("list", "doc-types-suggestions");
-    const datalist = document.createElement("datalist");
-    datalist.id = "doc-types-suggestions";
-    defaultDocTypes.forEach((type) => {
-      const option = document.createElement("option");
-      option.value = type;
-      datalist.appendChild(option);
-    });
-    document.body.appendChild(datalist);
-  
-    // Business Impact Rows with Default Options in Dropdown
+
+    // Business Impact Rows with Default Options
     const availableImpacts = [
       "Business lost due to slow turnaround time",
       "Cost of errors",
@@ -257,13 +259,7 @@
     const businessImpactSection = document.getElementById("business-impact-section");
     const addImpactBtn = document.getElementById("add-impact-btn");
 
-    // Button to add a new row dynamically
-    addImpactBtn.addEventListener("click", () => {
-      const row = createImpactRow();
-      businessImpactSection.appendChild(row);
-    });
-
-    // Dynamically create a row for Business Impact
+    // Function to dynamically create a Business Impact row
     function createImpactRow(selectedValue = "") {
       const row = document.createElement("div");
       row.className = "grid grid-cols-12 gap-4 items-center";
@@ -300,30 +296,33 @@
       removeBtn.addEventListener("click", () => {
         const selectedOption = select.value;
         if (selectedOption) {
-          availableImpacts.push(selectedOption);
+          availableImpacts.push(selectedOption); // Restore option to dropdown
         }
         row.remove();
       });
 
-      // Prevent the same option from being used twice
+      // Prevent duplicates in dropdown
       select.addEventListener("change", () => {
         const selectedOption = select.value;
         if (selectedOption && availableImpacts.includes(selectedOption)) {
-          availableImpacts.splice(availableImpacts.indexOf(selectedOption), 1);
+          availableImpacts.splice(availableImpacts.indexOf(selectedOption), 1); // Remove selected option
         }
       });
 
       return row;
     }
 
-    // Add Default Business Impact Options
-    function renderDefaultImpactOptions() {
-      // This ensures only dropdown values are rendered by default.
-      availableImpacts.forEach((impact) => {
-        const row = createImpactRow();
-        businessImpactSection.appendChild(row);
-      });
+    // Button to add a new row dynamically
+    addImpactBtn.addEventListener("click", () => {
+      const row = createImpactRow();
+      businessImpactSection.appendChild(row);
+    });
+
+    // Initialize Business Impact section (No default rows added initially)
+    function initializeImpactSection() {
+      // Dropdown values available for user to select; no rows rendered by default
     }
+    initializeImpactSection();
   </script>
 </body>
 </html>
