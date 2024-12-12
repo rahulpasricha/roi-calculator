@@ -12,7 +12,7 @@
   <header class="bg-blue-600">
     <div class="max-w-7xl mx-auto py-4 px-6 flex justify-between items-center">
       <h1 class="text-2xl font-bold text-white">ROI Calculator</h1>
-      <p class="text-white text-sm">Analyze Costs & Savings with IDP</p>
+      <p class="text-white text-sm">Analyze Costs & Savings</p>
     </div>
   </header>
 
@@ -31,20 +31,19 @@
             class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
         </div>
         <div>
-          <label for="doc-types" class="block text-sm font-medium text-gray-700">Document Types (Optional)</label>
+          <label for="doc-types-input" class="block text-sm font-medium text-gray-700">Document Types (Optional)</label>
           <div id="doc-types-container" class="flex flex-wrap items-center gap-2 border border-gray-300 rounded-md p-3 bg-white">
             <!-- Chips for selected document types will appear here -->
           </div>
-          <select id="doc-types-dropdown" class="mt-2 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-sm focus:border-indigo-500 focus:ring-indigo-500">
-            <option value="">-- Select a document type --</option>
-            <option value="Invoices">Invoices</option>
-            <option value="Contracts">Contracts</option>
-            <option value="Bank Statements">Bank Statements</option>
-            <option value="Policy Declaration">Policy Declaration</option>
-            <option value="Engineering Diagram">Engineering Diagram</option>
-          </select>
-          <input type="text" id="custom-doc-type" placeholder="Add a custom document type and press Enter"
+          <input type="text" id="doc-types-input" placeholder="Start typing to select or add new"
             class="mt-2 block w-full rounded-md bg-gray-100 border-gray-200 px-3 py-1.5 text-sm focus:ring-indigo-500 focus:border-indigo-500">
+          <datalist id="doc-types-suggestions">
+            <option value="Invoices">
+            <option value="Contracts">
+            <option value="Bank Statements">
+            <option value="Policy Declaration">
+            <option value="Engineering Diagram">
+          </datalist>
         </div>
       </div>
     </section>
@@ -109,6 +108,38 @@
       </div>
     </section>
 
+    <!-- Business Impact Section -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <h3 class="text-lg font-medium text-gray-900">Business Impact</h3>
+        <p class="mt-1 text-sm text-gray-500">Provide descriptions and dollar values for impacts. Optional suggestions are provided below.</p>
+      </div>
+      <div>
+        <div id="business-impact-section" class="space-y-4">
+          <!-- First row with labels -->
+          <div class="grid grid-cols-3 gap-4 items-center">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Impact Description (Optional)</label>
+              <input type="text" placeholder="Description"
+                class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Dollar Value (Optional)</label>
+              <input type="number" placeholder="Value in USD"
+                class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+            </div>
+            <button type="button" class="text-red-500 hover:text-red-700">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6h18M9 6v12m6-12v12m-9 12h12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <button type="button" id="add-impact-btn"
+          class="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Add Business Impact</button>
+      </div>
+    </section>
+
     <!-- Buttons -->
     <section class="flex gap-4">
       <button type="button" id="calculate-btn" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
@@ -132,66 +163,74 @@
       offshoreSection.classList.toggle("hidden", !offshoreToggle.checked);
     });
 
-    // Document Type Management
+    // Document Type Chips with Autocomplete
     const docTypesContainer = document.getElementById("doc-types-container");
-    const docTypesDropdown = document.getElementById("doc-types-dropdown");
-    const customDocTypeInput = document.getElementById("custom-doc-type");
+    const docTypesInput = document.getElementById("doc-types-input");
+    const docTypesSuggestions = ["Invoices", "Contracts", "Bank Statements", "Policy Declaration", "Engineering Diagram"];
     const addedDocTypes = new Set();
 
-    // Add Document Type from Dropdown
-    docTypesDropdown.addEventListener("change", () => {
-      const selectedOption = docTypesDropdown.value;
-
-      if (selectedOption && !addedDocTypes.has(selectedOption)) {
-        createChip(selectedOption);
-        addedDocTypes.add(selectedOption);
-        docTypesDropdown.value = ""; // Reset dropdown
-      }
-    });
-
-    // Add Custom Document Type
-    customDocTypeInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && customDocTypeInput.value.trim() !== "") {
-        const customType = customDocTypeInput.value.trim();
-
-        if (!addedDocTypes.has(customType)) {
-          createChip(customType);
-          addedDocTypes.add(customType);
-          customDocTypeInput.value = ""; // Clear input field
+    docTypesInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && docTypesInput.value.trim() !== "") {
+        const type = docTypesInput.value.trim();
+        if (!addedDocTypes.has(type)) {
+          createChip(type);
+          addedDocTypes.add(type);
         }
-
+        docTypesInput.value = ""; // Clear input
         e.preventDefault();
       }
     });
 
-    // Create a Chip for the Document Type
+    docTypesInput.addEventListener("input", () => {
+      const value = docTypesInput.value.toLowerCase();
+      const datalist = document.getElementById("doc-types-suggestions");
+      datalist.innerHTML = "";
+      docTypesSuggestions.forEach((suggestion) => {
+        if (suggestion.toLowerCase().includes(value) && !addedDocTypes.has(suggestion)) {
+          const option = document.createElement("option");
+          option.value = suggestion;
+          datalist.appendChild(option);
+        }
+      });
+    });
+
     function createChip(type) {
       const chip = document.createElement("span");
       chip.className = "chip inline-flex items-center bg-blue-100 text-blue-800 text-sm font-medium px-3 py-0.5 rounded-full";
       chip.innerHTML = `${type} <button class="ml-2 text-blue-500 hover:text-blue-600 focus:outline-none">&times;</button>`;
-
       chip.querySelector("button").addEventListener("click", () => {
         chip.remove();
         addedDocTypes.delete(type);
+      });
+      docTypesContainer.appendChild(chip);
+    }
 
-        // Add back to dropdown if it's a default type
-        const defaultOptions = ["Invoices", "Contracts", "Bank Statements", "Policy Declaration", "Engineering Diagram"];
-        if (defaultOptions.includes(type)) {
-          const option = document.createElement("option");
-          option.value = type;
-          option.textContent = type;
-          docTypesDropdown.appendChild(option);
-        }
+    // Add/Remove Business Impact Rows
+    const businessImpactSection = document.getElementById("business-impact-section");
+    const addImpactBtn = document.getElementById("add-impact-btn");
+
+    addImpactBtn.addEventListener("click", () => {
+      const row = document.createElement("div");
+      row.className = "grid grid-cols-3 gap-4 items-center";
+
+      row.innerHTML = `
+        <input type="text" placeholder="Description"
+          class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+        <input type="number" placeholder="Dollar Value"
+          class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+        <button type="button" class="text-red-500 hover:text-red-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6h18M9 6v12m6-12v12m-9 12h12" />
+          </svg>
+        </button>
+      `;
+
+      row.querySelector("button").addEventListener("click", () => {
+        row.remove();
       });
 
-      docTypesContainer.appendChild(chip);
-
-      // Remove from dropdown if it's a default type
-      const optionToRemove = Array.from(docTypesDropdown.options).find(option => option.value === type);
-      if (optionToRemove) {
-        docTypesDropdown.removeChild(optionToRemove);
-      }
-    }
+      businessImpactSection.appendChild(row);
+    });
   </script>
 </body>
 </html>
