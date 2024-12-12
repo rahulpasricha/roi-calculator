@@ -37,15 +37,16 @@
           <div id="doc-types-container" class="flex flex-wrap items-center gap-2 border border-gray-300 rounded-md p-3 bg-white">
             <!-- Chips for selected document types will appear here -->
           </div>
-          <input type="text" id="doc-types-input" placeholder="Type or select document types"
-            class="mt-2 block w-full rounded-md bg-gray-100 border-gray-200 px-3 py-1.5 text-sm focus:ring-indigo-500 focus:border-indigo-500">
-          <datalist id="doc-types-suggestions">
-            <option value="Invoices">
-            <option value="Contracts">
-            <option value="Bank Statements">
-            <option value="Policy Declaration">
-            <option value="Engineering Diagram">
-          </datalist>
+          <div class="relative">
+            <select id="doc-types-dropdown" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+              <option value="" disabled selected>Type or select document types</option>
+              <option value="Invoices">Invoices</option>
+              <option value="Contracts">Contracts</option>
+              <option value="Bank Statements">Bank Statements</option>
+              <option value="Policy Declaration">Policy Declaration</option>
+              <option value="Engineering Diagram">Engineering Diagram</option>
+            </select>
+          </div>
         </div>
       </div>
     </section>
@@ -201,10 +202,13 @@
     const defaultDocTypes = ["Invoices", "Contracts", "Bank Statements", "Policy Declaration", "Engineering Diagram"];
     const addedDocTypes = new Set();
   
-    docTypesInput.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" && docTypesInput.value.trim()) {
-        addChip(docTypesInput.value.trim());
-        event.preventDefault();
+    const docTypesDropdown = document.getElementById("doc-types-dropdown");
+    docTypesDropdown.addEventListener("change", (event) => {
+      const selectedType = event.target.value;
+      if (selectedType) {
+        addChip(selectedType);
+        // Reset dropdown back to placeholder
+        docTypesDropdown.selectedIndex = 0;
       }
     });
   
