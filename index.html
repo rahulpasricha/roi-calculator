@@ -37,15 +37,14 @@
           <div id="doc-types-container" class="flex flex-wrap items-center gap-2 border border-gray-300 rounded-md p-3 bg-white">
             <!-- Chips for selected document types will appear here -->
           </div>
-          <input type="text" id="doc-types-input" placeholder="Type or select document types"
-            class="block w-full mt-2 rounded-md bg-gray-100 border border-gray-300 px-3 py-1.5 shadow-sm text-sm focus:border-indigo-500 focus:ring-indigo-500">
-          <datalist id="doc-types-suggestions">
-            <option value="Invoices">
-            <option value="Contracts">
-            <option value="Bank Statements">
-            <option value="Policy Declaration">
-            <option value="Engineering Diagram">
-          </datalist>
+          <div class="relative mt-2">
+            <input type="text" id="doc-types-input" placeholder="Type to search or select a document type"
+              class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-sm focus:border-indigo-500 focus:ring-indigo-500">
+            <ul id="doc-types-dropdown"
+              class="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-40 overflow-y-auto hidden">
+              <!-- Suggestions will appear dynamically here -->
+            </ul>
+          </div>
         </div>
       </div>
     </section>
@@ -182,22 +181,46 @@
     // Document Type Chips
     const docTypesContainer = document.getElementById("doc-types-container");
     const docTypesInput = document.getElementById("doc-types-input");
-    const docTypesSuggestions = ["Invoices", "Contracts", "Bank Statements", "Policy Declaration", "Engineering Diagram"];
+    const docTypesDropdown = document.getElementById("doc-types-dropdown");
+
+    const defaultDocTypes = ["Invoices", "Contracts", "Bank Statements", "Policy Declaration", "Engineering Diagram"];
     const addedDocTypes = new Set();
 
-    docTypesInput.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" && docTypesInput.value.trim()) {
-        addChip(docTypesInput.value.trim());
-        event.preventDefault();
+    // Display suggestions when typing
+    docTypesInput.addEventListener("input", () => {
+      const inputValue = docTypesInput.value.toLowerCase();
+      docTypesDropdown.innerHTML = "";
+
+      // Filter suggestions
+      const suggestions = defaultDocTypes.filter(
+        (type) => type.toLowerCase().includes(inputValue) && !addedDocTypes.has(type)
+      );
+
+      // Show suggestions
+      if (suggestions.length > 0) {
+        suggestions.forEach((type) => {
+          const li = document.createElement("li");
+          li.textContent = type;
+          li.className =
+            "cursor-pointer px-3 py-2 hover:bg-indigo-100 text-gray-700";
+          li.addEventListener("click", () => {
+            addChip(type);
+            docTypesDropdown.classList.add("hidden");
+          });
+          docTypesDropdown.appendChild(li);
+        });
+        docTypesDropdown.classList.remove("hidden");
+      } else {
+        docTypesDropdown.classList.add("hidden");
       }
     });
 
+    // Hide dropdown on blur
     docTypesInput.addEventListener("blur", () => {
-      if (docTypesInput.value.trim()) {
-        addChip(docTypesInput.value.trim());
-      }
+      setTimeout(() => docTypesDropdown.classList.add("hidden"), 200);
     });
 
+    // Add chip for selected type
     function addChip(type) {
       if (!addedDocTypes.has(type)) {
         addedDocTypes.add(type);
