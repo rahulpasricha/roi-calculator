@@ -198,8 +198,7 @@
         availableOptions.forEach((type, index) => {
           const li = document.createElement("li");
           li.textContent = type;
-          li.className =
-            "cursor-pointer px-3 py-2 hover:bg-indigo-100 text-gray-700";
+          li.className = "cursor-pointer px-3 py-2 hover:bg-indigo-100 text-gray-700";
           li.setAttribute("data-index", index);
           li.addEventListener("click", () => {
             addChip(type);
@@ -267,13 +266,25 @@
     docTypesInput.addEventListener("input", populateDocTypeDropdown); // Filter options on input
     docTypesInput.addEventListener("focus", populateDocTypeDropdown); // Show options on focus
     docTypesInput.addEventListener("click", populateDocTypeDropdown); // Show options on click
-    docTypesInput.addEventListener("keydown", handleDropdownNavigation); // Handle arrow key navigation
   
-    // Add chip on Enter or Tab
+    // Add chip on Enter
     docTypesInput.addEventListener("keydown", (event) => {
-      if ((event.key === "Enter" || event.key === "Tab") && focusedOptionIndex === -1) {
-        event.preventDefault(); // Prevent form submission or blur
+      if (event.key === "Enter" && focusedOptionIndex === -1) {
+        event.preventDefault(); // Prevent form submission
         addChip(docTypesInput.value.trim()); // Add chip for entered text
+      }
+    });
+  
+    // Handle Tab key to allow moving to the next field
+    docTypesInput.addEventListener("keydown", (event) => {
+      if (event.key === "Tab") {
+        if (focusedOptionIndex !== -1) {
+          event.preventDefault(); // Prevent default tabbing
+          const dropdownItems = docTypesDropdown.querySelectorAll("li");
+          if (dropdownItems[focusedOptionIndex]) {
+            dropdownItems[focusedOptionIndex].click(); // Select the focused option
+          }
+        }
       }
     });
   
