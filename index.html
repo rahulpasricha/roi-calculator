@@ -176,28 +176,31 @@
     offshoreToggle.addEventListener("change", () => {
       offshoreSection.classList.toggle("hidden", !offshoreToggle.checked);
     });
-
+  
     // Document Type Chips
     const docTypesContainer = document.getElementById("doc-types-container");
     const docTypesInput = document.getElementById("doc-types");
     const docTypesDropdown = document.getElementById("doc-types-dropdown");
-
+  
     const defaultDocTypes = ["Invoices", "Contracts", "Bank Statements", "Policy Declaration", "Engineering Diagram"];
     const addedDocTypes = new Set();
-
+    let focusedOptionIndex = -1; // Keeps track of the currently focused dropdown option
+  
     // Populate dropdown dynamically
     function populateDocTypeDropdown() {
       const inputValue = docTypesInput.value.toLowerCase();
       const availableOptions = defaultDocTypes.filter(
         (type) => !addedDocTypes.has(type) && type.toLowerCase().includes(inputValue)
       );
-
+  
       docTypesDropdown.innerHTML = ""; // Clear previous options
       if (availableOptions.length > 0) {
-        availableOptions.forEach((type) => {
+        availableOptions.forEach((type, index) => {
           const li = document.createElement("li");
           li.textContent = type;
-          li.className = "cursor-pointer px-3 py-2 hover:bg-indigo-100 text-gray-700";
+          li.className =
+            "cursor-pointer px-3 py-2 hover:bg-indigo-100 text-gray-700";
+          li.setAttribute("data-index", index);
           li.addEventListener("click", () => {
             addChip(type);
             docTypesDropdown.classList.add("hidden"); // Hide dropdown
@@ -208,52 +211,88 @@
       } else {
         docTypesDropdown.classList.add("hidden"); // Hide if no options available
       }
+      focusedOptionIndex = -1; // Reset focus index
     }
-
+  
     // Add chip for selected or custom type
     function addChip(type) {
       if (!type.trim() || addedDocTypes.has(type)) return; // Ignore empty input or duplicates
-
+  
       addedDocTypes.add(type);
       const chip = document.createElement("span");
-      chip.className = "inline-flex items-center bg-blue-100 text-blue-800 text-sm font-medium px-3 py-0.5 rounded-full";
+      chip.className =
+        "inline-flex items-center bg-blue-100 text-blue-800 text-sm font-medium px-3 py-0.5 rounded-full";
       chip.innerHTML = `${type} <button class="ml-2 text-blue-500 hover:text-blue-600 focus:outline-none">&times;</button>`;
       chip.querySelector("button").addEventListener("click", () => {
         chip.remove();
         addedDocTypes.delete(type);
       });
-
+  
       docTypesContainer.insertBefore(chip, docTypesInput); // Add chip before the input field
       docTypesInput.value = ""; // Clear input field
       populateDocTypeDropdown(); // Refresh dropdown options
     }
-
+  
+    // Handle keyboard navigation
+    function handleDropdownNavigation(event) {
+      const dropdownItems = docTypesDropdown.querySelectorAll("li");
+      if (dropdownItems.length === 0) return;
+  
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        focusedOptionIndex =
+          (focusedOptionIndex + 1) % dropdownItems.length; // Move focus down
+      } else if (event.key === "ArrowUp") {
+        event.preventDefault();
+        focusedOptionIndex =
+          (focusedOptionIndex - 1 + dropdownItems.length) % dropdownItems.length; // Move focus up
+      } else if (event.key === "Enter") {
+        event.preventDefault();
+        if (focusedOptionIndex >= 0) {
+          dropdownItems[focusedOptionIndex].click(); // Select focused item
+        }
+      }
+  
+      // Update focus style
+      dropdownItems.forEach((item, index) => {
+        if (index === focusedOptionIndex) {
+          item.classList.add("bg-indigo-100");
+        } else {
+          item.classList.remove("bg-indigo-100");
+        }
+      });
+    }
+  
     // Event Listeners
     docTypesInput.addEventListener("input", populateDocTypeDropdown); // Filter options on input
     docTypesInput.addEventListener("focus", populateDocTypeDropdown); // Show options on focus
     docTypesInput.addEventListener("click", populateDocTypeDropdown); // Show options on click
-
+    docTypesInput.addEventListener("keydown", handleDropdownNavigation); // Handle arrow key navigation
+  
     // Add chip on Enter or Tab
     docTypesInput.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" || event.key === "Tab") {
+      if ((event.key === "Enter" || event.key === "Tab") && focusedOptionIndex === -1) {
         event.preventDefault(); // Prevent form submission or blur
         addChip(docTypesInput.value.trim()); // Add chip for entered text
-        docTypesInput.blur(); // Move focus to the next field
       }
     });
-
+  
     // Ensure input is always clickable
     docTypesContainer.addEventListener("click", () => {
       docTypesInput.focus(); // Focus input field when container is clicked
     });
-
-    // Fix: Prevent Tab Trap
+  
+    // Hide dropdown and add chip on blur (if value exists)
     docTypesInput.addEventListener("blur", () => {
       setTimeout(() => {
+        const inputValue = docTypesInput.value.trim();
+        if (inputValue) {
+          addChip(inputValue); // Add chip for remaining input value
+        }
         docTypesDropdown.classList.add("hidden"); // Hide dropdown
-      }, 150); // Delay to process clicks
+      }, 150); // Delay to process click events
     });
-
+  
     // Business Impact Rows
     const businessImpactSection = document.getElementById("business-impact-section");
     const addImpactBtn = document.getElementById("add-impact-btn");
@@ -264,11 +303,11 @@
       "Cost of employee training related to data entry",
       "Losing business to competitor due to lack of technology edge",
     ];
-
+  
     function createImpactRow() {
       const row = document.createElement("div");
       row.className = "grid grid-cols-12 gap-4 items-center";
-
+  
       row.innerHTML = `
         <div class="col-span-7">
           <select class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm">
@@ -285,59 +324,51 @@
           </button>
         </div>
       `;
-
+  
       const removeBtn = row.querySelector("button");
       removeBtn.addEventListener("click", () => row.remove());
-
+  
       businessImpactSection.appendChild(row);
     }
-
+  
     addImpactBtn.addEventListener("click", createImpactRow);
-
+  
     // Start Over functionality
     const resetBtn = document.getElementById("reset-btn");
-
+  
     resetBtn.addEventListener("click", () => {
       // Clear all document type chips
       docTypesContainer.querySelectorAll("span").forEach((chip) => chip.remove()); // Remove all chips
       addedDocTypes.clear(); // Clear the set of added document types
-
+  
       // Reset input field
       docTypesInput.value = "";
-
+  
       // Ensure dropdown is cleared and hidden
       docTypesDropdown.innerHTML = "";
       docTypesDropdown.classList.add("hidden");
-
+  
       // Reset all other input fields
       const inputs = document.querySelectorAll("input");
       inputs.forEach((input) => {
         input.value = ""; // Reset all inputs to blank
       });
-
+  
       // Reset dropdowns (like Business Impact)
       const selects = document.querySelectorAll("select");
       selects.forEach((select) => (select.selectedIndex = 0));
-
+  
       // Clear all dynamically added business impact rows
       businessImpactSection.innerHTML = "";
-
+  
       // Hide offshore section
       offshoreSection.classList.add("hidden");
       offshoreToggle.checked = false;
-
+  
       // Scroll to the top of the page
       window.scrollTo({ top: 0, behavior: "smooth" });
-
+  
       // Focus the first input field
-      const firstInput = document.querySelector("input");
-      if (firstInput) {
-        firstInput.focus();
-      }
-    });
-
-    // Focus the first input field on page load
-    document.addEventListener("DOMContentLoaded", () => {
       const firstInput = document.querySelector("input");
       if (firstInput) {
         firstInput.focus();
