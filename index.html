@@ -35,7 +35,7 @@
         <div>
           <label for="doc-types" class="block text-sm font-medium text-gray-700">Document Types</label>
           <div id="doc-types-container"
-            class="flex items-center flex-wrap gap-2 border border-gray-300 rounded-md bg-white px-3 py-1.5 shadow-sm h-[42px]">
+            class="flex items-center flex-wrap gap-2 border border-gray-300 rounded-md bg-white px-3 py-1.5 shadow-sm">
             <!-- Chips will appear here -->
             <input id="doc-types" placeholder="Type or select document types"
               class="flex-grow bg-transparent outline-none text-sm text-gray-900 placeholder-gray-400" />
@@ -187,12 +187,12 @@
 
       // Populate dropdown dynamically
       function populateDocTypeDropdown() {
-        docTypesDropdown.innerHTML = ""; // Clear dropdown
         const inputValue = docTypesInput.value.toLowerCase();
         const availableOptions = defaultDocTypes.filter(
-          (type) => type.toLowerCase().includes(inputValue) && !addedDocTypes.has(type)
+          (type) => !addedDocTypes.has(type) && type.toLowerCase().includes(inputValue)
         );
 
+        docTypesDropdown.innerHTML = ""; // Clear previous options
         if (availableOptions.length > 0) {
           availableOptions.forEach((type) => {
             const li = document.createElement("li");
@@ -200,7 +200,7 @@
             li.className = "cursor-pointer px-3 py-2 hover:bg-indigo-100 text-gray-700";
             li.addEventListener("click", () => {
               addChip(type);
-              docTypesDropdown.classList.add("hidden"); // Hide dropdown after selection
+              docTypesDropdown.classList.add("hidden"); // Hide dropdown
             });
             docTypesDropdown.appendChild(li);
           });
@@ -212,38 +212,38 @@
 
       // Add chip for selected or custom type
       function addChip(type) {
-        if (!type.trim()) return; // Ignore empty input
-        if (!addedDocTypes.has(type)) {
-          addedDocTypes.add(type);
-          const chip = document.createElement("span");
-          chip.className = "inline-flex items-center bg-blue-100 text-blue-800 text-sm font-medium px-3 py-0.5 rounded-full";
-          chip.innerHTML = `${type} <button class="ml-2 text-blue-500 hover:text-blue-600 focus:outline-none">&times;</button>`;
-          chip.querySelector("button").addEventListener("click", () => {
-            chip.remove();
-            addedDocTypes.delete(type);
-          });
-          // Insert chip before the input field
-          docTypesContainer.insertBefore(chip, docTypesInput);
-          docTypesInput.value = ""; // Clear input field
-        }
+        if (!type.trim() || addedDocTypes.has(type)) return; // Ignore empty input or duplicates
+
+        addedDocTypes.add(type);
+        const chip = document.createElement("span");
+        chip.className = "inline-flex items-center bg-blue-100 text-blue-800 text-sm font-medium px-3 py-0.5 rounded-full";
+        chip.innerHTML = `${type} <button class="ml-2 text-blue-500 hover:text-blue-600 focus:outline-none">&times;</button>`;
+        chip.querySelector("button").addEventListener("click", () => {
+          chip.remove();
+          addedDocTypes.delete(type);
+        });
+
+        docTypesContainer.insertBefore(chip, docTypesInput); // Add chip before the input field
+        docTypesInput.value = ""; // Clear input field
+        populateDocTypeDropdown(); // Refresh dropdown options
       }
 
       // Event Listeners
-      docTypesInput.addEventListener("focus", () => {
-        populateDocTypeDropdown(); // Populate dropdown on focus
-        docTypesDropdown.classList.remove("hidden"); // Ensure dropdown is visible
-      });
+      docTypesInput.addEventListener("input", populateDocTypeDropdown); // Filter options on input
+      docTypesInput.addEventListener("focus", populateDocTypeDropdown); // Show options on focus
+      docTypesInput.addEventListener("click", populateDocTypeDropdown); // Show options on click
 
       // Add chip on Enter or Tab
       docTypesInput.addEventListener("keydown", (event) => {
         if (event.key === "Enter" || event.key === "Tab") {
-          event.preventDefault(); // Prevent form submission or focus change
-          const inputValue = docTypesInput.value.trim();
-          if (inputValue) {
-            addChip(inputValue); // Add the custom input as a chip
-          }
-          docTypesDropdown.classList.add("hidden"); // Hide dropdown
+          event.preventDefault(); // Prevent form submission or blur
+          addChip(docTypesInput.value.trim()); // Add chip for entered text
         }
+      });
+
+      // Ensure input is always clickable
+      docTypesContainer.addEventListener("click", () => {
+        docTypesInput.focus(); // Focus input field when container is clicked
       });
 
       // Hide dropdown and add chip on blur (if value exists)
@@ -251,10 +251,10 @@
         setTimeout(() => {
           const inputValue = docTypesInput.value.trim();
           if (inputValue) {
-            addChip(inputValue); // Add chip for any remaining input value
+            addChip(inputValue); // Add chip for remaining input value
           }
           docTypesDropdown.classList.add("hidden"); // Hide dropdown
-        }, 150); // Delay to ensure click events are processed
+        }, 150); // Delay to process click events
       });
 
       // Business Impact Rows
