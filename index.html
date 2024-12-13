@@ -257,6 +257,13 @@
         }, 150); // Delay to process click events
       });
 
+      // Handle Tab navigation properly
+      docTypesInput.addEventListener("keydown", (event) => {
+        if (event.key === "Tab" && docTypesDropdown.classList.contains("hidden")) {
+          docTypesInput.blur(); // Allow tabbing to the next field if dropdown is hidden
+        }
+      });
+
       // Business Impact Rows
       const businessImpactSection = document.getElementById("business-impact-section");
       const addImpactBtn = document.getElementById("add-impact-btn");
