@@ -369,7 +369,15 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
   
       // Focus the first input field
-      const firstInput = document.querySelector("input");
+      const firstInput = document.getElementById("num-pages");
+      if (firstInput) {
+        firstInput.focus();
+      }
+    });
+  
+    // Focus the first input field on page load
+    document.addEventListener("DOMContentLoaded", () => {
+      const firstInput = document.getElementById("num-pages");
       if (firstInput) {
         firstInput.focus();
       }
