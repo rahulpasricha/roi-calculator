@@ -227,7 +227,10 @@
       }
 
       // Event Listeners
-      docTypesInput.addEventListener("input", populateDocTypeDropdown); // Populate dropdown on typing
+      docTypesInput.addEventListener("focus", () => {
+        populateDocTypeDropdown(); // Populate dropdown on focus
+        docTypesDropdown.classList.remove("hidden"); // Ensure dropdown is visible
+      });
 
       // Add chip on Enter or Tab
       docTypesInput.addEventListener("keydown", (event) => {
@@ -297,18 +300,25 @@
 
       resetBtn.addEventListener("click", () => {
         // Clear all document type chips
-        docTypesContainer.innerHTML = ""; // Remove all chips
+        docTypesContainer.querySelectorAll("span").forEach((chip) => chip.remove()); // Remove all chips
         addedDocTypes.clear(); // Clear the set of added document types
 
-        // Reset all input fields (including numeric ones)
+        // Reset input field
+        docTypesInput.value = "";
+
+        // Ensure dropdown is cleared and hidden
+        docTypesDropdown.innerHTML = "";
+        docTypesDropdown.classList.add("hidden");
+
+        // Reset all other input fields
         const inputs = document.querySelectorAll("input");
         inputs.forEach((input) => {
           input.value = ""; // Reset all inputs to blank
         });
 
-        // Reset dropdowns
+        // Reset dropdowns (like Business Impact)
         const selects = document.querySelectorAll("select");
-        selects.forEach((select) => (select.selectedIndex = 0)); // Reset to first option
+        selects.forEach((select) => (select.selectedIndex = 0));
 
         // Clear all dynamically added business impact rows
         businessImpactSection.innerHTML = "";
@@ -322,13 +332,9 @@
 
         // Focus the first input field
         const firstInput = document.querySelector("input");
-        if (firstInput) firstInput.focus();
-      });
-
-      // Focus the first input field on page load
-      document.addEventListener("DOMContentLoaded", () => {
-        const firstInput = document.querySelector("input");
-        if (firstInput) firstInput.focus();
+        if (firstInput) {
+          firstInput.focus();
+        }
       });
   </script>
 </body>
