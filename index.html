@@ -362,9 +362,13 @@
       // Reset all other input fields
       const inputs = document.querySelectorAll("input");
       inputs.forEach((input) => {
-        input.value = ""; // Reset all inputs to blank
+        if (input.id === "usa-ft-time" || input.id === "off-ft-time") {
+          input.value = "100"; // Set default value to 100 for full-time percentage fields
+        } else {
+          input.value = ""; // Reset other inputs to blank
+        }
       });
-  
+        
       // Reset dropdowns (like Business Impact)
       const selects = document.querySelectorAll("select");
       selects.forEach((select) => (select.selectedIndex = 0));
