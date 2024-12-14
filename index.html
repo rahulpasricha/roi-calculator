@@ -186,19 +186,19 @@
     const docTypesContainer = document.getElementById("doc-types-container");
     const docTypesInput = document.getElementById("doc-types");
     const docTypesDropdown = document.getElementById("doc-types-dropdown");
-    const docTypeCount = document.getElementById("doc-type-count"); // Badge for count
-
+    const docTypeCountBadge = document.getElementById("doc-type-count-badge"); // Badge for count
+  
     const defaultDocTypes = ["Invoices", "Contracts", "Bank Statements", "Policy Declaration", "Engineering Diagram"];
     const addedDocTypes = new Set(); // Keeps track of selected document types
     let focusedOptionIndex = -1; // Tracks focused option for dropdown navigation
-
+  
     // Populate dropdown dynamically
     function populateDocTypeDropdown() {
       const inputValue = docTypesInput.value.toLowerCase();
       const availableOptions = defaultDocTypes.filter(
         (type) => !addedDocTypes.has(type) && type.toLowerCase().includes(inputValue)
       );
-
+  
       docTypesDropdown.innerHTML = ""; // Clear previous options
       if (availableOptions.length > 0) {
         availableOptions.forEach((type, index) => {
@@ -218,14 +218,14 @@
       }
       focusedOptionIndex = -1; // Reset focus index
     }
-
+  
     // Add chip for selected or custom type
     function addChip(type) {
       if (!type.trim() || addedDocTypes.has(type)) return; // Ignore empty input or duplicates
-
+  
       addedDocTypes.add(type); // Add to set
       updateDocTypeCount(); // Update the count badge
-
+  
       const chip = document.createElement("span");
       chip.className =
         "inline-flex items-center bg-blue-100 text-blue-800 text-sm font-medium px-3 py-0.5 rounded-full";
@@ -235,23 +235,23 @@
         addedDocTypes.delete(type); // Remove from set
         updateDocTypeCount(); // Update the count badge
       });
-
+  
       docTypesContainer.insertBefore(chip, docTypesInput); // Add chip before the input field
       docTypesInput.value = ""; // Clear input field
       populateDocTypeDropdown(); // Refresh dropdown options
     }
-
+  
     // Update document type count badge
     function updateDocTypeCount() {
       const count = addedDocTypes.size;
-      docTypeCount.textContent = `${count} Selected`; // Update badge text
+      docTypeCountBadge.textContent = `${count}`; // Update badge text
     }
-
+  
     // Handle keyboard navigation
     function handleDropdownNavigation(event) {
       const dropdownItems = docTypesDropdown.querySelectorAll("li");
       if (dropdownItems.length === 0) return;
-
+  
       if (event.key === "ArrowDown") {
         event.preventDefault();
         focusedOptionIndex = (focusedOptionIndex + 1) % dropdownItems.length; // Move focus down
@@ -264,7 +264,7 @@
           dropdownItems[focusedOptionIndex].click(); // Select focused item
         }
       }
-
+  
       // Update focus style
       dropdownItems.forEach((item, index) => {
         if (index === focusedOptionIndex) {
@@ -274,12 +274,12 @@
         }
       });
     }
-
+  
     // Event Listeners
     docTypesInput.addEventListener("input", populateDocTypeDropdown); // Filter options on input
     docTypesInput.addEventListener("focus", populateDocTypeDropdown); // Show options on focus
     docTypesInput.addEventListener("click", populateDocTypeDropdown); // Show options on click
-
+  
     // Add chip on Enter
     docTypesInput.addEventListener("keydown", (event) => {
       if (event.key === "Enter" && focusedOptionIndex === -1) {
@@ -287,7 +287,7 @@
         addChip(docTypesInput.value.trim()); // Add chip for entered text
       }
     });
-
+  
     // Handle Tab key to allow moving to the next field
     docTypesInput.addEventListener("keydown", (event) => {
       if (event.key === "Tab") {
@@ -300,12 +300,12 @@
         }
       }
     });
-
+  
     // Ensure input is always clickable
     docTypesContainer.addEventListener("click", () => {
       docTypesInput.focus(); // Focus input field when container is clicked
     });
-
+  
     // Hide dropdown and add chip on blur (if value exists)
     docTypesInput.addEventListener("blur", () => {
       setTimeout(() => {
@@ -316,7 +316,7 @@
         docTypesDropdown.classList.add("hidden"); // Hide dropdown
       }, 150); // Delay to process click events
     });
-
+  
     // Initialize badge count on page load
     document.addEventListener("DOMContentLoaded", () => {
       updateDocTypeCount(); // Ensure the badge starts with correct count
@@ -364,7 +364,6 @@
   
     // Start Over functionality
     const resetBtn = document.getElementById("reset-btn");
-    const docTypeCountBadge = document.getElementById("doc-type-count-badge"); // Badge count for document type count
   
     resetBtn.addEventListener("click", () => {
       // Clear all document type chips
@@ -377,7 +376,7 @@
       // Ensure dropdown is cleared and hidden
       docTypesDropdown.innerHTML = "";
       docTypesDropdown.classList.add("hidden");
-
+  
       // Reset document type count badge
       docTypeCountBadge.textContent = "0";
   
@@ -390,7 +389,7 @@
           input.value = ""; // Reset other inputs to blank
         }
       });
-        
+  
       // Reset dropdowns (like Business Impact)
       const selects = document.querySelectorAll("select");
       selects.forEach((select) => (select.selectedIndex = 0));
