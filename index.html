@@ -7,7 +7,8 @@
   <!-- Include Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Include Firebase Configuration -->
-  <script type="module" src="./firebase-config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js"></script>
   <!-- Include Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -190,14 +191,25 @@
     const docTypesDropdown = document.getElementById("doc-types-dropdown");
     const docTypeCountBadge = document.getElementById("doc-type-count"); // Badge for count
   
-    import { db } from "./firebase-config.js"; // Ensure this points to the correct file
-    import { collection, getDocs } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCTNI8ZOfSVRFm1w_V2kgVKlIfuMQoLFyc",
+      authDomain: "roi-calculator-5c4a4.firebaseapp.com",
+      projectId: "roi-calculator-5c4a4",
+      storageBucket: "roi-calculator-5c4a4.appspot.com",
+      messagingSenderId: "484775728997",
+      appId: "1:484775728997:web:02fcfea46b9f568418338c"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
     let defaultDocTypes = []; // Initialize an empty array for document types
 
     async function fetchDocumentTypes() {
       try {
-        const querySnapshot = await getDocs(collection(db, "documentTypes"));
+        const querySnapshot = await db.collection("documentTypes").get();
         defaultDocTypes = querySnapshot.docs.map((doc) => doc.data().name); // Fetch document names from Firestore
         console.log("Fetched Document Types:", defaultDocTypes);
         populateDocTypeDropdown(); // Ensure dropdown is populated with dynamic data
