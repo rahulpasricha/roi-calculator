@@ -6,6 +6,8 @@
   <title>ROI Calculator</title>
   <!-- Include Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Include Firebase Configuration -->
+  <script type="module" src="./firebase-config.js"></script>
   <!-- Include Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -188,7 +190,24 @@
     const docTypesDropdown = document.getElementById("doc-types-dropdown");
     const docTypeCountBadge = document.getElementById("doc-type-count"); // Badge for count
   
-    const defaultDocTypes = ["Invoices", "Contracts", "Bank Statements", "Policy Declaration", "Engineering Diagram"];
+    import { db } from "./firebase-config.js"; // Import Firebase config
+    import { collection, getDocs } from "firebase/firestore";
+
+    let defaultDocTypes = []; // Initialize an empty array for document types
+
+    async function fetchDocumentTypes() {
+      try {
+        const querySnapshot = await getDocs(collection(db, "documentTypes"));
+        defaultDocTypes = querySnapshot.docs.map((doc) => doc.data().name); // Fetch document names from Firestore
+        console.log("Fetched Document Types:", defaultDocTypes);
+        populateDocTypeDropdown(); // Ensure dropdown is populated with dynamic data
+      } catch (error) {
+        console.error("Error fetching document types:", error);
+      }
+    }
+
+    // Call the function immediately after page load
+    document.addEventListener("DOMContentLoaded", fetchDocumentTypes);
     const addedDocTypes = new Set(); // Keeps track of selected document types
     let focusedOptionIndex = -1; // Tracks focused option for dropdown navigation
   
