@@ -376,6 +376,9 @@
       // Ensure dropdown is cleared and hidden
       docTypesDropdown.innerHTML = "";
       docTypesDropdown.classList.add("hidden");
+
+      // Reset document type count badge
+      docTypeCountBadge.textContent = "0";
   
       // Reset all other input fields
       const inputs = document.querySelectorAll("input");
