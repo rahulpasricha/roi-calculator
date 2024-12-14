@@ -280,36 +280,35 @@
     function populateDocTypeDropdown() {
       const inputValue = docTypesInput.value.toLowerCase().trim();
 
-      // Prevent dropdown from appearing on empty input
-      if (!inputValue) {
-        docTypesDropdown.classList.add("hidden");
-        return;
-      }
-
+      // Filter available options
       const availableOptions = defaultDocTypes.filter(
         (type) => !addedDocTypes.has(type) && type.toLowerCase().includes(inputValue)
       );
 
       docTypesDropdown.innerHTML = ""; // Clear previous options
-      if (availableOptions.length > 0) {
-        availableOptions.forEach((type, index) => {
-          const li = document.createElement("li");
-          li.textContent = type;
-          li.className = "cursor-pointer px-3 py-2 hover:bg-indigo-100 text-gray-700";
-          li.addEventListener("click", () => {
-            addChip(type);
-            updateOverflowFades();
-            docTypesDropdown.classList.add("hidden"); // Hide dropdown
-          });
-          docTypesDropdown.appendChild(li);
-        });
-        docTypesDropdown.classList.remove("hidden");
-      } else {
+
+      // If no options are available
+      if (availableOptions.length === 0) {
         docTypesDropdown.innerHTML = `<li class="px-3 py-2 text-gray-500">No document types available</li>`;
-        docTypesDropdown.classList.remove("hidden"); // Show fallback message
+        docTypesDropdown.classList.remove("hidden");
+        return;
       }
 
-      focusedOptionIndex = -1; // Reset focus index
+      // Populate dropdown with available options
+      availableOptions.forEach((type, index) => {
+        const li = document.createElement("li");
+        li.textContent = type;
+        li.className = "cursor-pointer px-3 py-2 hover:bg-indigo-100 text-gray-700";
+        li.addEventListener("click", () => {
+          addChip(type);
+          updateOverflowFades();
+          docTypesDropdown.classList.add("hidden"); // Hide dropdown after selection
+        });
+        docTypesDropdown.appendChild(li);
+      });
+
+      // Display the dropdown
+      docTypesDropdown.classList.remove("hidden");
     }
   
     // Add chip for selected or custom type
