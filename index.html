@@ -204,15 +204,15 @@
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-
-    let defaultDocTypes = []; // Initialize an empty array for document types
+    
+    console.log("Firestore Initialized:", db);
 
     async function fetchDocumentTypes() {
       try {
         const querySnapshot = await db.collection("documentTypes").get();
         defaultDocTypes = querySnapshot.docs.map((doc) => doc.data().name); // Fetch document names from Firestore
         console.log("Fetched Document Types:", defaultDocTypes);
-        populateDocTypeDropdown(); // Ensure dropdown is populated with dynamic data
+        populateDocTypeDropdown(defaultDocTypes); // Pass the fetched document types
       } catch (error) {
         console.error("Error fetching document types:", error);
       }
@@ -351,6 +351,7 @@
   
     // Initialize badge count on page load
     document.addEventListener("DOMContentLoaded", () => {
+      fetchDocumentTypes(); // Fetch and populate document types
       updateDocTypeCount(); // Ensure the badge starts with correct count
     });
   
