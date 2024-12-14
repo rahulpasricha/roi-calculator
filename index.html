@@ -186,7 +186,7 @@
     const docTypesContainer = document.getElementById("doc-types-container");
     const docTypesInput = document.getElementById("doc-types");
     const docTypesDropdown = document.getElementById("doc-types-dropdown");
-    const docTypeCountBadge = document.getElementById("doc-type-count-badge"); // Badge for count
+    const docTypeCountBadge = document.getElementById("doc-type-count"); // Badge for count
   
     const defaultDocTypes = ["Invoices", "Contracts", "Bank Statements", "Policy Declaration", "Engineering Diagram"];
     const addedDocTypes = new Set(); // Keeps track of selected document types
@@ -245,6 +245,7 @@
     function updateDocTypeCount() {
       const count = addedDocTypes.size;
       docTypeCountBadge.textContent = `${count}`; // Update badge text
+      docTypeCountBadge.style.display = count > 0 ? "inline-block" : "none"; // Hide badge when count is 0
     }
   
     // Handle keyboard navigation
@@ -378,7 +379,7 @@
       docTypesDropdown.classList.add("hidden");
   
       // Reset document type count badge
-      docTypeCountBadge.textContent = "0";
+      updateDocTypeCount();
   
       // Reset all other input fields
       const inputs = document.querySelectorAll("input");
