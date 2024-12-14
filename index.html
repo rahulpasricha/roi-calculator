@@ -190,8 +190,8 @@
     const docTypesDropdown = document.getElementById("doc-types-dropdown");
     const docTypeCountBadge = document.getElementById("doc-type-count"); // Badge for count
   
-    import { db } from "./firebase-config.js"; // Import Firebase config
-    import { collection, getDocs } from "firebase/firestore";
+    import { db } from "./firebase-config.js"; // Ensure this points to the correct file
+    import { collection, getDocs } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 
     let defaultDocTypes = []; // Initialize an empty array for document types
 
