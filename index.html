@@ -278,68 +278,60 @@
   
     // Populate dropdown dynamically
     function populateDocTypeDropdown() {
-      const inputRect = docTypesInput.getBoundingClientRect();
-      const dropdown = docTypesDropdown;
-      const inputValue = docTypesInput.value.toLowerCase();
+      const inputValue = docTypesInput.value.toLowerCase().trim();
+
+      // Prevent dropdown from appearing on empty input
+      if (!inputValue) {
+        docTypesDropdown.classList.add("hidden");
+        return;
+      }
 
       const availableOptions = defaultDocTypes.filter(
         (type) => !addedDocTypes.has(type) && type.toLowerCase().includes(inputValue)
       );
 
-      dropdown.innerHTML = ""; // Clear previous options
+      docTypesDropdown.innerHTML = ""; // Clear previous options
       if (availableOptions.length > 0) {
         availableOptions.forEach((type, index) => {
           const li = document.createElement("li");
           li.textContent = type;
           li.className = "cursor-pointer px-3 py-2 hover:bg-indigo-100 text-gray-700";
-          li.setAttribute("data-index", index);
           li.addEventListener("click", () => {
             addChip(type);
             updateOverflowFades();
-            dropdown.classList.add("hidden"); // Hide dropdown
+            docTypesDropdown.classList.add("hidden"); // Hide dropdown
           });
-          dropdown.appendChild(li);
+          docTypesDropdown.appendChild(li);
         });
-        dropdown.classList.remove("hidden");
-
-        // Calculate positioning to prevent viewport overflow
-        const dropdownRect = dropdown.getBoundingClientRect();
-        const viewportHeight = window.innerHeight;
-
-        if (dropdownRect.bottom > viewportHeight) {
-          dropdown.style.top = `${inputRect.top - dropdown.offsetHeight - 4}px`; // Show above input
-        } else {
-          dropdown.style.top = `${inputRect.bottom + 4}px`; // Show below input
-        }
-        dropdown.style.left = `${inputRect.left}px`;
-        dropdown.style.width = `${inputRect.width}px`;
+        docTypesDropdown.classList.remove("hidden");
       } else {
-        dropdown.innerHTML = `<li class="px-3 py-2 text-gray-500">No document types available</li>`;
-        dropdown.classList.remove("hidden"); // Show fallback message
+        docTypesDropdown.innerHTML = `<li class="px-3 py-2 text-gray-500">No document types available</li>`;
+        docTypesDropdown.classList.remove("hidden"); // Show fallback message
       }
+
       focusedOptionIndex = -1; // Reset focus index
     }
   
     // Add chip for selected or custom type
     function addChip(type) {
       if (!type.trim() || addedDocTypes.has(type)) return; // Ignore empty input or duplicates
-  
-      addedDocTypes.add(type); // Add to set
+
+      addedDocTypes.add(type); // Add to the set of selected types
       updateDocTypeCount(); // Update the count badge
-  
+
       const chip = document.createElement("span");
-      chip.className =
-        "inline-flex items-center bg-blue-100 text-blue-800 text-sm font-medium px-3 py-0.5 rounded-full";
+      chip.className = "inline-flex items-center bg-blue-100 text-blue-800 text-sm font-medium px-3 py-0.5 rounded-full";
       chip.innerHTML = `${type} <button class="ml-2 text-blue-500 hover:text-blue-600 focus:outline-none">&times;</button>`;
       chip.querySelector("button").addEventListener("click", () => {
         chip.remove();
-        addedDocTypes.delete(type); // Remove from set
-        updateDocTypeCount(); // Update the count badge
+        addedDocTypes.delete(type); // Remove from the set of selected types
+        populateDocTypeDropdown(); // Refresh the dropdown options
+        updateOverflowFades();
       });
-  
+
       docTypesContainer.insertBefore(chip, docTypesInput); // Add chip before the input field
-      docTypesInput.value = ""; // Clear input field
-      populateDocTypeDropdown(); // Refresh dropdown options
+      docTypesInput.value = ""; // Clear the input field
+      populateDocTypeDropdown(); // Refresh the dropdown options
     }
   
     // Update document type count badge
@@ -387,18 +379,12 @@
     });
     docTypesInput.addEventListener("focus", () => {
       setTimeout(() => {
-        if (docTypesInput.value.trim() !== "") {
-          populateDocTypeDropdown();
-        }
-      }, 100); // Delay slightly to ensure input readiness
+        populateDocTypeDropdown(); // Re-trigger dropdown population
+      }, 100);
     });
 
     docTypesInput.addEventListener("click", () => {
-      setTimeout(() => {
-        if (docTypesInput.value.trim() !== "") {
-          populateDocTypeDropdown();
-        }
-      }, 100);
+      populateDocTypeDropdown(); // Re-trigger dropdown population
     });
   
     // Add chip on Enter
@@ -501,6 +487,11 @@
       docTypesDropdown.innerHTML = "";
       docTypesDropdown.classList.add("hidden");
   
+      // Re-fetch document types and reinitialize the dropdown
+      fetchDocumentTypes().then(() => {
+        populateDocTypeDropdown(); // Reinitialize the dropdown
+      });
+
       // Reset document type count badge
       updateDocTypeCount();
   
