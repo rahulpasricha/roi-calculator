@@ -224,12 +224,12 @@
     let focusedOptionIndex = -1; // Tracks focused option for dropdown navigation
   
     // Populate dropdown dynamically
-    function populateDocTypeDropdown() {
+    function populateDocTypeDropdown(defaultDocTypes) {
       const inputValue = docTypesInput.value.toLowerCase();
       const availableOptions = defaultDocTypes.filter(
         (type) => !addedDocTypes.has(type) && type.toLowerCase().includes(inputValue)
       );
-  
+
       docTypesDropdown.innerHTML = ""; // Clear previous options
       if (availableOptions.length > 0) {
         availableOptions.forEach((type, index) => {
