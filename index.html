@@ -26,9 +26,17 @@
       display: none;
     }
   
-    /* Style to prevent dropdown overlap on reload or focus */
     #doc-types-container {
-      position: relative;
+      display: flex;
+      flex-wrap: wrap; /* Allow chips to wrap as a whole */
+      align-items: center;
+      gap: 8px; /* Space between chips */
+      border: 1px solid #d1d5db; /* Match the input styling */
+      padding: 8px; /* Adjust for better UX */
+      border-radius: 0.375rem;
+      background-color: #fff; /* Match the input background */
+      max-height: 120px; /* Set a height limit */
+      overflow-y: auto; /* Enable vertical scrolling if needed */
     }
 
     #chips-fade-left,
