@@ -30,20 +30,6 @@
     #doc-types-container {
       position: relative;
     }
-
-    #chips-fade-left,
-    #chips-fade-right {
-      position: absolute;
-      pointer-events: none; /* Prevent user interaction */
-    }
-
-    #chips-fade-left {
-      left: 0;
-    }
-
-    #chips-fade-right {
-      right: 0;
-    }
   </style>
 </head>
 <body class="bg-gradient-to-br from-gray-50 via-white to-gray-100">
@@ -78,17 +64,10 @@
           </div>
           <div id="doc-types-container"
             class="flex items-center gap-2 border border-gray-300 rounded-md bg-white px-3 py-1.5 shadow-sm overflow-x-auto relative">
-            
-            <!-- Left Fade -->
-            <div id="chips-fade-left" 
-                class="absolute inset-y-0 left-0 w-6 bg-gradient-to-r from-white to-transparent pointer-events-none hidden"></div>
 
             <input id="doc-types" placeholder="Type or select document types"
               class="flex-grow bg-transparent outline-none text-sm text-gray-900 placeholder-gray-400" />
 
-            <!-- Right Fade -->
-            <div id="chips-fade-right" 
-                class="absolute inset-y-0 right-0 w-6 bg-gradient-to-l from-white to-transparent pointer-events-none hidden"></div>
           </div>
           <ul id="doc-types-dropdown"
             class="absolute z-10 mt-1 w-full max-w-[300px] bg-white border border-gray-300 rounded-md shadow-lg max-h-40 overflow-y-auto hidden">
@@ -297,7 +276,6 @@
           li.className = "cursor-pointer px-3 py-2 hover:bg-indigo-100 text-gray-700";
           li.addEventListener("click", () => {
             addChip(type); // Add chip on selection
-            updateOverflowFades(); // Update fade visibility
             docTypesDropdown.classList.add("hidden"); // Hide dropdown after selection
           });
           docTypesDropdown.appendChild(li);
@@ -345,7 +323,6 @@
         chip.remove();
         addedDocTypes.delete(type); // Remove from the set of selected types
         populateDocTypeDropdown(); // Refresh the dropdown options
-        updateOverflowFades();
       });
 
       docTypesContainer.insertBefore(chip, docTypesInput); // Add chip before the input field
@@ -411,7 +388,6 @@
       if (event.key === "Enter" && focusedOptionIndex === -1) {
         event.preventDefault(); // Prevent form submission
         addChip(docTypesInput.value.trim()); // Add chip for entered text
-        updateOverflowFades();
       }
     });
   
@@ -439,7 +415,6 @@
         const inputValue = docTypesInput.value.trim();
         if (inputValue) {
           addChip(inputValue); // Add chip for remaining input value
-          updateOverflowFades();
         }
         docTypesDropdown.classList.add("hidden"); // Hide dropdown
       }, 150); // Delay to process click events
@@ -491,11 +466,8 @@
   
     addImpactBtn.addEventListener("click", createImpactRow);
   
-    // Start Over functionality
-    const resetBtn = document.getElementById("reset-btn");
-  
+    // Reset functionality
     resetBtn.addEventListener("click", () => {
-      // Clear all document type chips
       // Clear dropdown and chips
       docTypesDropdown.innerHTML = "";
       docTypesDropdown.classList.add("hidden"); // Hide dropdown
@@ -510,8 +482,7 @@
       docTypesContainer.querySelectorAll("span").forEach((chip) => chip.remove());
       docTypesInput.value = ""; // Clear input field
       updateDocTypeCount(); // Reset count badge
-      updateOverflowFades(); // Reset overflow fades
-  
+
       // Reset all other input fields
       const inputs = document.querySelectorAll("input");
       inputs.forEach((input) => {
@@ -521,21 +492,21 @@
           input.value = ""; // Reset other inputs to blank
         }
       });
-  
+
       // Reset dropdowns (like Business Impact)
       const selects = document.querySelectorAll("select");
       selects.forEach((select) => (select.selectedIndex = 0));
-  
+
       // Clear all dynamically added business impact rows
       businessImpactSection.innerHTML = "";
-  
+
       // Hide offshore section
       offshoreSection.classList.add("hidden");
       offshoreToggle.checked = false;
-  
+
       // Scroll to the top of the page
       window.scrollTo({ top: 0, behavior: "smooth" });
-  
+
       // Focus the first input field
       const firstInput = document.getElementById("num-pages");
       if (firstInput) {
@@ -551,22 +522,6 @@
       }
     });
 
-    function updateOverflowFades() {
-      const container = document.getElementById('doc-types-container');
-      const fadeLeft = document.getElementById('chips-fade-left');
-      const fadeRight = document.getElementById('chips-fade-right');
-
-      // Check if there is overflow on either side
-      const hasOverflowLeft = container.scrollLeft > 0;
-      const hasOverflowRight = container.scrollWidth > container.clientWidth + container.scrollLeft;
-
-      // Toggle fade visibility
-      fadeLeft.classList.toggle('hidden', !hasOverflowLeft);
-      fadeRight.classList.toggle('hidden', !hasOverflowRight);
-    }
-
-    // Trigger fade updates on scroll and when chips are added/removed
-    document.getElementById('doc-types-container').addEventListener('scroll', updateOverflowFades);
   </script>
 </body>
 </html>
