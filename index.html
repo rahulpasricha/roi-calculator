@@ -431,8 +431,16 @@
   
     // Initialize badge count on page load
     document.addEventListener("DOMContentLoaded", () => {
-      fetchDocumentTypes(); // Fetch and populate document types
-      updateDocTypeCount(); // Ensure the badge starts with correct count
+      // Fetch and populate document types immediately on page load
+      fetchDocumentTypes().then(() => {
+        populateDocTypeDropdown(); // Ensure dropdown is populated after fetching types
+      });
+
+      // Focus on the first input field (num-pages) on page load
+      const firstInput = document.getElementById("num-pages");
+      if (firstInput) {
+        firstInput.focus();
+      }
     });
   
     // Business Impact Rows
@@ -477,40 +485,42 @@
   
     // Reset functionality
     resetBtn.addEventListener("click", () => {
-      // Clear chips and addedDocTypes
+      // Clear chips and dropdown
       docTypesContainer.querySelectorAll("span").forEach((chip) => chip.remove());
-      addedDocTypes.clear();
-      docTypesInput.value = ""; // Clear input field
-      updateDocTypeCount(); // Reset count badge
+      addedDocTypes.clear(); // Clear selected types
+      docTypesInput.value = ""; // Clear the input field
+      updateDocTypeCount(); // Reset the count badge
       docTypesDropdown.innerHTML = ""; // Clear dropdown options
-      docTypesDropdown.classList.add("hidden"); // Hide dropdown
+      docTypesDropdown.classList.add("hidden"); // Ensure dropdown is hidden
 
-      // Reset all text and number inputs
+      // Reset all input fields
       const inputs = document.querySelectorAll("input");
       inputs.forEach((input) => {
         if (input.id === "usa-ft-time" || input.id === "off-ft-time") {
-          input.value = "100"; // Default time percentages
+          input.value = "100"; // Set default time percentages
         } else {
-          input.value = ""; // Clear other inputs
+          input.value = ""; // Clear all other inputs
         }
       });
 
-      // Reset Business Impact rows
-      businessImpactSection.innerHTML = ""; // Clear dynamically added rows
+      // Reset Business Impact section
+      businessImpactSection.innerHTML = ""; // Remove all dynamically added rows
 
-      // Reset dropdowns (like Business Impact select fields)
+      // Reset dropdowns (like Business Impact selects)
       const selects = document.querySelectorAll("select");
-      selects.forEach((select) => (select.selectedIndex = 0)); // Reset dropdowns to default
+      selects.forEach((select) => (select.selectedIndex = 0));
 
-      // Reset Offshore Section
-      offshoreSection.classList.add("hidden");
-      offshoreToggle.checked = false;
+      // Reset Offshore section
+      offshoreToggle.checked = false; // Uncheck the toggle
+      offshoreSection.classList.add("hidden"); // Hide the section
 
-      // Fetch and reinitialize document types
+      // Re-fetch document types and reinitialize the dropdown
       fetchDocumentTypes();
 
-      // Scroll to the top of the page and refocus on the first input field
+      // Scroll to the top of the page
       window.scrollTo({ top: 0, behavior: "smooth" });
+
+      // Refocus on the first input field
       const firstInput = document.getElementById("num-pages");
       if (firstInput) firstInput.focus();
     });
