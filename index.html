@@ -290,25 +290,27 @@
       // If no options are available
       if (availableOptions.length === 0) {
         docTypesDropdown.innerHTML = `<li class="px-3 py-2 text-gray-500">No document types available</li>`;
-        docTypesDropdown.classList.remove("hidden");
-        return;
+      } else {
+        // Populate dropdown with available options
+        availableOptions.forEach((type) => {
+          const li = document.createElement("li");
+          li.textContent = type;
+          li.className = "cursor-pointer px-3 py-2 hover:bg-indigo-100 text-gray-700";
+          li.addEventListener("click", () => {
+            addChip(type);
+            updateOverflowFades();
+            docTypesDropdown.classList.add("hidden"); // Hide dropdown after selection
+          });
+          docTypesDropdown.appendChild(li);
+        });
       }
 
-      // Populate dropdown with available options
-      availableOptions.forEach((type, index) => {
-        const li = document.createElement("li");
-        li.textContent = type;
-        li.className = "cursor-pointer px-3 py-2 hover:bg-indigo-100 text-gray-700";
-        li.addEventListener("click", () => {
-          addChip(type);
-          updateOverflowFades();
-          docTypesDropdown.classList.add("hidden"); // Hide dropdown after selection
-        });
-        docTypesDropdown.appendChild(li);
-      });
-
-      // Display the dropdown
-      docTypesDropdown.classList.remove("hidden");
+      // Show dropdown only if input has focus or user clicks inside
+      if (docTypesInput === document.activeElement && (inputValue || defaultDocTypes.length > 0)) {
+        docTypesDropdown.classList.remove("hidden");
+      } else {
+        docTypesDropdown.classList.add("hidden");
+      }
     }
   
     // Add chip for selected or custom type
@@ -369,22 +371,14 @@
     }
   
     // Event Listeners
-    let debounceTimeout;
     docTypesInput.addEventListener("input", () => {
       clearTimeout(debounceTimeout);
       debounceTimeout = setTimeout(() => {
-        populateDocTypeDropdown();
-      }, 300); // Adjust the debounce time as needed
+        populateDocTypeDropdown(); // Update dropdown with filtered options
+      }, 300);
     });
-    docTypesInput.addEventListener("focus", () => {
-      setTimeout(() => {
-        populateDocTypeDropdown(); // Re-trigger dropdown population
-      }, 100);
-    });
-
-    docTypesInput.addEventListener("click", () => {
-      populateDocTypeDropdown(); // Re-trigger dropdown population
-    });
+    docTypesInput.addEventListener("focus", populateDocTypeDropdown); // Open dropdown on focus
+    docTypesInput.addEventListener("click", populateDocTypeDropdown); // Open dropdown on click
   
     // Add chip on Enter
     docTypesInput.addEventListener("keydown", (event) => {
@@ -427,8 +421,17 @@
   
     // Initialize badge count on page load
     document.addEventListener("DOMContentLoaded", () => {
-      fetchDocumentTypes(); // Fetch and populate document types
-      updateDocTypeCount(); // Ensure the badge starts with correct count
+      fetchDocumentTypes(); // Fetch document types but do not trigger dropdown.
+      updateDocTypeCount(); // Ensure the badge starts with correct count.
+      
+      // Ensure dropdown remains hidden initially
+      docTypesDropdown.classList.add("hidden");
+
+      // Focus the first input field (optional, for usability)
+      const firstInput = document.getElementById("num-pages");
+      if (firstInput) {
+        firstInput.focus();
+      }
     });
   
     // Business Impact Rows
