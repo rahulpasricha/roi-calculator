@@ -28,7 +28,12 @@
   
     /* Style to prevent dropdown overlap on reload or focus */
     #doc-types-container {
-      position: relative;
+      display: flex;
+      flex-wrap: nowrap; /* Prevent wrapping */
+      align-items: center;
+      gap: 8px; /* Space between chips */
+      overflow-y: auto; /* Enable vertical scrolling */
+      max-height: 120px; /* Set max height */
     }
   </style>
 </head>
@@ -62,12 +67,8 @@
               0 Selected
             </span>
           </div>
-          <div id="doc-types-container"
-            class="flex items-center gap-2 border border-gray-300 rounded-md bg-white px-3 py-1.5 shadow-sm overflow-x-auto relative">
-
-            <input id="doc-types" placeholder="Type or select document types"
-              class="flex-grow bg-transparent outline-none text-sm text-gray-900 placeholder-gray-400" />
-
+          <div id="doc-types-container" class="flex items-center gap-2 border border-gray-300 rounded-md bg-white px-3 py-1.5 shadow-sm overflow-y-auto relative">
+            <input id="doc-types" placeholder="Type or select document types" class="flex-grow bg-transparent outline-none text-sm text-gray-900 placeholder-gray-400" />
           </div>
           <ul id="doc-types-dropdown"
             class="absolute z-10 mt-1 w-full max-w-[300px] bg-white border border-gray-300 rounded-md shadow-lg max-h-40 overflow-y-auto hidden">
@@ -254,8 +255,6 @@
     document.addEventListener("DOMContentLoaded", fetchDocumentTypes);
     const addedDocTypes = new Set(); // Keeps track of selected document types
     let focusedOptionIndex = -1; // Tracks focused option for dropdown navigation
-  
-    // Populate dropdown dynamically
     function populateDocTypeDropdown() {
       const inputValue = docTypesInput.value.toLowerCase().trim();
 
@@ -282,13 +281,22 @@
         });
       }
 
-      // Show dropdown if options are available
-      docTypesDropdown.classList.toggle("hidden", availableOptions.length === 0);
+      // Only show dropdown if input has focus or contains a value
+      if (docTypesInput === document.activeElement || inputValue) {
+        docTypesDropdown.classList.remove("hidden");
+      } else {
+        docTypesDropdown.classList.add("hidden");
+      }
     }
 
-    // Show dropdown on input focus or click
+    // Ensure dropdown is hidden unless user focuses or types
     docTypesInput.addEventListener("focus", () => {
-      populateDocTypeDropdown(); // Populate and show dropdown
+      populateDocTypeDropdown();
+    });
+    docTypesInput.addEventListener("blur", () => {
+      setTimeout(() => {
+        docTypesDropdown.classList.add("hidden");
+      }, 150);
     });
 
     docTypesInput.addEventListener("click", () => {
@@ -468,50 +476,42 @@
   
     // Reset functionality
     resetBtn.addEventListener("click", () => {
-      // Clear dropdown and chips
+      // Clear chips and dropdown
+      docTypesContainer.querySelectorAll("span").forEach((chip) => chip.remove());
+      addedDocTypes.clear();
       docTypesDropdown.innerHTML = "";
       docTypesDropdown.classList.add("hidden"); // Hide dropdown
-      addedDocTypes.clear(); // Clear selected document types
+      docTypesInput.value = "";
+      updateDocTypeCount();
 
-      // Re-fetch and reinitialize document types
-      fetchDocumentTypes().then(() => {
-        populateDocTypeDropdown(); // Ensure dropdown is functional after reset
-      });
-
-      // Reset chips
-      docTypesContainer.querySelectorAll("span").forEach((chip) => chip.remove());
-      docTypesInput.value = ""; // Clear input field
-      updateDocTypeCount(); // Reset count badge
+      // Re-fetch document types and reinitialize dropdown
+      fetchDocumentTypes();
 
       // Reset all other input fields
       const inputs = document.querySelectorAll("input");
       inputs.forEach((input) => {
         if (input.id === "usa-ft-time" || input.id === "off-ft-time") {
-          input.value = "100"; // Set default value to 100 for full-time percentage fields
+          input.value = "100"; // Default time percentage
         } else {
-          input.value = ""; // Reset other inputs to blank
+          input.value = ""; // Clear all other inputs
         }
       });
 
-      // Reset dropdowns (like Business Impact)
+      // Reset dropdowns (e.g., Business Impact)
       const selects = document.querySelectorAll("select");
       selects.forEach((select) => (select.selectedIndex = 0));
 
-      // Clear all dynamically added business impact rows
+      // Clear dynamically added Business Impact rows
       businessImpactSection.innerHTML = "";
 
-      // Hide offshore section
+      // Reset Offshore section
       offshoreSection.classList.add("hidden");
       offshoreToggle.checked = false;
 
-      // Scroll to the top of the page
+      // Scroll to top and focus the first input
       window.scrollTo({ top: 0, behavior: "smooth" });
-
-      // Focus the first input field
       const firstInput = document.getElementById("num-pages");
-      if (firstInput) {
-        firstInput.focus();
-      }
+      if (firstInput) firstInput.focus();
     });
   
     // Focus the first input field on page load
