@@ -285,31 +285,51 @@
         (type) => !addedDocTypes.has(type) && type.toLowerCase().includes(inputValue)
       );
 
-      docTypesDropdown.innerHTML = ""; // Clear previous options
+      // Clear previous dropdown options
+      docTypesDropdown.innerHTML = "";
 
-      // If no options are available
       if (availableOptions.length === 0) {
         docTypesDropdown.innerHTML = `<li class="px-3 py-2 text-gray-500">No document types available</li>`;
-        docTypesDropdown.classList.remove("hidden");
-        return;
+      } else {
+        availableOptions.forEach((type) => {
+          const li = document.createElement("li");
+          li.textContent = type;
+          li.className = "cursor-pointer px-3 py-2 hover:bg-indigo-100 text-gray-700";
+          li.addEventListener("click", () => {
+            addChip(type); // Add chip on selection
+            updateOverflowFades(); // Update fade visibility
+            docTypesDropdown.classList.add("hidden"); // Hide dropdown after selection
+          });
+          docTypesDropdown.appendChild(li);
+        });
       }
 
-      // Populate dropdown with available options
-      availableOptions.forEach((type, index) => {
-        const li = document.createElement("li");
-        li.textContent = type;
-        li.className = "cursor-pointer px-3 py-2 hover:bg-indigo-100 text-gray-700";
-        li.addEventListener("click", () => {
-          addChip(type);
-          updateOverflowFades();
-          docTypesDropdown.classList.add("hidden"); // Hide dropdown after selection
-        });
-        docTypesDropdown.appendChild(li);
-      });
-
-      // Display the dropdown
-      docTypesDropdown.classList.remove("hidden");
+      // Show dropdown if options are available
+      docTypesDropdown.classList.toggle("hidden", availableOptions.length === 0);
     }
+
+    // Show dropdown on input focus or click
+    docTypesInput.addEventListener("focus", () => {
+      populateDocTypeDropdown(); // Populate and show dropdown
+    });
+
+    docTypesInput.addEventListener("click", () => {
+      if (docTypesDropdown.classList.contains("hidden")) {
+        populateDocTypeDropdown(); // Show dropdown if hidden
+      }
+    });
+
+    // Hide dropdown when clicking outside the input or dropdown
+    document.addEventListener("click", (event) => {
+      if (!docTypesContainer.contains(event.target)) {
+        docTypesDropdown.classList.add("hidden"); // Hide dropdown on outside click
+      }
+    });
+
+    // Prevent hiding dropdown when interacting with it
+    docTypesDropdown.addEventListener("mousedown", (event) => {
+      event.preventDefault(); // Allow interaction without hiding
+    });
   
     // Add chip for selected or custom type
     function addChip(type) {
@@ -476,23 +496,21 @@
   
     resetBtn.addEventListener("click", () => {
       // Clear all document type chips
-      docTypesContainer.querySelectorAll("span").forEach((chip) => chip.remove()); // Remove all chips
-      addedDocTypes.clear(); // Clear the set of added document types
-  
-      // Reset input field
-      docTypesInput.value = "";
-  
-      // Ensure dropdown is cleared and hidden
+      // Clear dropdown and chips
       docTypesDropdown.innerHTML = "";
-      docTypesDropdown.classList.add("hidden");
-  
-      // Re-fetch document types and reinitialize the dropdown
+      docTypesDropdown.classList.add("hidden"); // Hide dropdown
+      addedDocTypes.clear(); // Clear selected document types
+
+      // Re-fetch and reinitialize document types
       fetchDocumentTypes().then(() => {
-        populateDocTypeDropdown(); // Reinitialize the dropdown
+        populateDocTypeDropdown(); // Ensure dropdown is functional after reset
       });
 
-      // Reset document type count badge
-      updateDocTypeCount();
+      // Reset chips
+      docTypesContainer.querySelectorAll("span").forEach((chip) => chip.remove());
+      docTypesInput.value = ""; // Clear input field
+      updateDocTypeCount(); // Reset count badge
+      updateOverflowFades(); // Reset overflow fades
   
       // Reset all other input fields
       const inputs = document.querySelectorAll("input");
