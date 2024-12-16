@@ -478,12 +478,15 @@
     ];
   
     function createImpactRow() {
+      const rowCount = businessImpactSection.children.length + 1; // Count rows to determine label number
+
       const row = document.createElement("div");
       row.className = "grid grid-cols-12 gap-4 items-center";
 
       row.innerHTML = `
         <!-- Impact Dropdown -->
         <div class="col-span-7">
+          <label class="block text-sm font-medium text-gray-700">Impact ${rowCount} <span class="text-red-600">*</span></label>
           <select class="impact-select block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm">
             <option value="" disabled selected>Select an Impact</option>
             ${availableImpacts.map((impact) => `<option value="${impact}">${impact}</option>`).join("")}
@@ -492,6 +495,7 @@
 
         <!-- USD Value Input -->
         <div class="col-span-4">
+          <label class="block text-sm font-medium text-gray-700">Value in USD ${rowCount} <span class="text-red-600">*</span></label>
           <input type="number" placeholder="Value in USD" 
                 class="impact-value block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm">
         </div>
@@ -516,12 +520,22 @@
       // Remove button functionality
       removeBtn.addEventListener("click", () => {
         row.remove();
-        clearError(impactSelect); // Clear any lingering errors when row is deleted
-        clearError(impactValueInput);
+        updateImpactLabels(); // Re-number labels after row removal
       });
 
       // Append row to the section
       businessImpactSection.appendChild(row);
+    }
+
+    // Function to update Impact and Value in USD labels dynamically
+    function updateImpactLabels() {
+      const rows = businessImpactSection.children;
+      Array.from(rows).forEach((row, index) => {
+        const impactLabel = row.querySelector("label:nth-child(1)");
+        const valueLabel = row.querySelector("label:nth-child(2)");
+        if (impactLabel) impactLabel.textContent = `Impact ${index + 1} *`;
+        if (valueLabel) valueLabel.textContent = `Value in USD ${index + 1} *`;
+      });
     }
   
     addImpactBtn.addEventListener("click", createImpactRow);
@@ -695,28 +709,28 @@
 
       // Show an error message for a specific input
       function showError(input, message) {
-      // Handle document types container separately
-      if (input.id === "doc-types-container") {
-        input.classList.add("error"); // Add the red border
-        // Add error message below the container if not already present
-        const errorLabel = document.createElement("span");
-        errorLabel.className = "error-message text-red-500 text-xs mt-1";
-        errorLabel.textContent = message;
+        // Handle document types container separately
+        if (input.id === "doc-types-container") {
+          input.classList.add("error"); // Add the red border
+          // Add error message below the container if not already present
+          const errorLabel = document.createElement("span");
+          errorLabel.className = "error-message text-red-500 text-xs mt-1";
+          errorLabel.textContent = message;
 
-        if (!input.nextElementSibling || !input.nextElementSibling.classList.contains("error-message")) {
-          input.insertAdjacentElement("afterend", errorLabel);
-        }
-      } else {
-        input.classList.add("error"); // Add red border for input fields
-        const errorLabel = document.createElement("span");
-        errorLabel.className = "error-message text-red-500 text-xs mt-1";
-        errorLabel.textContent = message;
+          if (!input.nextElementSibling || !input.nextElementSibling.classList.contains("error-message")) {
+            input.insertAdjacentElement("afterend", errorLabel);
+          }
+        } else {
+          input.classList.add("error"); // Add red border for input fields
+          const errorLabel = document.createElement("span");
+          errorLabel.className = "error-message text-red-500 text-xs mt-1";
+          errorLabel.textContent = message;
 
-        if (!input.nextElementSibling || !input.nextElementSibling.classList.contains("error-message")) {
-          input.insertAdjacentElement("afterend", errorLabel);
+          if (!input.nextElementSibling || !input.nextElementSibling.classList.contains("error-message")) {
+            input.insertAdjacentElement("afterend", errorLabel);
+          }
         }
       }
-    }
 
       // Show an error message for the document types container
       function showErrorForContainer(container, message) {
