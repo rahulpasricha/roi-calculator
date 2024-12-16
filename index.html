@@ -53,14 +53,25 @@
     #chips-fade-right {
       right: 0;
     }
+
     .just-validate-error-label {
-      color: #e53e3e;
-      font-size: 0.875rem;
+      color: #e53e3e; /* Red text for error messages */
+      font-size: 0.875rem; /* Smaller font size */
       margin-top: 0.25rem;
     }
-    input.just-validate-error-field {
-      border-color: #e53e3e;
+
+    input.just-validate-error-field,
+    select.just-validate-error-field {
+      border-color: #e53e3e; /* Red border for invalid fields */
+      border-width: 2px;
     }
+
+    input.just-validate-success-field,
+    select.just-validate-success-field {
+      border-color: #38a169; /* Green border for valid fields */
+      border-width: 2px;
+    }     
+
   </style>
 </head>
 <body class="bg-gradient-to-br from-gray-50 via-white to-gray-100">
@@ -572,7 +583,7 @@
 
     // Initialize JustValidate on form fields
     document.addEventListener("DOMContentLoaded", () => {
-      const validate = new JustValidate('main');
+      const validate = new JustValidate('form, body');
 
       // Validation rules for "Average # of Monthly Pages"
       validate.addField('#num-pages', [
