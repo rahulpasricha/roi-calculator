@@ -560,6 +560,61 @@
 
     // Trigger fade updates on scroll and when chips are added/removed
     document.getElementById('doc-types-container').addEventListener('scroll', updateOverflowFades);
+
+    // Input Validation
+    document.addEventListener("input", (e) => {
+      const target = e.target;
+
+      // 1. Full-Time Members Validation (Mandatory)
+      if (target.id === "usa-ft" || target.id === "off-ft") {
+        if (target.value.trim() === "") {
+          target.setCustomValidity("Full-Time Members is a mandatory field.");
+        } else {
+          target.setCustomValidity("");
+        }
+      }
+
+      // 2. % Time Spent Validation (Cannot exceed 100)
+      if (target.id === "usa-ft-time" || target.id === "usa-pt-time" || 
+          target.id === "off-ft-time" || target.id === "off-pt-time") {
+        const value = parseFloat(target.value);
+        if (value > 100) {
+          target.setCustomValidity("% Time Spent cannot exceed 100.");
+        } else {
+          target.setCustomValidity("");
+        }
+      }
+
+      // 3. Average # of Monthly Pages Validation
+      if (target.id === "num-pages") {
+        if (/^e/i.test(target.value) || parseFloat(target.value) < 0) {
+          target.setCustomValidity("Average # of Monthly Pages cannot start with 'e' or be negative.");
+        } else {
+          target.setCustomValidity("");
+        }
+      }
+
+      // 4. Hourly Rate Validation (Cannot be negative)
+      if (target.id === "usa-ft-rate" || target.id === "usa-pt-rate" || 
+          target.id === "off-ft-rate" || target.id === "off-pt-rate") {
+        if (parseFloat(target.value) < 0) {
+          target.setCustomValidity("Hourly Rate (USD) cannot be negative.");
+        } else {
+          target.setCustomValidity("");
+        }
+      }
+
+      // Ensure browser-native validation triggers
+      target.reportValidity();
+    });
+
+    // Add blur event to ensure validations persist on leaving the field
+    document.addEventListener("blur", (e) => {
+      if (e.target.tagName === "INPUT") {
+        e.target.reportValidity();
+      }
+    }, true);    
+
   </script>
 </body>
 </html>
