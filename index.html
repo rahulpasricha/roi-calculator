@@ -590,17 +590,17 @@
         clearAllErrors();
 
         const fields = [
-          { id: "num-pages", name: "Monthly pages", value: document.getElementById("num-pages").value, rules: { isInt: { min: 1 } } },
-          { id: "usa-ft", name: "Full-time team size", value: document.getElementById("usa-ft").value, rules: { isInt: { min: 1 } } },
-          { id: "usa-ft-time", name: "% time spent", value: document.getElementById("usa-ft-time").value, rules: { isInt: { min: 0, max: 100 } } },
-          { id: "usa-ft-rate", name: "Hourly rate (USD)", value: document.getElementById("usa-ft-rate").value, rules: { isFloat: { min: 0 } } },
+          { id: "num-pages", name: "Monthly pages", value: document.getElementById("num-pages").value, rules: { isInt: { min: 1 } }, error: "Enter a valid monthly volume." },
+          { id: "usa-ft", name: "Full-Time Members", value: document.getElementById("usa-ft").value, rules: { isInt: { min: 1 } }, error: "Enter at least 1 team member." },
+          { id: "usa-ft-time", name: "% time spent", value: document.getElementById("usa-ft-time").value, rules: { isInt: { min: 0, max: 100 } }, error: "Time spent must be between 0 and 100%." },
+          { id: "usa-ft-rate", name: "Hourly Rate (USD)", value: document.getElementById("usa-ft-rate").value, rules: { isFloat: { min: 0 } }, error: "Hourly rate must be at least $0." },
         ];
 
         if (offshoreToggle.checked) {
           const offshoreFields = [
-            { id: "off-ft", name: "Offshore team size", value: document.getElementById("off-ft").value, rules: { isInt: { min: 1 } } },
-            { id: "off-ft-time", name: "Offshore % time", value: document.getElementById("off-ft-time").value, rules: { isInt: { min: 0, max: 100 } } },
-            { id: "off-ft-rate", name: "Offshore hourly rate (USD)", value: document.getElementById("off-ft-rate").value, rules: { isFloat: { min: 0 } } },
+            { id: "off-ft", name: "Offshore Full-Time Members", value: document.getElementById("off-ft").value, rules: { isInt: { min: 1 } }, error: "Enter at least 1 offshore member." },
+            { id: "off-ft-time", name: "Offshore % time", value: document.getElementById("off-ft-time").value, rules: { isInt: { min: 0, max: 100 } }, error: "Time spent must be between 0 and 100%." },
+            { id: "off-ft-rate", name: "Offshore Hourly Rate (USD)", value: document.getElementById("off-ft-rate").value, rules: { isFloat: { min: 0 } }, error: "Offshore rate must be at least $0." },
           ];
           fields.push(...offshoreFields);
         }
@@ -610,9 +610,9 @@
           let error = "";
 
           if (field.rules.isInt && !validator.isInt(field.value, field.rules.isInt)) {
-            error = `Enter a valid value for ${field.name}.`;
+            error = field.error;
           } else if (field.rules.isFloat && !validator.isFloat(field.value, field.rules.isFloat)) {
-            error = `Enter a valid rate for ${field.name}.`;
+            error = field.error;
           }
 
           if (error) {
