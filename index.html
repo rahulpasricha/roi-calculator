@@ -480,27 +480,47 @@
     function createImpactRow() {
       const row = document.createElement("div");
       row.className = "grid grid-cols-12 gap-4 items-center";
-  
+
       row.innerHTML = `
+        <!-- Impact Dropdown -->
         <div class="col-span-7">
-          <select class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm">
+          <select class="impact-select block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm">
             <option value="" disabled selected>Select an Impact</option>
             ${availableImpacts.map((impact) => `<option value="${impact}">${impact}</option>`).join("")}
           </select>
         </div>
+
+        <!-- USD Value Input -->
         <div class="col-span-4">
-          <input type="number" placeholder="Value in USD" class="block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm">
+          <input type="number" placeholder="Value in USD" 
+                class="impact-value block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm">
         </div>
+
+        <!-- Remove Button -->
         <div class="col-span-1 flex justify-center items-center">
-          <button type="button" class="text-red-500 hover:text-red-700">
+          <button type="button" class="remove-impact-row text-red-500 hover:text-red-700">
             <i class="fas fa-trash"></i>
           </button>
         </div>
       `;
-  
-      const removeBtn = row.querySelector("button");
-      removeBtn.addEventListener("click", () => row.remove());
-  
+
+      // Input elements within the row
+      const impactSelect = row.querySelector(".impact-select");
+      const impactValueInput = row.querySelector(".impact-value");
+      const removeBtn = row.querySelector(".remove-impact-row");
+
+      // Event listener to clear errors on valid selection/input
+      impactSelect.addEventListener("change", () => clearError(impactSelect));
+      impactValueInput.addEventListener("input", () => clearError(impactValueInput));
+
+      // Remove button functionality
+      removeBtn.addEventListener("click", () => {
+        row.remove();
+        clearError(impactSelect); // Clear any lingering errors when row is deleted
+        clearError(impactValueInput);
+      });
+
+      // Append row to the section
       businessImpactSection.appendChild(row);
     }
   
@@ -582,57 +602,74 @@
 
       // Handle Calculate ROI button click
       calculateBtn.addEventListener("click", (event) => {
-        event.preventDefault(); // Prevent default form submission
+      event.preventDefault(); // Prevent default form submission
 
-        let isValid = true;
-        clearAllErrors();
+      let isValid = true;
+      clearAllErrors();
 
-        const fields = [
-          { id: "num-pages", name: "Monthly pages", value: document.getElementById("num-pages").value, rules: { isInt: { min: 1 } }, error: "Enter a valid monthly volume." },
-          { id: "usa-ft", name: "Full-Time Members", value: document.getElementById("usa-ft").value, rules: { isInt: { min: 1 } }, error: "Enter at least 1 team member." },
-          { id: "usa-ft-time", name: "% time spent", value: document.getElementById("usa-ft-time").value, rules: { isInt: { min: 0, max: 100 } }, error: "Time spent must be between 0 and 100%." },
-          { id: "usa-ft-rate", name: "Hourly Rate (USD)", value: document.getElementById("usa-ft-rate").value, rules: { isFloat: { min: 0.01 } }, error: "Hourly rate must be greater than $0." },
+      const fields = [
+        { id: "num-pages", name: "Monthly pages", value: document.getElementById("num-pages").value, rules: { isInt: { min: 1 } }, error: "Enter a valid monthly volume." },
+        { id: "usa-ft", name: "Full-Time Members", value: document.getElementById("usa-ft").value, rules: { isInt: { min: 1 } }, error: "Enter at least 1 team member." },
+        { id: "usa-ft-time", name: "% time spent", value: document.getElementById("usa-ft-time").value, rules: { isInt: { min: 0, max: 100 } }, error: "Time spent must be between 0 and 100%." },
+        { id: "usa-ft-rate", name: "Hourly Rate (USD)", value: document.getElementById("usa-ft-rate").value, rules: { isFloat: { min: 0.01 } }, error: "Hourly rate must be greater than $0." },
+      ];
+
+      // Validate at least one document type is selected
+      if (addedDocTypes.size === 0) {
+        isValid = false;
+        showError(docTypesContainer, "Select at least one document type.");
+      } else {
+        clearError(docTypesContainer);
+      }
+
+      if (offshoreToggle.checked) {
+        const offshoreFields = [
+          { id: "off-ft", name: "Offshore Full-Time Members", value: document.getElementById("off-ft").value, rules: { isInt: { min: 1 } }, error: "Enter at least 1 offshore member." },
+          { id: "off-ft-time", name: "Offshore % time", value: document.getElementById("off-ft-time").value, rules: { isInt: { min: 0, max: 100 } }, error: "Time spent must be between 0 and 100%." },
+          { id: "off-ft-rate", name: "Offshore Hourly Rate (USD)", value: document.getElementById("off-ft-rate").value, rules: { isFloat: { min: 0.01 } }, error: "Offshore rate must be greater than $0." },
         ];
+        fields.push(...offshoreFields);
+      }
 
-        // Validate at least one document type is selected
-        if (addedDocTypes.size === 0) {
+      fields.forEach((field) => {
+        const input = document.getElementById(field.id);
+        let error = "";
+
+        if (field.rules.isInt && !validator.isInt(field.value, field.rules.isInt)) {
+          error = field.error;
+        } else if (field.rules.isFloat && !validator.isFloat(field.value, field.rules.isFloat)) {
+          error = field.error;
+        }
+
+        if (error) {
           isValid = false;
-          showError(docTypesContainer, "Select at least one document type.");
-        } else {
-          clearError(docTypesContainer);
-        }
-
-        if (offshoreToggle.checked) {
-          const offshoreFields = [
-            { id: "off-ft", name: "Offshore Full-Time Members", value: document.getElementById("off-ft").value, rules: { isInt: { min: 1 } }, error: "Enter at least 1 offshore member." },
-            { id: "off-ft-time", name: "Offshore % time", value: document.getElementById("off-ft-time").value, rules: { isInt: { min: 0, max: 100 } }, error: "Time spent must be between 0 and 100%." },
-            { id: "off-ft-rate", name: "Offshore Hourly Rate (USD)", value: document.getElementById("off-ft-rate").value, rules: { isFloat: { min: 0.01 } }, error: "Offshore rate must be greater than $0." },
-          ];
-          fields.push(...offshoreFields);
-        }
-
-        fields.forEach((field) => {
-          const input = document.getElementById(field.id);
-          let error = "";
-
-          if (field.rules.isInt && !validator.isInt(field.value, field.rules.isInt)) {
-            error = field.error;
-          } else if (field.rules.isFloat && !validator.isFloat(field.value, field.rules.isFloat)) {
-            error = field.error;
-          }
-
-          if (error) {
-            isValid = false;
-            showError(input, error);
-          }
-        });
-
-        if (isValid) {
-          alert("Form is valid! Proceeding...");
-        } else {
-          alert("Please fix the errors before proceeding.");
+          showError(input, error);
         }
       });
+
+      // Business Impact Validation
+      const impactRows = document.querySelectorAll("#business-impact-section > div");
+      impactRows.forEach((row, index) => {
+        const impactSelect = row.querySelector("select");
+        const impactInput = row.querySelector("input");
+
+        if (!impactSelect.value) {
+          isValid = false;
+          showError(impactSelect, `Impact ${index + 1} is required.`);
+        }
+
+        if (!validator.isFloat(impactInput.value, { min: 0.01 })) {
+          isValid = false;
+          showError(impactInput, `Value for Impact ${index + 1} must be greater than $0.`);
+        }
+      });
+
+      if (isValid) {
+        alert("Form is valid! Proceeding...");
+      } else {
+        alert("Please fix the errors before proceeding.");
+      }
+    });
 
       // Attach listeners to clear validation errors on typing
       const inputs = document.querySelectorAll("input");
