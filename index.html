@@ -600,9 +600,9 @@
         // Add offshore fields if toggle is checked
         if (offshoreToggle.checked) {
           const offshoreFields = [
-            { id: 'off-pt', name: 'Offshore Part-Time Members', value: document.getElementById('off-pt').value, rules: { isInt: { min: 1 } } },
-            { id: 'off-pt-time', name: 'Offshore % Time Spent', value: document.getElementById('off-pt-time').value, rules: { isInt: { min: 0, max: 100 } } },
-            { id: 'off-pt-rate', name: 'Offshore Hourly Rate (USD)', value: document.getElementById('off-pt-rate').value, rules: { isFloat: { min: 0 } } },
+            { id: 'off-ft', name: 'Offshore Full-Time Members', value: document.getElementById('off-ft').value, rules: { isInt: { min: 1 } } },
+            { id: 'off-ft-time', name: 'Offshore % Time Spent', value: document.getElementById('off-ft-time').value, rules: { isInt: { min: 0, max: 100 } } },
+            { id: 'off-ft-rate', name: 'Offshore Hourly Rate (USD)', value: document.getElementById('off-ft-rate').value, rules: { isFloat: { min: 0 } } },
           ];
           fields.push(...offshoreFields);
         }
@@ -679,7 +679,7 @@
 
       // Clear errors specific to offshore fields
       function clearOffshoreErrors() {
-        ['off-pt', 'off-pt-time', 'off-pt-rate'].forEach((id) => {
+        ['off-ft', 'off-ft-time', 'off-ft-rate'].forEach((id) => {
           const input = document.getElementById(id);
           clearError(input);
         });
