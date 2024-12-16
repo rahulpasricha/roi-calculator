@@ -648,6 +648,20 @@
       ]);
     });
 
+    // Attach validation to the Calculate ROI button
+    const calculateBtn = document.getElementById('calculate-btn');
+    calculateBtn.addEventListener('click', (event) => {
+      event.preventDefault(); // Prevent default behavior
+      const isValid = validate.validate(); // Trigger validation check
+
+      if (isValid) {
+        alert('Form is valid! Calculating EOI...');
+        // Add your ROI calculation logic here
+      } else {
+        alert('Form has errors. Please fix them.');
+      }
+    });
+
   </script>
 </body>
 </html>
