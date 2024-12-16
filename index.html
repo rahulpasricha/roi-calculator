@@ -581,9 +581,10 @@
     // Trigger fade updates on scroll and when chips are added/removed
     document.getElementById('doc-types-container').addEventListener('scroll', updateOverflowFades);
 
+    let validate; // Declare validate globally so it can be accessed anywhere
     // Initialize JustValidate on form fields
     document.addEventListener("DOMContentLoaded", () => {
-      const validate = new JustValidate('form, body');
+      validate = new JustValidate('form, body');
 
       // Validation rules for "Average # of Monthly Pages"
       validate.addField('#num-pages', [
