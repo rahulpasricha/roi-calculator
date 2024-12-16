@@ -582,41 +582,37 @@
       const offshoreToggle = document.getElementById('toggle-offshore');
       const offshoreSection = document.getElementById('offshore-section');
 
-      calculateBtn.addEventListener('click', (event) => {
-        event.preventDefault(); // Prevent form submission
-        let isValid = true;
+      // Handle Calculate ROI button click
+      calculateBtn.addEventListener("click", (event) => {
+        event.preventDefault(); // Prevent default form submission
 
-        // Clear previous errors
+        let isValid = true;
         clearAllErrors();
 
-        // Get form values and fields
         const fields = [
-          { id: 'num-pages', name: 'Average # of Monthly Pages', value: document.getElementById('num-pages').value, rules: { isInt: { min: 1 } } },
-          { id: 'usa-ft', name: 'Full-Time Members', value: document.getElementById('usa-ft').value, rules: { isInt: { min: 1 } } },
-          { id: 'usa-ft-time', name: '% Time Spent', value: document.getElementById('usa-ft-time').value, rules: { isInt: { min: 0, max: 100 } } },
-          { id: 'usa-ft-rate', name: 'Hourly Rate (USD)', value: document.getElementById('usa-ft-rate').value, rules: { isFloat: { min: 0 } } },
+          { id: "num-pages", name: "Monthly pages", value: document.getElementById("num-pages").value, rules: { isInt: { min: 1 } } },
+          { id: "usa-ft", name: "Full-time team size", value: document.getElementById("usa-ft").value, rules: { isInt: { min: 1 } } },
+          { id: "usa-ft-time", name: "% time spent", value: document.getElementById("usa-ft-time").value, rules: { isInt: { min: 0, max: 100 } } },
+          { id: "usa-ft-rate", name: "Hourly rate (USD)", value: document.getElementById("usa-ft-rate").value, rules: { isFloat: { min: 0 } } },
         ];
 
-        // Add offshore fields if toggle is checked
         if (offshoreToggle.checked) {
           const offshoreFields = [
-            { id: 'off-ft', name: 'Offshore Full-Time Members', value: document.getElementById('off-ft').value, rules: { isInt: { min: 1 } } },
-            { id: 'off-ft-time', name: 'Offshore % Time Spent', value: document.getElementById('off-ft-time').value, rules: { isInt: { min: 0, max: 100 } } },
-            { id: 'off-ft-rate', name: 'Offshore Hourly Rate (USD)', value: document.getElementById('off-ft-rate').value, rules: { isFloat: { min: 0 } } },
+            { id: "off-ft", name: "Offshore team size", value: document.getElementById("off-ft").value, rules: { isInt: { min: 1 } } },
+            { id: "off-ft-time", name: "Offshore % time", value: document.getElementById("off-ft-time").value, rules: { isInt: { min: 0, max: 100 } } },
+            { id: "off-ft-rate", name: "Offshore hourly rate (USD)", value: document.getElementById("off-ft-rate").value, rules: { isFloat: { min: 0 } } },
           ];
           fields.push(...offshoreFields);
         }
 
-        // Validate each field
         fields.forEach((field) => {
           const input = document.getElementById(field.id);
-          let error = '';
+          let error = "";
 
           if (field.rules.isInt && !validator.isInt(field.value, field.rules.isInt)) {
-            error = `${field.name} must be a whole number${field.rules.isInt.min !== undefined ? ` of at least ${field.rules.isInt.min}` : ''}.`;
-          }
-          if (field.rules.isFloat && !validator.isFloat(field.value, field.rules.isFloat)) {
-            error = `${field.name} must be a valid number${field.rules.isFloat.min !== undefined ? ` of at least ${field.rules.isFloat.min}` : ''}.`;
+            error = `Enter a valid value for ${field.name}.`;
+          } else if (field.rules.isFloat && !validator.isFloat(field.value, field.rules.isFloat)) {
+            error = `Enter a valid rate for ${field.name}.`;
           }
 
           if (error) {
@@ -625,64 +621,56 @@
           }
         });
 
-        // Show success or error message
         if (isValid) {
-          alert('Form is valid! Proceeding...');
+          alert("Form is valid! Proceeding...");
         } else {
-          alert('Please fix the highlighted errors before proceeding.');
+          alert("Please fix the errors before proceeding.");
         }
       });
 
-      // Attach event listeners to clear validation on input
-      const inputs = document.querySelectorAll('input');
+      // Attach listeners to clear validation errors on typing
+      const inputs = document.querySelectorAll("input");
       inputs.forEach((input) => {
-        input.addEventListener('input', () => {
+        input.addEventListener("input", () => {
           clearError(input);
         });
       });
 
-      // Clear all errors
+      // Clear all error messages
       function clearAllErrors() {
-        document.querySelectorAll('.error').forEach((el) => el.classList.remove('error'));
-        document.querySelectorAll('.error-message').forEach((el) => el.remove());
+        document.querySelectorAll(".error").forEach((el) => el.classList.remove("error"));
+        document.querySelectorAll(".error-message").forEach((el) => el.remove());
       }
 
-      // Show an error for a specific input
-      function showError(input, message) {
-        input.classList.add('error');
+      // Clear errors specific to offshore fields
+      function clearOffshoreErrors() {
+        ["off-ft", "off-ft-time", "off-ft-rate"].forEach((id) => {
+          const input = document.getElementById(id);
+          clearError(input);
+        });
+      }
 
-        // Add error message
-        const errorLabel = document.createElement('span');
-        errorLabel.className = 'error-message';
+      // Show an error message for a specific input
+      function showError(input, message) {
+        input.classList.add("error");
+
+        const errorLabel = document.createElement("span");
+        errorLabel.className = "error-message text-red-500 text-xs mt-1";
         errorLabel.textContent = message;
-        input.insertAdjacentElement('afterend', errorLabel);
+
+        // Add the error message if it doesn't exist
+        if (!input.nextElementSibling || !input.nextElementSibling.classList.contains("error-message")) {
+          input.insertAdjacentElement("afterend", errorLabel);
+        }
       }
 
       // Clear a specific input's error
       function clearError(input) {
-        input.classList.remove('error');
+        input.classList.remove("error");
         const errorLabel = input.nextElementSibling;
-        if (errorLabel && errorLabel.classList.contains('error-message')) {
+        if (errorLabel && errorLabel.classList.contains("error-message")) {
           errorLabel.remove();
         }
-      }
-
-      // Show or hide the offshore section dynamically
-      offshoreToggle.addEventListener('change', () => {
-        if (offshoreToggle.checked) {
-          offshoreSection.classList.remove('hidden');
-        } else {
-          offshoreSection.classList.add('hidden');
-          clearOffshoreErrors(); // Clear errors if toggle is unchecked
-        }
-      });
-
-      // Clear errors specific to offshore fields
-      function clearOffshoreErrors() {
-        ['off-ft', 'off-ft-time', 'off-ft-rate'].forEach((id) => {
-          const input = document.getElementById(id);
-          clearError(input);
-        });
       }
     });
 
