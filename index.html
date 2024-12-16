@@ -229,6 +229,7 @@
 
   <script type="module">
     let defaultDocTypes = []; // Declare globally for shared use
+    let availableImpacts = []; // Dynamically populated from Firebase
     // Offshore Toggle Functionality
     const offshoreToggle = document.getElementById("toggle-offshore");
     const offshoreSection = document.getElementById("offshore-section");
@@ -272,6 +273,17 @@
         populateDocTypeDropdown(); // Pass the fetched document types
       } catch (error) {
         console.error("Error fetching document types:", error);
+      }
+    }
+
+    // Fetch Business Impact options from Firebase
+    async function fetchBusinessImpacts() {
+      try {
+        const querySnapshot = await getDocs(collection(db, "businessImpacts"));
+        availableImpacts = querySnapshot.docs.map((doc) => doc.data().impactName); // Extract impactName
+        console.log("Business Impacts:", availableImpacts);
+      } catch (error) {
+        console.error("Error fetching business impacts:", error);
       }
     }
 
@@ -454,6 +466,7 @@
     // Initialize badge count on page load
     document.addEventListener("DOMContentLoaded", () => {
       fetchDocumentTypes(); // Fetch document types but do not trigger dropdown.
+      fetchBusinessImpacts(); // Fetch business impact list
       updateDocTypeCount(); // Ensure the badge starts with correct count.
       
       // Ensure dropdown remains hidden initially
@@ -469,18 +482,6 @@
     // Business Impact Rows
     const businessImpactSection = document.getElementById("business-impact-section");
     const addImpactBtn = document.getElementById("add-impact-btn");
-    let availableImpacts = []; // Dynamically populated from Firebase
-
-    // Fetch Business Impact options from Firebase
-    async function fetchBusinessImpacts() {
-      try {
-        const querySnapshot = await getDocs(collection(db, "businessImpacts"));
-        availableImpacts = querySnapshot.docs.map((doc) => doc.data().impactName); // Extract impactName
-        console.log("Fetched Business Impacts:", availableImpacts); // Log for debugging
-      } catch (error) {
-        console.error("Error fetching business impacts:", error);
-      }
-    }
   
     function createImpactRow() {
       const rowCount = businessImpactSection.children.length + 1; // Count rows to determine label number
