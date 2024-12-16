@@ -585,8 +585,7 @@
         let isValid = true;
 
         // Clear previous errors
-        document.querySelectorAll('.error').forEach((el) => el.classList.remove('error'));
-        document.querySelectorAll('.error-message').forEach((el) => el.remove());
+        clearAllErrors();
 
         // Get form values and fields
         const fields = [
@@ -610,13 +609,7 @@
 
           if (error) {
             isValid = false;
-            input.classList.add('error');
-
-            // Add error message
-            const errorLabel = document.createElement('span');
-            errorLabel.className = 'error-message';
-            errorLabel.textContent = error;
-            input.insertAdjacentElement('afterend', errorLabel);
+            showError(input, error);
           }
         });
 
@@ -627,6 +620,40 @@
           alert('Please fix the highlighted errors before proceeding.');
         }
       });
+
+      // Attach event listeners to clear validation on input
+      const inputs = document.querySelectorAll('input');
+      inputs.forEach((input) => {
+        input.addEventListener('input', () => {
+          clearError(input);
+        });
+      });
+
+      // Clear all errors
+      function clearAllErrors() {
+        document.querySelectorAll('.error').forEach((el) => el.classList.remove('error'));
+        document.querySelectorAll('.error-message').forEach((el) => el.remove());
+      }
+
+      // Show an error for a specific input
+      function showError(input, message) {
+        input.classList.add('error');
+
+        // Add error message
+        const errorLabel = document.createElement('span');
+        errorLabel.className = 'error-message';
+        errorLabel.textContent = message;
+        input.insertAdjacentElement('afterend', errorLabel);
+      }
+
+      // Clear a specific input's error
+      function clearError(input) {
+        input.classList.remove('error');
+        const errorLabel = input.nextElementSibling;
+        if (errorLabel && errorLabel.classList.contains('error-message')) {
+          errorLabel.remove();
+        }
+      }
     });
 
   </script>
