@@ -299,6 +299,16 @@
     const addedDocTypes = new Set(); // Keeps track of selected document types
     let focusedOptionIndex = -1; // Tracks focused option for dropdown navigation
   
+    function clearError(input) {
+      if (input) {
+        input.classList.remove("error");
+        const errorLabel = input.nextElementSibling;
+        if (errorLabel && errorLabel.classList.contains("error-message")) {
+          errorLabel.remove();
+        }
+      }
+    }
+
     // Populate dropdown dynamically
     function populateDocTypeDropdown() {
       const inputValue = docTypesInput.value.toLowerCase().trim();
@@ -601,7 +611,7 @@
 
     // Trigger fade updates on scroll and when chips are added/removed
     document.getElementById('doc-types-container').addEventListener('scroll', updateOverflowFades);
-
+    
     // Validation code for input field
     document.addEventListener("DOMContentLoaded", () => {
       const calculateBtn = document.getElementById('calculate-btn');
@@ -726,15 +736,6 @@
 
         if (!container.nextElementSibling || !container.nextElementSibling.classList.contains("error-message")) {
           container.insertAdjacentElement("afterend", errorLabel);
-        }
-      }
-
-      // Clear a specific input's error
-      function clearError(input) {
-        input.classList.remove("error");
-        const errorLabel = input.nextElementSibling;
-        if (errorLabel && errorLabel.classList.contains("error-message")) {
-          errorLabel.remove();
         }
       }
     });
