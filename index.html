@@ -370,25 +370,32 @@
       chip.className = "inline-flex items-center bg-blue-100 text-blue-800 text-sm font-medium px-3 py-0.5 rounded-full";
       chip.innerHTML = `${type} <button class="ml-2 text-blue-500 hover:text-blue-600 focus:outline-none">&times;</button>`;
       chip.querySelector("button").addEventListener("click", () => {
-        chip.remove();
+        chip.remove(); // Remove chip from DOM
         addedDocTypes.delete(type); // Remove from the set of selected types
+        updateDocTypeCount(); // Update the count badge
         populateDocTypeDropdown(); // Refresh the dropdown options
-        updateOverflowFades();
+        updateOverflowFades(); // Update scrolling fades if necessary
+
+        // Clear validation error if applicable
+        if (addedDocTypes.size > 0) {
+          clearError(docTypesContainer);
+        }
       });
 
       docTypesContainer.insertBefore(chip, docTypesInput); // Add chip before the input field
       docTypesInput.value = ""; // Clear the input field
       populateDocTypeDropdown(); // Refresh the dropdown options
+      updateOverflowFades(); // Update scrolling fades if necessary
 
-      // Clear the validation error for the container
+      // Clear validation error if applicable
       clearError(docTypesContainer);
     }
   
     // Update document type count badge
     function updateDocTypeCount() {
       const count = addedDocTypes.size;
-      docTypeCountBadge.textContent = `${count}`; // Update badge text
-      docTypeCountBadge.style.display = count > 0 ? "inline-block" : "none"; // Hide badge when count is 0
+      docTypeCountBadge.textContent = `${count} Selected`; // Update badge text
+      docTypeCountBadge.style.display = count > 0 ? "inline-block" : "none"; // Hide badge if count is 0
     }
   
     // Handle keyboard navigation
@@ -528,73 +535,50 @@
     const resetBtn = document.getElementById("reset-btn");
   
     resetBtn.addEventListener("click", () => {
-      // Clear all error messages
-      document.querySelectorAll(".error").forEach((el) => el.classList.remove("error"));
-      document.querySelectorAll(".error-message").forEach((el) => el.remove());
+      clearAllErrors(); // Clear all validation errors
 
-      // Clear added document types
-      addedDocTypes.clear();
-      updateDocTypeCount();
+      // Clear all document type chips
+      docTypesContainer.querySelectorAll("span").forEach((chip) => chip.remove()); // Remove all chips
+      addedDocTypes.clear(); // Clear the set of added document types
+      updateDocTypeCount(); // Reset the count badge
 
-      // Reset document types container while keeping the input field intact
-      const docTypesContainer = document.getElementById("doc-types-container");
-      const docTypesInput = document.getElementById("doc-types");
-
-      // Remove all chips but retain the input field
-      Array.from(docTypesContainer.children).forEach((child) => {
-        if (child !== docTypesInput) {
-          child.remove();
-        }
-      });
-
-      // Reset input value
+      // Reset input field for document types
       docTypesInput.value = "";
 
       // Ensure dropdown is cleared and hidden
-      const docTypesDropdown = document.getElementById("doc-types-dropdown");
-      if (docTypesDropdown) {
-        docTypesDropdown.innerHTML = "";
-        docTypesDropdown.classList.add("hidden");
-      }
+      docTypesDropdown.innerHTML = "";
+      docTypesDropdown.classList.add("hidden");
 
-      // Reset all other inputs
-      document.querySelectorAll("input").forEach((input) => {
+      // Re-fetch document types and reinitialize the dropdown
+      fetchDocumentTypes().then(() => {
+        populateDocTypeDropdown(); // Reinitialize the dropdown
+      });
+
+      // Reset all other input fields
+      const inputs = document.querySelectorAll("input");
+      inputs.forEach((input) => {
         if (input.id === "usa-ft-time" || input.id === "off-ft-time") {
-          input.value = "100"; // Default value for % Time Spent
+          input.value = "100"; // Set default value to 100 for percentage fields
         } else {
-          input.value = ""; // Clear other fields
+          input.value = ""; // Reset other inputs to blank
         }
       });
 
       // Reset dropdowns (like Business Impact)
-      document.querySelectorAll("select").forEach((select) => {
-        select.selectedIndex = 0;
-      });
+      const selects = document.querySelectorAll("select");
+      selects.forEach((select) => (select.selectedIndex = 0));
 
-      // Clear dynamically added business impact rows
-      const businessImpactSection = document.getElementById("business-impact-section");
-      if (businessImpactSection) {
-        businessImpactSection.innerHTML = "";
-      }
+      // Clear all dynamically added Business Impact rows
+      businessImpactSection.innerHTML = "";
 
-      // Hide the offshore section
-      const offshoreSection = document.getElementById("offshore-section");
-      if (offshoreSection) {
-        offshoreSection.classList.add("hidden");
-      }
+      // Hide offshore section
+      offshoreSection.classList.add("hidden");
+      offshoreToggle.checked = false;
 
-      const offshoreToggle = document.getElementById("toggle-offshore");
-      if (offshoreToggle) {
-        offshoreToggle.checked = false;
-      }
-
-      // Ensure overflow fades are updated after DOM changes
-      updateOverflowFades();
-
-      // Scroll to top
+      // Scroll to the top of the page
       window.scrollTo({ top: 0, behavior: "smooth" });
 
-        // Focus the first input field
+      // Focus the first input field (Monthly Pages)
       const firstInput = document.getElementById("num-pages");
       if (firstInput) {
         firstInput.focus();
