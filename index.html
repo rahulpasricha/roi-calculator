@@ -565,18 +565,36 @@
     document.addEventListener("input", (e) => {
       const target = e.target;
 
-      // 1. Full-Time Members Validation (Mandatory)
-      if (target.id === "usa-ft" || target.id === "off-ft") {
+      // Prevent negative values directly
+      if (
+        target.id === "usa-ft" || target.id === "usa-pt" ||
+        target.id === "off-ft" || target.id === "off-pt" ||
+        target.id === "usa-ft-rate" || target.id === "usa-pt-rate" ||
+        target.id === "off-ft-rate" || target.id === "off-pt-rate" ||
+        target.id === "num-pages"
+      ) {
+        if (parseFloat(target.value) < 0) {
+          target.value = ""; // Reset input if a negative value is entered
+        }
+      }
+
+      // Full-Time Members & Part-Time Members Validation (Mandatory)
+      if (
+        target.id === "usa-ft" || target.id === "usa-pt" ||
+        target.id === "off-ft" || target.id === "off-pt"
+      ) {
         if (target.value.trim() === "") {
-          target.setCustomValidity("Full-Time Members is a mandatory field.");
+          target.setCustomValidity("This field is required.");
         } else {
           target.setCustomValidity("");
         }
       }
 
-      // 2. % Time Spent Validation (Cannot exceed 100)
-      if (target.id === "usa-ft-time" || target.id === "usa-pt-time" || 
-          target.id === "off-ft-time" || target.id === "off-pt-time") {
+      // % Time Spent Validation (Cannot exceed 100)
+      if (
+        target.id === "usa-ft-time" || target.id === "usa-pt-time" ||
+        target.id === "off-ft-time" || target.id === "off-pt-time"
+      ) {
         const value = parseFloat(target.value);
         if (value > 100) {
           target.setCustomValidity("% Time Spent cannot exceed 100.");
@@ -585,35 +603,23 @@
         }
       }
 
-      // 3. Average # of Monthly Pages Validation
+      // Average # of Monthly Pages Validation (Prevent 'e' or exponential input)
       if (target.id === "num-pages") {
-        if (/^e/i.test(target.value) || parseFloat(target.value) < 0) {
-          target.setCustomValidity("Average # of Monthly Pages cannot start with 'e' or be negative.");
-        } else {
-          target.setCustomValidity("");
+        if (/^e/i.test(target.value)) {
+          target.value = ""; // Reset input if it starts with 'e'
         }
       }
 
-      // 4. Hourly Rate Validation (Cannot be negative)
-      if (target.id === "usa-ft-rate" || target.id === "usa-pt-rate" || 
-          target.id === "off-ft-rate" || target.id === "off-pt-rate") {
-        if (parseFloat(target.value) < 0) {
-          target.setCustomValidity("Hourly Rate (USD) cannot be negative.");
-        } else {
-          target.setCustomValidity("");
-        }
-      }
-
-      // Ensure browser-native validation triggers
+      // Trigger browser-native validation feedback
       target.reportValidity();
     });
 
-    // Add blur event to ensure validations persist on leaving the field
+    // Ensure required fields are validated on blur
     document.addEventListener("blur", (e) => {
       if (e.target.tagName === "INPUT") {
         e.target.reportValidity();
       }
-    }, true);    
+    }, true);  
 
   </script>
 </body>
