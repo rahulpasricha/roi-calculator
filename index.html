@@ -11,22 +11,22 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     #doc-types-container {
-      position: relative; /* Parent container for proper positioning */
+      position: relative; /* This makes the dropdown align relative to the container */
     }
 
     #doc-types-dropdown {
-      position: absolute; /* Align relative to container */
-      top: 100%; /* Position below the input field */
-      left: 0; /* Align left */
-      z-index: 10;
-      max-height: 200px;
+      position: absolute; /* Aligns the dropdown relative to its parent container */
+      top: 100%; /* Places the dropdown directly below the input field */
+      left: 0; /* Aligns the dropdown to the left of the container */
+      z-index: 9999; /* Ensures dropdown is above other elements */
+      max-height: 200px; /* Restrict height and enable scrolling */
       overflow-y: auto;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      background-color: white;
+      background-color: white; /* Background for the dropdown */
       border: 1px solid #d1d5db;
       border-radius: 0.375rem;
-      width: 100%; /* Match the width of the container */
-      display: none; /* Hidden initially */
+      width: 100%; /* Matches the container width */
+      display: none; /* Ensure it is initially hidden */
     }
   
     /* Hide dropdown initially */
@@ -345,11 +345,11 @@
         });
       }
 
-      // Show dropdown only if input has focus or user clicks inside
-      if (docTypesInput === document.activeElement && (inputValue || defaultDocTypes.length > 0)) {
-        docTypesDropdown.classList.remove("hidden");
+      // Show dropdown only if options exist
+      if (availableOptions.length > 0) {
+        docTypesDropdown.style.display = "block";
       } else {
-        docTypesDropdown.classList.add("hidden");
+        docTypesDropdown.style.display = "none";
       }
     }
   
@@ -465,13 +465,8 @@
     // Hide dropdown and add chip on blur (if value exists)
     docTypesInput.addEventListener("blur", () => {
       setTimeout(() => {
-        const inputValue = docTypesInput.value.trim();
-        if (inputValue) {
-          addChip(inputValue); // Add chip for remaining input value
-          updateOverflowFades();
-        }
-        docTypesDropdown.classList.add("hidden"); // Hide dropdown
-      }, 150); // Delay to process click events
+        docTypesDropdown.style.display = "none";
+      }, 150); // Delay to allow clicks on dropdown options
     });
   
     // Initialize badge count on page load
