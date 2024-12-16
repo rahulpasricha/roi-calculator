@@ -501,7 +501,7 @@
     const resetBtn = document.getElementById("reset-btn");
   
     resetBtn.addEventListener("click", () => {
-      // Clear all error messages and styles inline
+      // Clear all error messages
       document.querySelectorAll(".error").forEach((el) => el.classList.remove("error"));
       document.querySelectorAll(".error-message").forEach((el) => el.remove());
 
@@ -509,48 +509,63 @@
       addedDocTypes.clear();
       updateDocTypeCount();
 
-      // Reset the input field inside doc-types-container
+      // Reset document types container while keeping the input field intact
+      const docTypesContainer = document.getElementById("doc-types-container");
       const docTypesInput = document.getElementById("doc-types");
-      docTypesInput.value = ""; // Clear the input value
 
-      // Remove all chips but keep the input field intact
+      // Remove all chips but retain the input field
       Array.from(docTypesContainer.children).forEach((child) => {
         if (child !== docTypesInput) {
           child.remove();
         }
       });
 
-      // Ensure the dropdown is cleared and hidden
-      docTypesDropdown.innerHTML = "";
-      docTypesDropdown.classList.add("hidden");
+      // Reset input value
+      docTypesInput.value = "";
 
-      // Reset all other input fields
-      const inputs = document.querySelectorAll("input");
-      inputs.forEach((input) => {
+      // Ensure dropdown is cleared and hidden
+      const docTypesDropdown = document.getElementById("doc-types-dropdown");
+      if (docTypesDropdown) {
+        docTypesDropdown.innerHTML = "";
+        docTypesDropdown.classList.add("hidden");
+      }
+
+      // Reset all other inputs
+      document.querySelectorAll("input").forEach((input) => {
         if (input.id === "usa-ft-time" || input.id === "off-ft-time") {
-          input.value = "100"; // Set default value for time percentage fields
+          input.value = "100"; // Default value for % Time Spent
         } else {
-          input.value = ""; // Clear other inputs
+          input.value = ""; // Clear other fields
         }
       });
 
       // Reset dropdowns (like Business Impact)
-      const selects = document.querySelectorAll("select");
-      selects.forEach((select) => (select.selectedIndex = 0));
+      document.querySelectorAll("select").forEach((select) => {
+        select.selectedIndex = 0;
+      });
 
-      // Clear all dynamically added business impact rows
-      businessImpactSection.innerHTML = "";
+      // Clear dynamically added business impact rows
+      const businessImpactSection = document.getElementById("business-impact-section");
+      if (businessImpactSection) {
+        businessImpactSection.innerHTML = "";
+      }
 
       // Hide the offshore section
-      offshoreSection.classList.add("hidden");
-      offshoreToggle.checked = false;
+      const offshoreSection = document.getElementById("offshore-section");
+      if (offshoreSection) {
+        offshoreSection.classList.add("hidden");
+      }
 
-      // Scroll to the top of the page
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      const offshoreToggle = document.getElementById("toggle-offshore");
+      if (offshoreToggle) {
+        offshoreToggle.checked = false;
+      }
 
-      // Re-initialize document types dropdown and update overflow fades
-      populateDocTypeDropdown();
+      // Ensure overflow fades are updated after DOM changes
       updateOverflowFades();
+
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
   
     // Focus the first input field on page load
@@ -562,17 +577,22 @@
     });
 
     function updateOverflowFades() {
-      const container = document.getElementById('doc-types-container');
-      const fadeLeft = document.getElementById('chips-fade-left');
-      const fadeRight = document.getElementById('chips-fade-right');
+      const container = document.getElementById("doc-types-container");
+      const fadeLeft = document.getElementById("chips-fade-left");
+      const fadeRight = document.getElementById("chips-fade-right");
+
+      // Ensure the container and fades exist before proceeding
+      if (!container || !fadeLeft || !fadeRight) {
+        return; // Exit if any element is null
+      }
 
       // Check if there is overflow on either side
       const hasOverflowLeft = container.scrollLeft > 0;
       const hasOverflowRight = container.scrollWidth > container.clientWidth + container.scrollLeft;
 
       // Toggle fade visibility
-      fadeLeft.classList.toggle('hidden', !hasOverflowLeft);
-      fadeRight.classList.toggle('hidden', !hasOverflowRight);
+      fadeLeft.classList.toggle("hidden", !hasOverflowLeft);
+      fadeRight.classList.toggle("hidden", !hasOverflowRight);
     }
 
     // Trigger fade updates on scroll and when chips are added/removed
@@ -644,14 +664,14 @@
         });
       });
 
-      // Start Over button clears validation errors
-      resetBtn.addEventListener("click", () => {
-        clearAllErrors();
-        addedDocTypes.clear();
-        const docTypesInput = document.getElementById("doc-types");
-        docTypesInput.value = ""; // Clear input
-        docTypesContainer.innerHTML = ""; // Clear chips
-      });
+      // // Start Over button clears validation errors
+      // resetBtn.addEventListener("click", () => {
+      //   clearAllErrors();
+      //   addedDocTypes.clear();
+      //   const docTypesInput = document.getElementById("doc-types");
+      //   docTypesInput.value = ""; // Clear input
+      //   docTypesContainer.innerHTML = ""; // Clear chips
+      // });
 
       // Clear all error messages
       function clearAllErrors() {
