@@ -427,12 +427,16 @@
     }
   
     // Event Listeners
+    let debounceTimeout = null; // Initialize with `null` to ensure it’s defined
+
     docTypesInput.addEventListener("input", () => {
-      clearTimeout(debounceTimeout);
-      clearError(docTypesContainer);
+      if (debounceTimeout) {
+        clearTimeout(debounceTimeout); // Safely clear previous timeout
+      }
+
       debounceTimeout = setTimeout(() => {
-        populateDocTypeDropdown(); // Update dropdown with filtered options
-      }, 300);
+        populateDocTypeDropdown(); // Populate the dropdown after 300ms delay
+      }, 300); // Delay duration
     });
     docTypesInput.addEventListener("focus", populateDocTypeDropdown); // Open dropdown on focus
     docTypesInput.addEventListener("click", populateDocTypeDropdown); // Open dropdown on click
