@@ -6,6 +6,7 @@
   <title>ROI Calculator</title>
   <!-- Include Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/just-validate@3.3.3/dist/just-validate.production.min.js"></script>
   <!-- Include Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
@@ -51,6 +52,14 @@
 
     #chips-fade-right {
       right: 0;
+    }
+    .just-validate-error-label {
+      color: #e53e3e;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+    input.just-validate-error-field {
+      border-color: #e53e3e;
     }
   </style>
 </head>
@@ -560,6 +569,73 @@
 
     // Trigger fade updates on scroll and when chips are added/removed
     document.getElementById('doc-types-container').addEventListener('scroll', updateOverflowFades);
+
+    // Initialize JustValidate on form fields
+    document.addEventListener("DOMContentLoaded", () => {
+      const validate = new JustValidate('main');
+
+      // Validation rules for "Average # of Monthly Pages"
+      validate.addField('#num-pages', [
+        {
+          rule: 'required',
+          errorMessage: 'This field is required',
+        },
+        {
+          rule: 'minNumber',
+          value: 1,
+          errorMessage: 'Value must be greater than 0',
+        },
+        {
+          rule: 'customRegexp',
+          value: /^[0-9]+$/, // Ensure no "e" or invalid formats
+          errorMessage: 'Invalid input',
+        },
+      ]);
+
+      // Validation rules for "Full-Time Members"
+      validate.addField('#usa-ft', [
+        {
+          rule: 'required',
+          errorMessage: 'Full-time members are required',
+        },
+        {
+          rule: 'minNumber',
+          value: 1,
+          errorMessage: 'Value must be greater than 0',
+        },
+      ]);
+
+      // Validation rules for "% Time Spent"
+      validate.addField('#usa-ft-time', [
+        {
+          rule: 'required',
+          errorMessage: 'This field is required',
+        },
+        {
+          rule: 'maxNumber',
+          value: 100,
+          errorMessage: 'Cannot exceed 100%',
+        },
+      ]);
+
+      // Validation rules for "Hourly Rate (USD)"
+      validate.addField('#usa-ft-rate', [
+        {
+          rule: 'minNumber',
+          value: 0,
+          errorMessage: 'Hourly rate cannot be negative',
+        },
+      ]);
+
+      // Part-time members validation
+      validate.addField('#usa-pt', [
+        {
+          rule: 'minNumber',
+          value: 0,
+          errorMessage: 'Value must be 0 or more',
+        },
+      ]);
+    });
 
   </script>
 </body>
