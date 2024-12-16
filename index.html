@@ -535,6 +535,12 @@
     const resetBtn = document.getElementById("reset-btn");
   
     resetBtn.addEventListener("click", () => {
+      // Inline implementation of clearAllErrors
+      function clearAllErrors() {
+        document.querySelectorAll(".error").forEach((el) => el.classList.remove("error"));
+        document.querySelectorAll(".error-message").forEach((el) => el.remove());
+      }
+
       clearAllErrors(); // Clear all validation errors
 
       // Clear all document type chips
