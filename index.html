@@ -10,10 +10,7 @@
   <!-- Include Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    #doc-types-container {
-      position: relative; /* This makes the dropdown align relative to the container */
-    }
-
+    /* Ensure the dropdown stays within the viewport */
     #doc-types-dropdown {
       position: absolute; /* Position relative to the nearest positioned ancestor */
       z-index: 1000; /* Ensure it appears above other elements */
@@ -29,6 +26,10 @@
     /* Hide dropdown initially */
     #doc-types-dropdown.hidden {
       display: none;
+    }
+  
+    #doc-types-container {
+      position: relative; /* Ensure the dropdown positions relative to this container */
     }
 
     #chips-fade-left,
@@ -110,8 +111,8 @@
                 class="absolute inset-y-0 right-0 w-6 bg-gradient-to-l from-white to-transparent pointer-events-none hidden"></div>
           </div>
           <ul id="doc-types-dropdown"
-             class="absolute z-10 mt-1 w-full max-h-40 overflow-y-auto hidden">
-          <!-- Suggestions dynamically inserted -->
+            class="absolute z-10 mt-1 w-full max-w-[300px] bg-white border border-gray-300 rounded-md shadow-lg max-h-40 overflow-y-auto hidden">
+            <!-- Suggestions dynamically inserted -->
           </ul>
         </div>
       </div>
@@ -342,11 +343,11 @@
         });
       }
 
-      // Show dropdown only if options exist
-      if (availableOptions.length > 0) {
-        docTypesDropdown.style.display = "block";
+      // Show dropdown only if input has focus or user clicks inside
+      if (docTypesInput === document.activeElement && (inputValue || defaultDocTypes.length > 0)) {
+        docTypesDropdown.classList.remove("hidden");
       } else {
-        docTypesDropdown.style.display = "none";
+        docTypesDropdown.classList.add("hidden");
       }
     }
   
@@ -429,18 +430,7 @@
         populateDocTypeDropdown(); // Populate the dropdown after 300ms delay
       }, 300); // Delay duration
     });
-    // Show dropdown on focus
-    docTypesInput.addEventListener("focus", () => {
-      populateDocTypeDropdown();
-      docTypesDropdown.classList.remove("hidden");
-    });
-
-    // Hide dropdown when the input loses focus (after a short delay to allow clicks)
-    docTypesInput.addEventListener("blur", () => {
-      setTimeout(() => {
-        docTypesDropdown.classList.add("hidden");
-      }, 150);
-    });
+    docTypesInput.addEventListener("focus", populateDocTypeDropdown); // Open dropdown on focus
     docTypesInput.addEventListener("click", populateDocTypeDropdown); // Open dropdown on click
   
     // Add chip on Enter
@@ -473,8 +463,13 @@
     // Hide dropdown and add chip on blur (if value exists)
     docTypesInput.addEventListener("blur", () => {
       setTimeout(() => {
-        docTypesDropdown.style.display = "none";
-      }, 150); // Delay to allow clicks on dropdown options
+        const inputValue = docTypesInput.value.trim();
+        if (inputValue) {
+          addChip(inputValue); // Add chip for remaining input value
+          updateOverflowFades();
+        }
+        docTypesDropdown.classList.add("hidden"); // Hide dropdown
+      }, 150); // Delay to process click events
     });
   
     // Initialize badge count on page load
