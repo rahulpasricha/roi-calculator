@@ -655,14 +655,18 @@
       event.preventDefault(); // Prevent default behavior
 
       if (validate) {
-        // Trigger validation check
-        const isValid = await validate.revalidate(); // Revalidate all fields
+        try {
+          // Trigger validation
+          const isValid = await validate.validate();
 
-        if (isValid) {
-          alert('Form is valid! Proceeding...');
-          // Add your ROI calculation logic here
-        } else {
-          alert('Form has errors. Please fix them.');
+          if (isValid) {
+            alert('Form is valid! Proceeding...');
+            // Add your ROI calculation logic here
+          } else {
+            alert('Form has errors. Please fix them.');
+          }
+        } catch (err) {
+          console.error('Validation error:', err);
         }
       } else {
         console.error('Validation library not initialized!');
