@@ -376,9 +376,9 @@
         populateDocTypeDropdown(); // Refresh the dropdown options
         updateOverflowFades(); // Update scrolling fades if necessary
 
-        // Clear validation error if applicable
-        if (addedDocTypes.size > 0) {
-          clearError(docTypesContainer);
+        // If no chips remain, validate the container
+        if (addedDocTypes.size === 0) {
+          showError(docTypesContainer, "Select at least one document type.");
         }
       });
 
@@ -709,29 +709,28 @@
 
       // Show an error message for a specific input
       function showError(input, message) {
-        if (input.id === "doc-types-container") {
-          input.classList.add("error");
+      // Handle document types container separately
+      if (input.id === "doc-types-container") {
+        input.classList.add("error"); // Add the red border
+        // Add error message below the container if not already present
+        const errorLabel = document.createElement("span");
+        errorLabel.className = "error-message text-red-500 text-xs mt-1";
+        errorLabel.textContent = message;
 
-          // Add error message below the container if not already present
-          const errorLabel = document.createElement("span");
-          errorLabel.className = "error-message text-red-500 text-xs mt-1";
-          errorLabel.textContent = message;
+        if (!input.nextElementSibling || !input.nextElementSibling.classList.contains("error-message")) {
+          input.insertAdjacentElement("afterend", errorLabel);
+        }
+      } else {
+        input.classList.add("error"); // Add red border for input fields
+        const errorLabel = document.createElement("span");
+        errorLabel.className = "error-message text-red-500 text-xs mt-1";
+        errorLabel.textContent = message;
 
-          if (!input.nextElementSibling || !input.nextElementSibling.classList.contains("error-message")) {
-            input.insertAdjacentElement("afterend", errorLabel);
-          }
-        } else {
-          input.classList.add("error");
-
-          const errorLabel = document.createElement("span");
-          errorLabel.className = "error-message text-red-500 text-xs mt-1";
-          errorLabel.textContent = message;
-
-          if (!input.nextElementSibling || !input.nextElementSibling.classList.contains("error-message")) {
-            input.insertAdjacentElement("afterend", errorLabel);
-          }
+        if (!input.nextElementSibling || !input.nextElementSibling.classList.contains("error-message")) {
+          input.insertAdjacentElement("afterend", errorLabel);
         }
       }
+    }
 
       // Show an error message for the document types container
       function showErrorForContainer(container, message) {
