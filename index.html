@@ -30,6 +30,16 @@
   
     #doc-types-container {
       position: relative; /* Ensure the dropdown positions relative to this container */
+
+      display: flex;
+      flex-wrap: wrap; /* Allow chips to wrap to the next line */
+      gap: 8px; /* Add space between chips */
+      border: 1px solid #d1d5db; /* Match input styling */
+      padding: 8px; /* Adjust padding for better layout */
+      border-radius: 0.375rem; /* Rounded corners */
+      background-color: #fff; /* White background */
+      max-height: 120px; /* Optional: limit height if too many chips */
+      overflow-y: auto; /* Enable vertical scrolling if needed */
     }
 
     /* Highlight invalid fields */
@@ -83,7 +93,7 @@
             </span>
           </div>
           <div id="doc-types-container"
-            class="flex items-center gap-2 border border-gray-300 rounded-md bg-white px-3 py-1.5 shadow-sm overflow-x-auto relative">
+            class="flex items-center flex-wrap gap-2 border border-gray-300 rounded-md bg-white px-3 py-1.5 shadow-sm">
             <input id="doc-types" placeholder="Type or select document types"
               class="flex-grow bg-transparent outline-none text-sm text-gray-900 placeholder-gray-400" />
           </div>
