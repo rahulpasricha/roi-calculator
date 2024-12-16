@@ -356,6 +356,9 @@
       docTypesContainer.insertBefore(chip, docTypesInput); // Add chip before the input field
       docTypesInput.value = ""; // Clear the input field
       populateDocTypeDropdown(); // Refresh the dropdown options
+
+      // Clear the validation error for the container
+      clearError(docTypesContainer);
     }
   
     // Update document type count badge
@@ -396,6 +399,7 @@
     // Event Listeners
     docTypesInput.addEventListener("input", () => {
       clearTimeout(debounceTimeout);
+      clearError(docTypesContainer);
       debounceTimeout = setTimeout(() => {
         populateDocTypeDropdown(); // Update dropdown with filtered options
       }, 300);
@@ -689,15 +693,28 @@
 
       // Show an error message for a specific input
       function showError(input, message) {
-        input.classList.add("error");
+        // If the input is a container like doc-types-container
+        if (input.id === "doc-types-container") {
+          input.classList.add("error"); // Add the red border
+          const errorLabel = document.createElement("span");
+          errorLabel.className = "error-message text-red-500 text-xs mt-1";
+          errorLabel.textContent = message;
 
-        const errorLabel = document.createElement("span");
-        errorLabel.className = "error-message text-red-500 text-xs mt-1";
-        errorLabel.textContent = message;
+          // Add the error message if it doesn't exist
+          if (!input.nextElementSibling || !input.nextElementSibling.classList.contains("error-message")) {
+            input.insertAdjacentElement("afterend", errorLabel);
+          }
+        } else {
+          // Regular input field validation
+          input.classList.add("error");
 
-        // Add the error message if it doesn't exist
-        if (!input.nextElementSibling || !input.nextElementSibling.classList.contains("error-message")) {
-          input.insertAdjacentElement("afterend", errorLabel);
+          const errorLabel = document.createElement("span");
+          errorLabel.className = "error-message text-red-500 text-xs mt-1";
+          errorLabel.textContent = message;
+
+          if (!input.nextElementSibling || !input.nextElementSibling.classList.contains("error-message")) {
+            input.insertAdjacentElement("afterend", errorLabel);
+          }
         }
       }
 
