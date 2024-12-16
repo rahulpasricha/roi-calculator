@@ -469,13 +469,17 @@
     // Business Impact Rows
     const businessImpactSection = document.getElementById("business-impact-section");
     const addImpactBtn = document.getElementById("add-impact-btn");
-    const availableImpacts = [
-      "Business lost due to slow turnaround time",
-      "Cost of errors",
-      "Hiring and managing data entry team",
-      "Cost of employee training related to data entry",
-      "Losing business to competitor due to lack of technology edge",
-    ];
+    let availableImpacts = []; // Dynamically populated from Firebase
+
+    // Fetch Business Impact options from Firebase
+    async function fetchBusinessImpacts() {
+      try {
+        const querySnapshot = await getDocs(collection(db, "businessImpacts"));
+        availableImpacts = querySnapshot.docs.map((doc) => doc.data().impactName); // Extract impactName
+      } catch (error) {
+        console.error("Error fetching business impacts:", error);
+      }
+    }
   
     function createImpactRow() {
       const rowCount = businessImpactSection.children.length + 1; // Count rows to determine label number
@@ -495,7 +499,7 @@
 
         <!-- USD Value Input -->
         <div class="col-span-4">
-          <label class="block text-sm font-medium text-gray-700">Value in USD ${rowCount} <span class="text-red-600">*</span></label>
+          <label class="block text-sm font-medium text-gray-700">Value in USD <span class="text-red-600">*</span></label>
           <input type="number" placeholder="Value in USD" 
                 class="impact-value block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm">
         </div>
