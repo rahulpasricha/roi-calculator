@@ -579,6 +579,8 @@
     // Validation code for input field
     document.addEventListener("DOMContentLoaded", () => {
       const calculateBtn = document.getElementById('calculate-btn');
+      const offshoreToggle = document.getElementById('toggle-offshore');
+      const offshoreSection = document.getElementById('offshore-section');
 
       calculateBtn.addEventListener('click', (event) => {
         event.preventDefault(); // Prevent form submission
@@ -594,6 +596,16 @@
           { id: 'usa-ft-time', name: '% Time Spent', value: document.getElementById('usa-ft-time').value, rules: { isInt: { min: 0, max: 100 } } },
           { id: 'usa-ft-rate', name: 'Hourly Rate (USD)', value: document.getElementById('usa-ft-rate').value, rules: { isFloat: { min: 0 } } },
         ];
+
+        // Add offshore fields if toggle is checked
+        if (offshoreToggle.checked) {
+          const offshoreFields = [
+            { id: 'off-pt', name: 'Offshore Part-Time Members', value: document.getElementById('off-pt').value, rules: { isInt: { min: 1 } } },
+            { id: 'off-pt-time', name: 'Offshore % Time Spent', value: document.getElementById('off-pt-time').value, rules: { isInt: { min: 0, max: 100 } } },
+            { id: 'off-pt-rate', name: 'Offshore Hourly Rate (USD)', value: document.getElementById('off-pt-rate').value, rules: { isFloat: { min: 0 } } },
+          ];
+          fields.push(...offshoreFields);
+        }
 
         // Validate each field
         fields.forEach((field) => {
@@ -653,6 +665,24 @@
         if (errorLabel && errorLabel.classList.contains('error-message')) {
           errorLabel.remove();
         }
+      }
+
+      // Show or hide the offshore section dynamically
+      offshoreToggle.addEventListener('change', () => {
+        if (offshoreToggle.checked) {
+          offshoreSection.classList.remove('hidden');
+        } else {
+          offshoreSection.classList.add('hidden');
+          clearOffshoreErrors(); // Clear errors if toggle is unchecked
+        }
+      });
+
+      // Clear errors specific to offshore fields
+      function clearOffshoreErrors() {
+        ['off-pt', 'off-pt-time', 'off-pt-rate'].forEach((id) => {
+          const input = document.getElementById(id);
+          clearError(input);
+        });
       }
     });
 
