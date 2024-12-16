@@ -110,8 +110,8 @@
                 class="absolute inset-y-0 right-0 w-6 bg-gradient-to-l from-white to-transparent pointer-events-none hidden"></div>
           </div>
           <ul id="doc-types-dropdown"
-            class="absolute z-10 mt-1 w-full max-w-[300px] bg-white border border-gray-300 rounded-md shadow-lg max-h-40 overflow-y-auto hidden">
-            <!-- Suggestions dynamically inserted -->
+             class="absolute z-10 mt-1 w-full max-h-40 overflow-y-auto hidden">
+          <!-- Suggestions dynamically inserted -->
           </ul>
         </div>
       </div>
@@ -429,7 +429,18 @@
         populateDocTypeDropdown(); // Populate the dropdown after 300ms delay
       }, 300); // Delay duration
     });
-    docTypesInput.addEventListener("focus", populateDocTypeDropdown); // Open dropdown on focus
+    // Show dropdown on focus
+    docTypesInput.addEventListener("focus", () => {
+      populateDocTypeDropdown();
+      docTypesDropdown.classList.remove("hidden");
+    });
+
+    // Hide dropdown when the input loses focus (after a short delay to allow clicks)
+    docTypesInput.addEventListener("blur", () => {
+      setTimeout(() => {
+        docTypesDropdown.classList.add("hidden");
+      }, 150);
+    });
     docTypesInput.addEventListener("click", populateDocTypeDropdown); // Open dropdown on click
   
     // Add chip on Enter
