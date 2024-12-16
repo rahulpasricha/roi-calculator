@@ -501,8 +501,9 @@
     const resetBtn = document.getElementById("reset-btn");
   
     resetBtn.addEventListener("click", () => {
-      // Clear all error messages and styles
-      clearAllErrors();
+      // Clear all error messages and styles inline
+      document.querySelectorAll(".error").forEach((el) => el.classList.remove("error"));
+      document.querySelectorAll(".error-message").forEach((el) => el.remove());
 
       // Clear added document types
       addedDocTypes.clear();
