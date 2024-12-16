@@ -561,66 +561,6 @@
     // Trigger fade updates on scroll and when chips are added/removed
     document.getElementById('doc-types-container').addEventListener('scroll', updateOverflowFades);
 
-    // Input Validation
-    document.addEventListener("input", (e) => {
-      const target = e.target;
-
-      // Prevent negative values directly
-      if (
-        target.id === "usa-ft" || target.id === "usa-pt" ||
-        target.id === "off-ft" || target.id === "off-pt" ||
-        target.id === "usa-ft-rate" || target.id === "usa-pt-rate" ||
-        target.id === "off-ft-rate" || target.id === "off-pt-rate" ||
-        target.id === "num-pages"
-      ) {
-        if (parseFloat(target.value) < 0) {
-          target.value = ""; // Reset input if a negative value is entered
-        }
-      }
-
-      // Full-Time Members & Part-Time Members Validation (Mandatory)
-      if (
-        target.id === "usa-ft" || target.id === "usa-pt" ||
-        target.id === "off-ft" || target.id === "off-pt"
-      ) {
-        if (target.value.trim() === "") {
-          target.setCustomValidity("This field is required.");
-        } else {
-          target.setCustomValidity("");
-        }
-      }
-
-      // % Time Spent Validation (Cannot exceed 100)
-      if (
-        target.id === "usa-ft-time" || target.id === "usa-pt-time" ||
-        target.id === "off-ft-time" || target.id === "off-pt-time"
-      ) {
-        const value = parseFloat(target.value);
-        if (value > 100) {
-          target.setCustomValidity("% Time Spent cannot exceed 100.");
-        } else {
-          target.setCustomValidity("");
-        }
-      }
-
-      // Average # of Monthly Pages Validation (Prevent 'e' or exponential input)
-      if (target.id === "num-pages") {
-        if (/^e/i.test(target.value)) {
-          target.value = ""; // Reset input if it starts with 'e'
-        }
-      }
-
-      // Trigger browser-native validation feedback
-      target.reportValidity();
-    });
-
-    // Ensure required fields are validated on blur
-    document.addEventListener("blur", (e) => {
-      if (e.target.tagName === "INPUT") {
-        e.target.reportValidity();
-      }
-    }, true);  
-
   </script>
 </body>
 </html>
