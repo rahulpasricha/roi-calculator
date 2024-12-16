@@ -651,15 +651,21 @@
 
     // Attach validation to the Calculate ROI button
     const calculateBtn = document.getElementById('calculate-btn');
-    calculateBtn.addEventListener('click', (event) => {
+    calculateBtn.addEventListener('click', async (event) => {
       event.preventDefault(); // Prevent default behavior
-      const isValid = validate.validate(); // Trigger validation check
 
-      if (isValid) {
-        alert('Form is valid! Calculating EOI...');
-        // Add your ROI calculation logic here
+      if (validate) {
+        // Trigger validation check
+        const isValid = await validate.revalidate(); // Revalidate all fields
+
+        if (isValid) {
+          alert('Form is valid! Proceeding...');
+          // Add your ROI calculation logic here
+        } else {
+          alert('Form has errors. Please fix them.');
+        }
       } else {
-        alert('Form has errors. Please fix them.');
+        console.error('Validation library not initialized!');
       }
     });
 
