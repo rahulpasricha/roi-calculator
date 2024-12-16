@@ -580,6 +580,12 @@
 
       // Scroll to top
       window.scrollTo({ top: 0, behavior: "smooth" });
+
+        // Focus the first input field
+      const firstInput = document.getElementById("num-pages");
+      if (firstInput) {
+        firstInput.focus();
+      }
     });
   
     // Focus the first input field on page load
@@ -677,15 +683,6 @@
           clearError(input);
         });
       });
-
-      // // Start Over button clears validation errors
-      // resetBtn.addEventListener("click", () => {
-      //   clearAllErrors();
-      //   addedDocTypes.clear();
-      //   const docTypesInput = document.getElementById("doc-types");
-      //   docTypesInput.value = ""; // Clear input
-      //   docTypesContainer.innerHTML = ""; // Clear chips
-      // });
 
       // Clear all error messages
       function clearAllErrors() {
