@@ -583,40 +583,48 @@
       calculateBtn.addEventListener('click', (event) => {
         event.preventDefault(); // Prevent form submission
         let isValid = true;
-        let errorMessage = '';
 
-        // Get form values
-        const numPages = document.getElementById('num-pages').value;
-        const usaFt = document.getElementById('usa-ft').value;
-        const usaFtTime = document.getElementById('usa-ft-time').value;
-        const usaFtRate = document.getElementById('usa-ft-rate').value;
+        // Clear previous errors
+        document.querySelectorAll('.error').forEach((el) => el.classList.remove('error'));
+        document.querySelectorAll('.error-message').forEach((el) => el.remove());
 
-        // Validation rules using Validator.js
-        if (!validator.isInt(numPages, { min: 1 })) {
-          isValid = false;
-          errorMessage += '• Average # of Monthly Pages must be a positive number.\n';
-        }
+        // Get form values and fields
+        const fields = [
+          { id: 'num-pages', name: 'Average # of Monthly Pages', value: document.getElementById('num-pages').value, rules: { isInt: { min: 1 } } },
+          { id: 'usa-ft', name: 'Full-Time Members', value: document.getElementById('usa-ft').value, rules: { isInt: { min: 1 } } },
+          { id: 'usa-ft-time', name: '% Time Spent', value: document.getElementById('usa-ft-time').value, rules: { isInt: { min: 0, max: 100 } } },
+          { id: 'usa-ft-rate', name: 'Hourly Rate (USD)', value: document.getElementById('usa-ft-rate').value, rules: { isFloat: { min: 0 } } },
+        ];
 
-        if (!validator.isInt(usaFt, { min: 1 })) {
-          isValid = false;
-          errorMessage += '• Full-Time Members is required and must be 1 or more.\n';
-        }
+        // Validate each field
+        fields.forEach((field) => {
+          const input = document.getElementById(field.id);
+          let error = '';
 
-        if (!validator.isInt(usaFtTime, { min: 0, max: 100 })) {
-          isValid = false;
-          errorMessage += '• % Time Spent must be between 0 and 100.\n';
-        }
+          if (field.rules.isInt && !validator.isInt(field.value, field.rules.isInt)) {
+            error = `${field.name} must be a whole number${field.rules.isInt.min !== undefined ? ` of at least ${field.rules.isInt.min}` : ''}.`;
+          }
+          if (field.rules.isFloat && !validator.isFloat(field.value, field.rules.isFloat)) {
+            error = `${field.name} must be a valid number${field.rules.isFloat.min !== undefined ? ` of at least ${field.rules.isFloat.min}` : ''}.`;
+          }
 
-        if (!validator.isFloat(usaFtRate, { min: 0 })) {
-          isValid = false;
-          errorMessage += '• Hourly Rate (USD) cannot be negative.\n';
-        }
+          if (error) {
+            isValid = false;
+            input.classList.add('error');
 
-        // Show error or success message
+            // Add error message
+            const errorLabel = document.createElement('span');
+            errorLabel.className = 'error-message';
+            errorLabel.textContent = error;
+            input.insertAdjacentElement('afterend', errorLabel);
+          }
+        });
+
+        // Show success or error message
         if (isValid) {
           alert('Form is valid! Proceeding...');
         } else {
-          alert(`Please fix the following errors:\n${errorMessage}`);
+          alert('Please fix the highlighted errors before proceeding.');
         }
       });
     });
