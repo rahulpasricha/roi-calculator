@@ -6,7 +6,7 @@
   <title>ROI Calculator</title>
   <!-- Include Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/just-validate@3.3.3/dist/just-validate.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/validator/validator.min.js"></script>
   <!-- Include Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
@@ -54,23 +54,18 @@
       right: 0;
     }
 
-    .just-validate-error-label {
-      color: #e53e3e; /* Red text for error messages */
+    /* Highlight invalid fields */
+    input.error {
+      border-color: #e53e3e; /* Red border */
+      border-width: 2px;
+    }
+
+    /* Error message styling */
+    .error-message {
+      color: #e53e3e; /* Red text */
       font-size: 0.875rem; /* Smaller font size */
       margin-top: 0.25rem;
     }
-
-    input.just-validate-error-field,
-    select.just-validate-error-field {
-      border-color: #e53e3e; /* Red border for invalid fields */
-      border-width: 2px;
-    }
-
-    input.just-validate-success-field,
-    select.just-validate-success-field {
-      border-color: #38a169; /* Green border for valid fields */
-      border-width: 2px;
-    }     
 
   </style>
 </head>
@@ -581,96 +576,49 @@
     // Trigger fade updates on scroll and when chips are added/removed
     document.getElementById('doc-types-container').addEventListener('scroll', updateOverflowFades);
 
-    let validate; // Declare validate globally so it can be accessed anywhere
-    // Initialize JustValidate on form fields
+    // Validation code
     document.addEventListener("DOMContentLoaded", () => {
-      validate = new JustValidate('form, body');
+      const calculateBtn = document.getElementById('calculate-btn');
 
-      // Validation rules for "Average # of Monthly Pages"
-      validate.addField('#num-pages', [
-        {
-          rule: 'required',
-          errorMessage: 'This field is required',
-        },
-        {
-          rule: 'minNumber',
-          value: 1,
-          errorMessage: 'Value must be greater than 0',
-        },
-        {
-          rule: 'customRegexp',
-          value: /^[0-9]+$/, // Ensure no "e" or invalid formats
-          errorMessage: 'Invalid input',
-        },
-      ]);
+      calculateBtn.addEventListener('click', (event) => {
+        event.preventDefault(); // Prevent form submission
+        let isValid = true;
+        let errorMessage = '';
 
-      // Validation rules for "Full-Time Members"
-      validate.addField('#usa-ft', [
-        {
-          rule: 'required',
-          errorMessage: 'Full-time members are required',
-        },
-        {
-          rule: 'minNumber',
-          value: 1,
-          errorMessage: 'Value must be greater than 0',
-        },
-      ]);
+        // Get form values
+        const numPages = document.getElementById('num-pages').value;
+        const usaFt = document.getElementById('usa-ft').value;
+        const usaFtTime = document.getElementById('usa-ft-time').value;
+        const usaFtRate = document.getElementById('usa-ft-rate').value;
 
-      // Validation rules for "% Time Spent"
-      validate.addField('#usa-ft-time', [
-        {
-          rule: 'required',
-          errorMessage: 'This field is required',
-        },
-        {
-          rule: 'maxNumber',
-          value: 100,
-          errorMessage: 'Cannot exceed 100%',
-        },
-      ]);
-
-      // Validation rules for "Hourly Rate (USD)"
-      validate.addField('#usa-ft-rate', [
-        {
-          rule: 'minNumber',
-          value: 0,
-          errorMessage: 'Hourly rate cannot be negative',
-        },
-      ]);
-
-      // Part-time members validation
-      validate.addField('#usa-pt', [
-        {
-          rule: 'minNumber',
-          value: 0,
-          errorMessage: 'Value must be 0 or more',
-        },
-      ]);
-    });
-
-    // Attach validation to the Calculate ROI button
-    const calculateBtn = document.getElementById('calculate-btn');
-    calculateBtn.addEventListener('click', async (event) => {
-      event.preventDefault(); // Prevent default behavior
-
-      if (validate) {
-        try {
-          // Trigger validation
-          const isValid = await validate.validate();
-
-          if (isValid) {
-            alert('Form is valid! Proceeding...');
-            // Add your ROI calculation logic here
-          } else {
-            alert('Form has errors. Please fix them.');
-          }
-        } catch (err) {
-          console.error('Validation error:', err);
+        // Validation rules using Validator.js
+        if (!validator.isInt(numPages, { min: 1 })) {
+          isValid = false;
+          errorMessage += '• Average # of Monthly Pages must be a positive number.\n';
         }
-      } else {
-        console.error('Validation library not initialized!');
-      }
+
+        if (!validator.isInt(usaFt, { min: 1 })) {
+          isValid = false;
+          errorMessage += '• Full-Time Members is required and must be 1 or more.\n';
+        }
+
+        if (!validator.isInt(usaFtTime, { min: 0, max: 100 })) {
+          isValid = false;
+          errorMessage += '• % Time Spent must be between 0 and 100.\n';
+        }
+
+        if (!validator.isFloat(usaFtRate, { min: 0 })) {
+          isValid = false;
+          errorMessage += '• Hourly Rate (USD) cannot be negative.\n';
+        }
+
+        // Show error or success message
+        if (isValid) {
+          alert('Form is valid! Proceeding...');
+        } else {
+          alert(`Please fix the following errors:\n${errorMessage}`);
+        }
+      });
     });
 
   </script>
