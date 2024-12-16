@@ -67,6 +67,11 @@
       margin-top: 0.25rem;
     }
 
+    #error {
+      border-color: #e53e3e; /* Red border for error */
+      border-width: 2px;
+    }
+
   </style>
 </head>
 <body class="bg-gradient-to-br from-gray-50 via-white to-gray-100">
@@ -300,8 +305,16 @@
     let focusedOptionIndex = -1; // Tracks focused option for dropdown navigation
   
     function clearError(input) {
-      if (input) {
+      if (input.id === "doc-types-container") {
         input.classList.remove("error");
+
+        const errorLabel = input.nextElementSibling;
+        if (errorLabel && errorLabel.classList.contains("error-message")) {
+          errorLabel.remove();
+        }
+      } else {
+        input.classList.remove("error");
+
         const errorLabel = input.nextElementSibling;
         if (errorLabel && errorLabel.classList.contains("error-message")) {
           errorLabel.remove();
@@ -642,6 +655,8 @@
         if (addedDocTypes.size === 0) {
           isValid = false;
           showError(docTypesContainer, "Select at least one document type.");
+        } else {
+          clearError(docTypesContainer);
         }
 
         if (offshoreToggle.checked) {
@@ -700,19 +715,18 @@
 
       // Show an error message for a specific input
       function showError(input, message) {
-        // If the input is a container like doc-types-container
         if (input.id === "doc-types-container") {
-          input.classList.add("error"); // Add the red border
+          input.classList.add("error");
+
+          // Add error message below the container if not already present
           const errorLabel = document.createElement("span");
           errorLabel.className = "error-message text-red-500 text-xs mt-1";
           errorLabel.textContent = message;
 
-          // Add the error message if it doesn't exist
           if (!input.nextElementSibling || !input.nextElementSibling.classList.contains("error-message")) {
             input.insertAdjacentElement("afterend", errorLabel);
           }
         } else {
-          // Regular input field validation
           input.classList.add("error");
 
           const errorLabel = document.createElement("span");
