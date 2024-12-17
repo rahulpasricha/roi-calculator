@@ -464,6 +464,31 @@
       }
     }
 
+    // Show an error message for a specific input
+    function showError(input, message) {
+      // Handle document types container separately
+      if (input.id === "doc-types-container") {
+        input.classList.add("error"); // Add the red border
+        // Add error message below the container if not already present
+        const errorLabel = document.createElement("span");
+        errorLabel.className = "error-message text-red-500 text-xs mt-1";
+        errorLabel.textContent = message;
+
+        if (!input.nextElementSibling || !input.nextElementSibling.classList.contains("error-message")) {
+          input.insertAdjacentElement("afterend", errorLabel);
+        }
+      } else {
+        input.classList.add("error"); // Add red border for input fields
+        const errorLabel = document.createElement("span");
+        errorLabel.className = "error-message text-red-500 text-xs mt-1";
+        errorLabel.textContent = message;
+
+        if (!input.nextElementSibling || !input.nextElementSibling.classList.contains("error-message")) {
+          input.insertAdjacentElement("afterend", errorLabel);
+        }
+      }
+    }
+
     // Add chip for selected or custom type
     function addChip(type) {
       if (!type.trim() || addedDocTypes.has(type)) return; // Ignore empty input or duplicates
@@ -998,31 +1023,6 @@
           const input = document.getElementById(id);
           clearError(input);
         });
-      }
-
-      // Show an error message for a specific input
-      function showError(input, message) {
-        // Handle document types container separately
-        if (input.id === "doc-types-container") {
-          input.classList.add("error"); // Add the red border
-          // Add error message below the container if not already present
-          const errorLabel = document.createElement("span");
-          errorLabel.className = "error-message text-red-500 text-xs mt-1";
-          errorLabel.textContent = message;
-
-          if (!input.nextElementSibling || !input.nextElementSibling.classList.contains("error-message")) {
-            input.insertAdjacentElement("afterend", errorLabel);
-          }
-        } else {
-          input.classList.add("error"); // Add red border for input fields
-          const errorLabel = document.createElement("span");
-          errorLabel.className = "error-message text-red-500 text-xs mt-1";
-          errorLabel.textContent = message;
-
-          if (!input.nextElementSibling || !input.nextElementSibling.classList.contains("error-message")) {
-            input.insertAdjacentElement("afterend", errorLabel);
-          }
-        }
       }
 
       // Show an error message for the document types container
