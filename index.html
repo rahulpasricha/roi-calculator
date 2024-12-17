@@ -225,6 +225,56 @@
         Email Me
       </button>
     </section>
+
+    <!-- ROI Results Section -->
+    <div id="results-container" class="hidden mt-8 bg-white rounded-lg shadow-lg p-6">
+      <h2 class="text-2xl font-semibold text-center mb-6">ROI Results</h2>
+      
+      <!-- Grid Layout for Results -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-center">
+        <!-- Infrrd Pricing Monthly -->
+        <div class="p-4 border rounded-lg shadow-sm bg-blue-50">
+          <p class="text-gray-700 font-medium">Infrrd Usage Pricing (Monthly)</p>
+          <p class="text-3xl font-bold text-blue-500" id="infrrd-pricing">$0</p>
+        </div>
+
+        <!-- Infrrd Onboarding Fee -->
+        <div class="p-4 border rounded-lg shadow-sm bg-orange-50">
+          <p class="text-gray-700 font-medium">Infrrd Onboarding Fee (One Time)</p>
+          <p class="text-3xl font-bold text-orange-500" id="infrrd-onboarding">$0</p>
+        </div>
+
+        <!-- Total Annual Spend -->
+        <div class="p-4 border rounded-lg shadow-sm bg-gray-100">
+          <p class="text-gray-700 font-medium">Total Annual Spend</p>
+          <p class="text-3xl font-bold text-gray-800" id="total-annual-spend">$0</p>
+        </div>
+
+        <!-- Savings - Year 1 -->
+        <div class="p-4 border rounded-lg shadow-sm bg-green-50">
+          <p class="text-gray-700 font-medium">Net Savings - Year 1</p>
+          <p class="text-3xl font-bold text-green-500" id="savings-year-1">$0</p>
+        </div>
+
+        <!-- Savings - Year 2 -->
+        <div class="p-4 border rounded-lg shadow-sm bg-green-50">
+          <p class="text-gray-700 font-medium">Net Savings - Year 2</p>
+          <p class="text-3xl font-bold text-green-500" id="savings-year-2">$0</p>
+        </div>
+
+        <!-- Payback Period -->
+        <div class="p-4 border rounded-lg shadow-sm bg-purple-50">
+          <p class="text-gray-700 font-medium">Payback Period (Months)</p>
+          <p class="text-3xl font-bold text-purple-500" id="payback-period">0</p>
+        </div>
+      </div>
+
+      <!-- Success Message -->
+      <div class="text-center mt-8">
+        <p class="text-lg text-gray-600">Here are your ROI results based on the inputs provided.</p>
+        <p class="text-sm text-gray-500">These savings are estimates based on current configurations.</p>
+      </div>
+    </div>
   </main>
 
   <script type="module">
@@ -238,16 +288,22 @@
     offshoreToggle.addEventListener("change", () => {
       offshoreSection.classList.toggle("hidden", !offshoreToggle.checked);
     });
-  
+
     // Document Type Chips
     const docTypesContainer = document.getElementById("doc-types-container");
     const docTypesInput = document.getElementById("doc-types");
     const docTypesDropdown = document.getElementById("doc-types-dropdown");
     const docTypeCountBadge = document.getElementById("doc-type-count"); // Badge for count
-  
+
     // Import Firebase modules (ensure <script> tags are present in <head>)
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs
+    } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 
     // Firebase configuration
     const firebaseConfig = {
@@ -258,6 +314,52 @@
       messagingSenderId: "484775728997",
       appId: "1:484775728997:web:02fcfea46b9f568418338c"
     };
+
+    // Helper function to get numeric values safely
+    function getNumberValue(id) {
+      const value = document.getElementById(id)?.value || 0;
+      return parseFloat(value) || 0;
+    }
+
+    // Helper function to calculate tiered pricing
+    function calculateTieredPricing(annualPages) {
+      let pricing = "Out of range";
+      tiers.forEach((tier) => {
+        if (annualPages >= tier.from && annualPages <= tier.to) {
+          pricing = tier.price;
+        }
+      });
+      return pricing === "Out of range" ? 0 : pricing;
+    }
+
+    // Function to show a progress indicator
+    function showProgress() {
+      const resultsContainer = document.getElementById("results-container");
+      resultsContainer.classList.add("hidden");
+
+      const progress = document.createElement("div");
+      progress.id = "progress-indicator";
+      progress.className = "flex justify-center items-center my-6";
+      progress.innerHTML = `
+            <div class="flex items-center space-x-2 text-blue-500">
+              <svg class="animate-spin h-6 w-6 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+              </svg>
+              <p>Calculating ROI...</p>
+            </div>
+          `;
+      document.body.appendChild(progress);
+    }
+
+    // Function to hide progress and show results
+    function hideProgress() {
+      const progress = document.getElementById("progress-indicator");
+      if (progress) progress.remove();
+
+      const resultsContainer = document.getElementById("results-container");
+      resultsContainer.classList.remove("hidden");
+    }
 
     // Global error handler to catch unexpected issues
     window.addEventListener("error", (e) => {
@@ -307,7 +409,7 @@
     document.addEventListener("DOMContentLoaded", fetchDocumentTypes);
     const addedDocTypes = new Set(); // Keeps track of selected document types
     let focusedOptionIndex = -1; // Tracks focused option for dropdown navigation
-  
+
     function clearError(input) {
       if (input.id === "doc-types-container") {
         input.classList.remove("error");
@@ -361,7 +463,7 @@
         docTypesDropdown.classList.add("hidden");
       }
     }
-  
+
     // Add chip for selected or custom type
     function addChip(type) {
       if (!type.trim() || addedDocTypes.has(type)) return; // Ignore empty input or duplicates
@@ -391,19 +493,19 @@
       // Clear validation error if applicable
       clearError(docTypesContainer);
     }
-  
+
     // Update document type count badge
     function updateDocTypeCount() {
       const count = addedDocTypes.size;
       docTypeCountBadge.textContent = `${count} Selected`; // Update badge text
       docTypeCountBadge.style.display = count > 0 ? "inline-block" : "none"; // Hide badge if count is 0
     }
-  
+
     // Handle keyboard navigation
     function handleDropdownNavigation(event) {
       const dropdownItems = docTypesDropdown.querySelectorAll("li");
       if (dropdownItems.length === 0) return;
-  
+
       if (event.key === "ArrowDown") {
         event.preventDefault();
         focusedOptionIndex = (focusedOptionIndex + 1) % dropdownItems.length; // Move focus down
@@ -416,7 +518,7 @@
           dropdownItems[focusedOptionIndex].click(); // Select focused item
         }
       }
-  
+
       // Update focus style
       dropdownItems.forEach((item, index) => {
         if (index === focusedOptionIndex) {
@@ -426,7 +528,7 @@
         }
       });
     }
-  
+
     // Event Listeners
     let debounceTimeout = null; // Initialize with `null` to ensure it’s defined
 
@@ -441,7 +543,7 @@
     });
     docTypesInput.addEventListener("focus", populateDocTypeDropdown); // Open dropdown on focus
     docTypesInput.addEventListener("click", populateDocTypeDropdown); // Open dropdown on click
-  
+
     // Add chip on Enter
     docTypesInput.addEventListener("keydown", (event) => {
       if (event.key === "Enter" && focusedOptionIndex === -1) {
@@ -449,7 +551,7 @@
         addChip(docTypesInput.value.trim()); // Add chip for entered text
       }
     });
-  
+
     // Handle Tab key to allow moving to the next field
     docTypesInput.addEventListener("keydown", (event) => {
       if (event.key === "Tab") {
@@ -462,12 +564,12 @@
         }
       }
     });
-  
+
     // Ensure input is always clickable
     docTypesContainer.addEventListener("click", () => {
       docTypesInput.focus(); // Focus input field when container is clicked
     });
-  
+
     // Hide dropdown and add chip on blur (if value exists)
     docTypesInput.addEventListener("blur", () => {
       setTimeout(() => {
@@ -478,14 +580,14 @@
         docTypesDropdown.classList.add("hidden"); // Hide dropdown
       }, 150); // Delay to process click events
     });
-  
+
     // Initialize badge count on page load
     document.addEventListener("DOMContentLoaded", () => {
       fetchDocumentTypes(); // Fetch document types but do not trigger dropdown.
       fetchBusinessImpacts(); // Fetch business impact list
       fetchTiers(); // Fetch tiers
       updateDocTypeCount(); // Ensure the badge starts with correct count.
-      
+
       // Ensure dropdown remains hidden initially
       docTypesDropdown.classList.add("hidden");
 
@@ -495,11 +597,11 @@
         firstInput.focus();
       }
     });
-  
+
     // Business Impact Rows
     const businessImpactSection = document.getElementById("business-impact-section");
     const addImpactBtn = document.getElementById("add-impact-btn");
-  
+
     function createImpactRow() {
       const rowCount = businessImpactSection.children.length + 1; // Count rows to determine label number
 
@@ -507,29 +609,29 @@
       row.className = "grid grid-cols-12 gap-4 items-center";
 
       row.innerHTML = `
-        <!-- Impact Dropdown -->
-        <div class="col-span-7">
-          <label class="block text-sm font-medium text-gray-700">Impact ${rowCount} <span class="text-red-600">*</span></label>
-          <select class="impact-select block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm">
-            <option value="" disabled selected>Select an Impact</option>
-            ${availableImpacts.map((impact) => `<option value="${impact}">${impact}</option>`).join("")}
-          </select>
-        </div>
+            <!-- Impact Dropdown -->
+            <div class="col-span-7">
+              <label class="block text-sm font-medium text-gray-700">Impact ${rowCount} <span class="text-red-600">*</span></label>
+              <select class="impact-select block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm">
+                <option value="" disabled selected>Select an Impact</option>
+                ${availableImpacts.map((impact) => `<option value="${impact}">${impact}</option>`).join("")}
+              </select>
+            </div>
 
-        <!-- USD Value Input -->
-        <div class="col-span-4">
-          <label class="block text-sm font-medium text-gray-700">Value in USD <span class="text-red-600">*</span></label>
-          <input type="number" placeholder="Value in USD" 
-                class="impact-value block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm">
-        </div>
+            <!-- USD Value Input -->
+            <div class="col-span-4">
+              <label class="block text-sm font-medium text-gray-700">Value in USD <span class="text-red-600">*</span></label>
+              <input type="number" placeholder="Value in USD" 
+                    class="impact-value block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm">
+            </div>
 
-        <!-- Remove Button -->
-        <div class="col-span-1 flex justify-center items-center">
-          <button type="button" class="remove-impact-row text-red-500 hover:text-red-700">
-            <i class="fas fa-trash"></i>
-          </button>
-        </div>
-      `;
+            <!-- Remove Button -->
+            <div class="col-span-1 flex justify-center items-center">
+              <button type="button" class="remove-impact-row text-red-500 hover:text-red-700">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          `;
 
       // Input elements within the row
       const impactSelect = row.querySelector(".impact-select");
@@ -560,12 +662,12 @@
         if (valueLabel) valueLabel.textContent = `Value in USD ${index + 1} *`;
       });
     }
-  
+
     addImpactBtn.addEventListener("click", createImpactRow);
-  
+
     // Start Over functionality
     const resetBtn = document.getElementById("reset-btn");
-  
+
     resetBtn.addEventListener("click", () => {
       // Inline implementation of clearAllErrors
       function clearAllErrors() {
@@ -614,7 +716,10 @@
       offshoreToggle.checked = false;
 
       // Scroll to the top of the page
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
 
       // Focus the first input field (Monthly Pages)
       const firstInput = document.getElementById("num-pages");
@@ -622,7 +727,7 @@
         firstInput.focus();
       }
     });
-  
+
     // Focus the first input field on page load
     document.addEventListener("DOMContentLoaded", () => {
       const firstInput = document.getElementById("num-pages");
@@ -630,83 +735,248 @@
         firstInput.focus();
       }
     });
-    
+
     // Validation code for input field
     document.addEventListener("DOMContentLoaded", () => {
       const calculateBtn = document.getElementById('calculate-btn');
       const offshoreToggle = document.getElementById('toggle-offshore');
       const offshoreSection = document.getElementById('offshore-section');
 
+      // Function to calculate ROI and update results
+      function calculateROI() {
+        showProgress(); // Show the progress indicator
+
+        setTimeout(() => {
+          const annualPages = getNumberValue("num-pages") * 12;
+
+          // Total Monthly Spend
+          const usaFT = getNumberValue("usa-ft");
+          const usaFTTime = getNumberValue("usa-ft-time");
+          const usaFTRate = getNumberValue("usa-ft-rate");
+
+          const usaPT = getNumberValue("usa-pt");
+          const usaPTTime = getNumberValue("usa-pt-time");
+          const usaPTRate = getNumberValue("usa-pt-rate");
+
+          const offshoreFT = getNumberValue("off-ft");
+          const offshoreFTTime = getNumberValue("off-ft-time");
+          const offshoreFTRate = getNumberValue("off-ft-rate");
+
+          const offshorePT = getNumberValue("off-pt");
+          const offshorePTTime = getNumberValue("off-pt-time");
+          const offshorePTRate = getNumberValue("off-pt-rate");
+
+          const totalMonthlySpend =
+            (usaFT * usaFTTime * usaFTRate +
+              usaPT * usaPTTime * usaPTRate +
+              offshoreFT * offshoreFTTime * offshoreFTRate +
+              offshorePT * offshorePTTime * offshorePTRate) *
+            168;
+
+          const operationalOverhead = totalMonthlySpend * 0.1;
+          const totalMonthlySpendWithOverhead = totalMonthlySpend + operationalOverhead;
+          const totalAnnualSpend = totalMonthlySpendWithOverhead * 12;
+
+          // Business Impact
+          let businessImpact = 0;
+          document.querySelectorAll("#business-impact-section > div").forEach((row) => {
+            const impactValue = row.querySelector("input").value;
+            if (impactValue) businessImpact += parseFloat(impactValue);
+          });
+
+          const totalAnnualSpendWithImpact = totalAnnualSpend + businessImpact;
+
+          // Infrrd Pricing
+          const infrrdPrice = calculateTieredPricing(annualPages);
+          const infrrdOnboarding = addedDocTypes.size * 500; // Replace 500 with dynamic Firebase value if available
+
+          // Net Savings
+          const netSavingsYear1 = totalAnnualSpendWithImpact - (infrrdPrice * 12 + infrrdOnboarding);
+          const netSavingsYear2 = totalAnnualSpendWithImpact - infrrdPrice * 12;
+
+          // Payback Period
+          const paybackPeriod = Math.ceil((infrrdOnboarding / (totalAnnualSpendWithImpact / 12)) * 10) / 10;
+
+          // Update results in the UI
+          document.getElementById("infrrd-pricing").textContent = `$${infrrdPrice.toLocaleString()}`;
+          document.getElementById("infrrd-onboarding").textContent = `$${infrrdOnboarding.toLocaleString()}`;
+          document.getElementById("total-annual-spend").textContent = `$${totalAnnualSpendWithImpact.toLocaleString()}`;
+          document.getElementById("savings-year-1").textContent = `$${netSavingsYear1.toLocaleString()}`;
+          document.getElementById("savings-year-2").textContent = `$${netSavingsYear2.toLocaleString()}`;
+          document.getElementById("payback-period").textContent = `${paybackPeriod} Months`;
+
+          hideProgress(); // Hide the progress indicator
+        }, 2000); // Simulate a 2-second delay
+      }
+
+      // Event listener for Calculate ROI button
+      calculateBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+
+        let isValid = true;
+        clearAllErrors();
+
+        const fields = [
+          { id: "num-pages", name: "Monthly pages", value: getNumberValue("num-pages"), rules: { isInt: { min: 1 } }, error: "Enter a valid monthly volume." },
+          { id: "usa-ft", name: "Full-Time Members", value: getNumberValue("usa-ft"), rules: { isInt: { min: 1 } }, error: "Enter at least 1 team member." },
+          { id: "usa-ft-time", name: "% time spent", value: getNumberValue("usa-ft-time"), rules: { isInt: { min: 0, max: 100 } }, error: "Time spent must be between 0 and 100%." },
+          { id: "usa-ft-rate", name: "Hourly Rate (USD)", value: getNumberValue("usa-ft-rate"), rules: { isFloat: { min: 0.01 } }, error: "Hourly rate must be greater than $0." },
+        ];
+
+        if (addedDocTypes.size === 0) {
+          isValid = false;
+          showError(docTypesContainer, "Select at least one document type.");
+        }
+
+        if (isValid) {
+          calculateROI();
+        } else {
+          alert("Please fix the errors before proceeding.");
+        }
+      });
+
       // Handle Calculate ROI button click
       calculateBtn.addEventListener("click", (event) => {
-      event.preventDefault(); // Prevent default form submission
+        event.preventDefault(); // Prevent default form submission
 
-      let isValid = true;
-      clearAllErrors();
+        let isValid = true;
+        clearAllErrors();
 
-      const fields = [
-        { id: "num-pages", name: "Monthly pages", value: document.getElementById("num-pages").value, rules: { isInt: { min: 1 } }, error: "Enter a valid monthly volume." },
-        { id: "usa-ft", name: "Full-Time Members", value: document.getElementById("usa-ft").value, rules: { isInt: { min: 1 } }, error: "Enter at least 1 team member." },
-        { id: "usa-ft-time", name: "% time spent", value: document.getElementById("usa-ft-time").value, rules: { isInt: { min: 0, max: 100 } }, error: "Time spent must be between 0 and 100%." },
-        { id: "usa-ft-rate", name: "Hourly Rate (USD)", value: document.getElementById("usa-ft-rate").value, rules: { isFloat: { min: 0.01 } }, error: "Hourly rate must be greater than $0." },
-      ];
-
-      // Validate at least one document type is selected
-      if (addedDocTypes.size === 0) {
-        isValid = false;
-        showError(docTypesContainer, "Select at least one document type.");
-      } else {
-        clearError(docTypesContainer);
-      }
-
-      if (offshoreToggle.checked) {
-        const offshoreFields = [
-          { id: "off-ft", name: "Offshore Full-Time Members", value: document.getElementById("off-ft").value, rules: { isInt: { min: 1 } }, error: "Enter at least 1 offshore member." },
-          { id: "off-ft-time", name: "Offshore % time", value: document.getElementById("off-ft-time").value, rules: { isInt: { min: 0, max: 100 } }, error: "Time spent must be between 0 and 100%." },
-          { id: "off-ft-rate", name: "Offshore Hourly Rate (USD)", value: document.getElementById("off-ft-rate").value, rules: { isFloat: { min: 0.01 } }, error: "Offshore rate must be greater than $0." },
+        const fields = [{
+            id: "num-pages",
+            name: "Monthly pages",
+            value: document.getElementById("num-pages").value,
+            rules: {
+              isInt: {
+                min: 1
+              }
+            },
+            error: "Enter a valid monthly volume."
+          },
+          {
+            id: "usa-ft",
+            name: "Full-Time Members",
+            value: document.getElementById("usa-ft").value,
+            rules: {
+              isInt: {
+                min: 1
+              }
+            },
+            error: "Enter at least 1 team member."
+          },
+          {
+            id: "usa-ft-time",
+            name: "% time spent",
+            value: document.getElementById("usa-ft-time").value,
+            rules: {
+              isInt: {
+                min: 0,
+                max: 100
+              }
+            },
+            error: "Time spent must be between 0 and 100%."
+          },
+          {
+            id: "usa-ft-rate",
+            name: "Hourly Rate (USD)",
+            value: document.getElementById("usa-ft-rate").value,
+            rules: {
+              isFloat: {
+                min: 0.01
+              }
+            },
+            error: "Hourly rate must be greater than $0."
+          },
         ];
-        fields.push(...offshoreFields);
-      }
 
-      fields.forEach((field) => {
-        const input = document.getElementById(field.id);
-        let error = "";
-
-        if (field.rules.isInt && !validator.isInt(field.value, field.rules.isInt)) {
-          error = field.error;
-        } else if (field.rules.isFloat && !validator.isFloat(field.value, field.rules.isFloat)) {
-          error = field.error;
+        // Validate at least one document type is selected
+        if (addedDocTypes.size === 0) {
+          isValid = false;
+          showError(docTypesContainer, "Select at least one document type.");
+        } else {
+          clearError(docTypesContainer);
         }
 
-        if (error) {
-          isValid = false;
-          showError(input, error);
+        if (offshoreToggle.checked) {
+          const offshoreFields = [{
+              id: "off-ft",
+              name: "Offshore Full-Time Members",
+              value: document.getElementById("off-ft").value,
+              rules: {
+                isInt: {
+                  min: 1
+                }
+              },
+              error: "Enter at least 1 offshore member."
+            },
+            {
+              id: "off-ft-time",
+              name: "Offshore % time",
+              value: document.getElementById("off-ft-time").value,
+              rules: {
+                isInt: {
+                  min: 0,
+                  max: 100
+                }
+              },
+              error: "Time spent must be between 0 and 100%."
+            },
+            {
+              id: "off-ft-rate",
+              name: "Offshore Hourly Rate (USD)",
+              value: document.getElementById("off-ft-rate").value,
+              rules: {
+                isFloat: {
+                  min: 0.01
+                }
+              },
+              error: "Offshore rate must be greater than $0."
+            },
+          ];
+          fields.push(...offshoreFields);
+        }
+
+        fields.forEach((field) => {
+          const input = document.getElementById(field.id);
+          let error = "";
+
+          if (field.rules.isInt && !validator.isInt(field.value, field.rules.isInt)) {
+            error = field.error;
+          } else if (field.rules.isFloat && !validator.isFloat(field.value, field.rules.isFloat)) {
+            error = field.error;
+          }
+
+          if (error) {
+            isValid = false;
+            showError(input, error);
+          }
+        });
+
+        // Business Impact Validation
+        const impactRows = document.querySelectorAll("#business-impact-section > div");
+        impactRows.forEach((row, index) => {
+          const impactSelect = row.querySelector("select");
+          const impactInput = row.querySelector("input");
+
+          if (!impactSelect.value) {
+            isValid = false;
+            showError(impactSelect, `Impact ${index + 1} is required.`);
+          }
+
+          if (!validator.isFloat(impactInput.value, {
+              min: 0.01
+            })) {
+            isValid = false;
+            showError(impactInput, `Value must be greater than $0.`);
+          }
+        });
+
+        if (isValid) {
+          calculateROI(); // Call calculateROI when inputs are valid
+        } else {
+          alert("Please fix the errors before proceeding.");
         }
       });
-
-      // Business Impact Validation
-      const impactRows = document.querySelectorAll("#business-impact-section > div");
-      impactRows.forEach((row, index) => {
-        const impactSelect = row.querySelector("select");
-        const impactInput = row.querySelector("input");
-
-        if (!impactSelect.value) {
-          isValid = false;
-          showError(impactSelect, `Impact ${index + 1} is required.`);
-        }
-
-        if (!validator.isFloat(impactInput.value, { min: 0.01 })) {
-          isValid = false;
-          showError(impactInput, `Value must be greater than $0.`);
-        }
-      });
-
-      if (isValid) {
-        alert("Form is valid! Proceeding...");
-      } else {
-        alert("Please fix the errors before proceeding.");
-      }
-    });
 
       // Attach listeners to clear validation errors on typing
       const inputs = document.querySelectorAll("input");
@@ -766,7 +1036,6 @@
         }
       }
     });
-
   </script>
 </body>
 </html>
