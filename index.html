@@ -292,7 +292,11 @@
     async function fetchTiers() {
       try {
         const querySnapshot = await getDocs(collection(db, "tiers"));
-        tiers = querySnapshot.docs.map((doc) => doc.data().tierName); // Extract tierName
+        tiers = querySnapshot.docs.map((doc) => ({
+          from: doc.data().from,
+          to: doc.data().to,
+          price: doc.data().price,
+        }));
         console.log("Tiers:", tiers);
       } catch (error) {
         console.error("Error fetching tiers:", error);
