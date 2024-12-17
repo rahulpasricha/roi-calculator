@@ -230,6 +230,8 @@
   <script type="module">
     let defaultDocTypes = []; // Declare globally for shared use
     let availableImpacts = []; // Dynamically populated from Firebase
+    let tiers = []; // For Tiers
+
     // Offshore Toggle Functionality
     const offshoreToggle = document.getElementById("toggle-offshore");
     const offshoreSection = document.getElementById("offshore-section");
@@ -281,9 +283,19 @@
       try {
         const querySnapshot = await getDocs(collection(db, "businessImpacts"));
         availableImpacts = querySnapshot.docs.map((doc) => doc.data().impactName); // Extract impactName
-        console.log("Business Impacts:", availableImpacts);
       } catch (error) {
         console.error("Error fetching business impacts:", error);
+      }
+    }
+
+    // Fetch tiers from Firebase
+    async function fetchTiers() {
+      try {
+        const querySnapshot = await getDocs(collection(db, "tiers"));
+        tiers = querySnapshot.docs.map((doc) => doc.data().tierName); // Extract tierName
+        console.log("Tiers:", tiers);
+      } catch (error) {
+        console.error("Error fetching tiers:", error);
       }
     }
 
@@ -467,6 +479,7 @@
     document.addEventListener("DOMContentLoaded", () => {
       fetchDocumentTypes(); // Fetch document types but do not trigger dropdown.
       fetchBusinessImpacts(); // Fetch business impact list
+      fetchTiers(); // Fetch tiers
       updateDocTypeCount(); // Ensure the badge starts with correct count.
       
       // Ensure dropdown remains hidden initially
