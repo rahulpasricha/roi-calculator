@@ -1,346 +1,522 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ROI Calculator</title>
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <!-- Include Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/validator/validator.min.js"></script>
-  <!-- Include Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    /* Ensure the dropdown stays within the viewport */
-    #doc-types-dropdown {
-      position: absolute; /* Position relative to the nearest positioned ancestor */
-      z-index: 1000; /* Ensure it appears above other elements */
-      width: 100%; /* Match the width of the parent container */
-      max-height: 200px; /* Limit the dropdown height */
-      overflow-y: auto; /* Scroll if options overflow */
-      background-color: white; /* Background color for visibility */
-      border: 1px solid #d1d5db; /* Light border */
-      border-radius: 0.375rem; /* Rounded corners */
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for a floating effect */
-    }
-  
-    /* Hide dropdown initially */
-    #doc-types-dropdown.hidden {
-      display: none;
-    }
-  
-    #doc-types-container {
-      position: relative; /* Ensure the dropdown positions relative to this container */
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ROI Calculator</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <!-- Include Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/validator/validator.min.js"></script>
+    <!-- Include Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      /* Ensure the dropdown stays within the viewport */
+      #doc-types-dropdown {
+        position: absolute; /* Position relative to the nearest positioned ancestor */
+        z-index: 1000; /* Ensure it appears above other elements */
+        width: 100%; /* Match the width of the parent container */
+        max-height: 200px; /* Limit the dropdown height */
+        overflow-y: auto; /* Scroll if options overflow */
+        background-color: white; /* Background color for visibility */
+        border: 1px solid #d1d5db; /* Light border */
+        border-radius: 0.375rem; /* Rounded corners */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for a floating effect */
+      }
 
-      display: flex;
-      flex-wrap: wrap; /* Allow chips to wrap to the next line */
-      gap: 8px; /* Add space between chips */
-      border: 1px solid #d1d5db; /* Match input styling */
-      padding: 8px; /* Adjust padding for better layout */
-      border-radius: 0.375rem; /* Rounded corners */
-      background-color: #fff; /* White background */
-      max-height: 120px; /* Optional: limit height if too many chips */
-      overflow-y: auto; /* Enable vertical scrolling if needed */
-    }
+      /* Hide dropdown initially */
+      #doc-types-dropdown.hidden {
+        display: none;
+      }
 
-    /* Highlight invalid fields */
-    input.error {
-      border-color: #e53e3e; /* Red border */
-      border-width: 2px;
-    }
+      #doc-types-container {
+        position: relative; /* Ensure the dropdown positions relative to this container */
 
-    /* Error message styling */
-    .error-message {
-      color: #e53e3e; /* Red text */
-      font-size: 0.75rem; /* Smaller font size */
-      margin-top: 0.25rem;
-    }
+        display: flex;
+        flex-wrap: wrap; /* Allow chips to wrap to the next line */
+        gap: 8px; /* Add space between chips */
+        border: 1px solid #d1d5db; /* Match input styling */
+        padding: 8px; /* Adjust padding for better layout */
+        border-radius: 0.375rem; /* Rounded corners */
+        background-color: #fff; /* White background */
+        max-height: 120px; /* Optional: limit height if too many chips */
+        overflow-y: auto; /* Enable vertical scrolling if needed */
+      }
 
-    #error {
-      border-color: #e53e3e; /* Red border for error */
-      border-width: 2px;
-    }
+      /* Highlight invalid fields */
+      input.error {
+        border-color: #e53e3e; /* Red border */
+        border-width: 2px;
+      }
 
-  </style>
-</head>
-<body class="bg-gradient-to-br from-gray-50 via-white to-gray-100">
-  <!-- Header -->
-  <header class="bg-gradient-to-r from-green-500 via-blue-500 to-indigo-700 shadow-lg">
-    <div class="max-w-7xl mx-auto py-4 px-6 flex justify-between items-center">
-      <h1 class="text-2xl font-bold text-white">ROI Calculator</h1>
-      <p class="text-white text-sm">Analyze Costs & Savings with Intelligent Document Processing</p>
-    </div>
-  </header>
+      /* Error message styling */
+      .error-message {
+        color: #e53e3e; /* Red text */
+        font-size: 0.75rem; /* Smaller font size */
+        margin-top: 0.25rem;
+      }
 
-  <!-- Main Content -->
-  <main class="max-w-7xl mx-auto px-6 py-12 space-y-12">
-    <!-- General Inputs -->
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div>
-        <h3 class="text-lg font-medium text-gray-900">General Inputs</h3>
-        <p class="mt-1 text-sm text-gray-500">Provide details about monthly pages and document types. Fields marked with <span class="text-red-600">*</span> are mandatory.</p>
+      #error {
+        border-color: #e53e3e; /* Red border for error */
+        border-width: 2px;
+      }
+    </style>
+  </head>
+  <body class="bg-gradient-to-br from-gray-50 via-white to-gray-100">
+    <!-- Header -->
+    <header
+      class="bg-gradient-to-r from-green-500 via-blue-500 to-indigo-700 shadow-lg"
+    >
+      <div
+        class="max-w-7xl mx-auto py-4 px-6 flex justify-between items-center"
+      >
+        <h1 class="text-2xl font-bold text-white">ROI Calculator</h1>
+        <p class="text-white text-sm">
+          Analyze Costs & Savings with Intelligent Document Processing
+        </p>
       </div>
-      <div class="space-y-6">
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-6 py-12 space-y-12">
+      <!-- General Inputs -->
+      <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label for="num-pages" class="block text-sm font-medium text-gray-700">Average # of Monthly Pages <span class="text-red-600">*</span></label>
-          <input type="number" id="num-pages" name="num-pages" required
-            class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+          <h3 class="text-lg font-medium text-gray-900">General Inputs</h3>
+          <p class="mt-1 text-sm text-gray-500">
+            Provide details about monthly pages and document types. Fields
+            marked with <span class="text-red-600">*</span> are mandatory.
+          </p>
+        </div>
+        <div class="space-y-6">
+          <div>
+            <label
+              for="num-pages"
+              class="block text-sm font-medium text-gray-700"
+              >Average # of Monthly Pages
+              <span class="text-red-600">*</span></label
+            >
+            <input
+              type="number"
+              id="num-pages"
+              name="num-pages"
+              required
+              class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            />
+          </div>
+          <div>
+            <div class="flex items-center justify-between">
+              <label
+                for="doc-types"
+                class="block text-sm font-medium text-gray-700"
+                >Document Types <span class="text-red-600">*</span></label
+              >
+              <span
+                id="doc-type-count"
+                class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+              >
+                0 Selected
+              </span>
+            </div>
+            <div
+              id="doc-types-container"
+              class="flex items-center flex-wrap gap-2 border border-gray-300 rounded-md bg-white px-3 py-1.5 shadow-sm"
+            >
+              <input
+                id="doc-types"
+                placeholder="Type or select document types"
+                class="flex-grow bg-transparent outline-none text-sm text-gray-900 placeholder-gray-400"
+              />
+            </div>
+            <ul
+              id="doc-types-dropdown"
+              class="absolute z-10 mt-1 w-full max-w-[300px] bg-white border border-gray-300 rounded-md shadow-lg max-h-40 overflow-y-auto hidden"
+            >
+              <!-- Suggestions dynamically inserted -->
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Data Entry Section -->
+      <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <h3 class="text-lg font-medium text-gray-900">Data Entry Inputs</h3>
+          <p class="mt-1 text-sm text-gray-500">
+            Provide team configuration details for USA and Offshore data entry
+            teams.
+          </p>
+        </div>
+        <div class="space-y-6">
+          <!-- USA Data Entry -->
+          <div>
+            <h4 class="text-md font-semibold text-gray-900 mb-4">
+              USA Data Entry (Default)
+            </h4>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label
+                  for="usa-ft"
+                  class="block text-sm font-medium text-gray-700"
+                  >Full-Time Members <span class="text-red-600">*</span></label
+                >
+                <input
+                  type="number"
+                  id="usa-ft"
+                  class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div>
+                <label
+                  for="usa-ft-time"
+                  class="block text-sm font-medium text-gray-700"
+                  >% Time Spent <span class="text-red-600">*</span></label
+                >
+                <input
+                  type="number"
+                  id="usa-ft-time"
+                  value="100"
+                  class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div>
+                <label
+                  for="usa-ft-rate"
+                  class="block text-sm font-medium text-gray-700"
+                  >Hourly Rate (USD) <span class="text-red-600">*</span></label
+                >
+                <input
+                  type="number"
+                  id="usa-ft-rate"
+                  class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+              </div>
+              <!-- Part-Time Members -->
+              <div>
+                <label
+                  for="usa-pt"
+                  class="block text-sm font-medium text-gray-700"
+                  >Part-Time Members</label
+                >
+                <input
+                  type="number"
+                  id="usa-pt"
+                  class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div>
+                <label
+                  for="usa-pt-time"
+                  class="block text-sm font-medium text-gray-700"
+                  >% Time Spent</label
+                >
+                <input
+                  type="number"
+                  id="usa-pt-time"
+                  class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div>
+                <label
+                  for="usa-pt-rate"
+                  class="block text-sm font-medium text-gray-700"
+                  >Hourly Rate (USD)</label
+                >
+                <input
+                  type="number"
+                  id="usa-pt-rate"
+                  class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Offshore Toggle -->
+          <div class="flex items-center mt-4">
+            <input
+              type="checkbox"
+              id="toggle-offshore"
+              class="mr-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+            />
+            <label for="toggle-offshore" class="text-sm text-gray-700"
+              >I also have data entry Offshore</label
+            >
+          </div>
+
+          <!-- Offshore Data Entry -->
+          <div id="offshore-section" class="hidden mt-6 space-y-4">
+            <h4 class="text-md font-semibold text-gray-900 mb-4">
+              Offshore Data Entry
+            </h4>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label
+                  for="off-ft"
+                  class="block text-sm font-medium text-gray-700"
+                  >Full-Time Members <span class="text-red-600">*</span></label
+                >
+                <input
+                  type="number"
+                  id="off-ft"
+                  class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div>
+                <label
+                  for="off-ft-time"
+                  class="block text-sm font-medium text-gray-700"
+                  >% Time Spent <span class="text-red-600">*</span></label
+                >
+                <input
+                  type="number"
+                  id="off-ft-time"
+                  value="100"
+                  class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div>
+                <label
+                  for="off-ft-rate"
+                  class="block text-sm font-medium text-gray-700"
+                  >Hourly Rate (USD) <span class="text-red-600">*</span></label
+                >
+                <input
+                  type="number"
+                  id="off-ft-rate"
+                  class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+              </div>
+              <!-- Part-Time Members -->
+              <div>
+                <label
+                  for="off-pt"
+                  class="block text-sm font-medium text-gray-700"
+                  >Part-Time Members</label
+                >
+                <input
+                  type="number"
+                  id="off-pt"
+                  class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div>
+                <label
+                  for="off-pt-time"
+                  class="block text-sm font-medium text-gray-700"
+                  >% Time Spent</label
+                >
+                <input
+                  type="number"
+                  id="off-pt-time"
+                  class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div>
+                <label
+                  for="off-pt-rate"
+                  class="block text-sm font-medium text-gray-700"
+                  >Hourly Rate (USD)</label
+                >
+                <input
+                  type="number"
+                  id="off-pt-rate"
+                  class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Business Impact Section -->
+      <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <h3 class="text-lg font-medium text-gray-900">Business Impact</h3>
+          <p class="mt-1 text-sm text-gray-500">
+            Provide descriptions and dollar values for impacts.
+          </p>
         </div>
         <div>
-          <div class="flex items-center justify-between">
-            <label for="doc-types" class="block text-sm font-medium text-gray-700">Document Types <span class="text-red-600">*</span></label>
-            <span id="doc-type-count" class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-              0 Selected
-            </span>
+          <div id="business-impact-section" class="space-y-4">
+            <!-- Business Impact Rows -->
           </div>
-          <div id="doc-types-container"
-            class="flex items-center flex-wrap gap-2 border border-gray-300 rounded-md bg-white px-3 py-1.5 shadow-sm">
-            <input id="doc-types" placeholder="Type or select document types"
-              class="flex-grow bg-transparent outline-none text-sm text-gray-900 placeholder-gray-400" />
+          <button
+            type="button"
+            id="add-impact-btn"
+            class="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+          >
+            Add Business Impact
+          </button>
+        </div>
+      </section>
+
+      <!-- Buttons Section -->
+      <section class="flex gap-4">
+        <button
+          type="button"
+          id="calculate-btn"
+          class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+        >
+          Calculate ROI
+        </button>
+        <button
+          type="reset"
+          id="reset-btn"
+          class="bg-gray-300 hover:bg-gray-400 text-gray-900 py-2 px-4 rounded"
+        >
+          Start Over
+        </button>
+        <button
+          type="button"
+          id="email-btn"
+          class="bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-4 rounded"
+        >
+          Email Me
+        </button>
+      </section>
+
+      <!-- ROI Results Section -->
+      <div
+        id="results-container"
+        class="hidden mt-8 bg-white rounded-lg shadow-lg p-6"
+      >
+        <h2 class="text-2xl font-semibold text-center mb-6">ROI Results</h2>
+
+        <!-- Grid Layout for Results -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-center">
+          <!-- Infrrd Pricing Monthly -->
+          <div class="p-4 border rounded-lg shadow-sm bg-blue-50">
+            <p class="text-gray-700 font-medium">
+              Infrrd Usage Pricing (Monthly)
+            </p>
+            <p class="text-3xl font-bold text-blue-500" id="infrrd-pricing">
+              $0
+            </p>
           </div>
-          <ul id="doc-types-dropdown"
-            class="absolute z-10 mt-1 w-full max-w-[300px] bg-white border border-gray-300 rounded-md shadow-lg max-h-40 overflow-y-auto hidden">
-            <!-- Suggestions dynamically inserted -->
-          </ul>
-        </div>
-      </div>
-    </section>
 
-    <!-- Data Entry Section -->
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div>
-        <h3 class="text-lg font-medium text-gray-900">Data Entry Inputs</h3>
-        <p class="mt-1 text-sm text-gray-500">Provide team configuration details for USA and Offshore data entry teams.</p>
-      </div>
-      <div class="space-y-6">
-        <!-- USA Data Entry -->
-        <div>
-          <h4 class="text-md font-semibold text-gray-900 mb-4">USA Data Entry (Default)</h4>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label for="usa-ft" class="block text-sm font-medium text-gray-700">Full-Time Members <span class="text-red-600">*</span></label>
-              <input type="number" id="usa-ft" 
-                class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-            </div>
-            <div>
-              <label for="usa-ft-time" class="block text-sm font-medium text-gray-700">% Time Spent <span class="text-red-600">*</span></label>
-              <input type="number" id="usa-ft-time" value="100"
-                class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-            </div>
-            <div>
-              <label for="usa-ft-rate" class="block text-sm font-medium text-gray-700">Hourly Rate (USD) <span class="text-red-600">*</span></label>
-              <input type="number" id="usa-ft-rate" 
-                class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-            </div>
-            <!-- Part-Time Members -->
-            <div>
-              <label for="usa-pt" class="block text-sm font-medium text-gray-700">Part-Time Members</label>
-              <input type="number" id="usa-pt" 
-                class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-            </div>
-            <div>
-              <label for="usa-pt-time" class="block text-sm font-medium text-gray-700">% Time Spent</label>
-              <input type="number" id="usa-pt-time" 
-                class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-            </div>
-            <div>
-              <label for="usa-pt-rate" class="block text-sm font-medium text-gray-700">Hourly Rate (USD)</label>
-              <input type="number" id="usa-pt-rate" 
-                class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-            </div>
+          <!-- Infrrd Onboarding Fee -->
+          <div class="p-4 border rounded-lg shadow-sm bg-orange-50">
+            <p class="text-gray-700 font-medium">
+              Infrrd Onboarding Fee (One Time)
+            </p>
+            <p
+              class="text-3xl font-bold text-orange-500"
+              id="infrrd-onboarding"
+            >
+              $0
+            </p>
           </div>
-        </div>
 
-        <!-- Offshore Toggle -->
-        <div class="flex items-center mt-4">
-          <input type="checkbox" id="toggle-offshore"
-            class="mr-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-          <label for="toggle-offshore" class="text-sm text-gray-700">I also have data entry Offshore</label>
-        </div>
+          <!-- Total Annual Spend -->
+          <div class="p-4 border rounded-lg shadow-sm bg-gray-100">
+            <p class="text-gray-700 font-medium">Total Annual Spend</p>
+            <p class="text-3xl font-bold text-gray-800" id="total-annual-spend">
+              $0
+            </p>
+          </div>
 
-        <!-- Offshore Data Entry -->
-        <div id="offshore-section" class="hidden mt-6 space-y-4">
-          <h4 class="text-md font-semibold text-gray-900 mb-4">Offshore Data Entry</h4>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label for="off-ft" class="block text-sm font-medium text-gray-700">Full-Time Members <span class="text-red-600">*</span></label>
-              <input type="number" id="off-ft" 
-                class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-            </div>
-            <div>
-              <label for="off-ft-time" class="block text-sm font-medium text-gray-700">% Time Spent <span class="text-red-600">*</span></label>
-              <input type="number" id="off-ft-time" value="100"
-                class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-            </div>
-            <div>
-              <label for="off-ft-rate" class="block text-sm font-medium text-gray-700">Hourly Rate (USD) <span class="text-red-600">*</span></label>
-              <input type="number" id="off-ft-rate" 
-                class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-            </div>
-            <!-- Part-Time Members -->
-            <div>
-              <label for="off-pt" class="block text-sm font-medium text-gray-700">Part-Time Members</label>
-              <input type="number" id="off-pt" 
-                class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-            </div>
-            <div>
-              <label for="off-pt-time" class="block text-sm font-medium text-gray-700">% Time Spent</label>
-              <input type="number" id="off-pt-time" 
-                class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-            </div>
-            <div>
-              <label for="off-pt-rate" class="block text-sm font-medium text-gray-700">Hourly Rate (USD)</label>
-              <input type="number" id="off-pt-rate" 
-                class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-            </div>
+          <!-- Savings - Year 1 -->
+          <div class="p-4 border rounded-lg shadow-sm bg-green-50">
+            <p class="text-gray-700 font-medium">Net Savings - Year 1</p>
+            <p class="text-3xl font-bold text-green-500" id="savings-year-1">
+              $0
+            </p>
+          </div>
+
+          <!-- Savings - Year 2 -->
+          <div class="p-4 border rounded-lg shadow-sm bg-green-50">
+            <p class="text-gray-700 font-medium">Net Savings - Year 2</p>
+            <p class="text-3xl font-bold text-green-500" id="savings-year-2">
+              $0
+            </p>
+          </div>
+
+          <!-- Payback Period -->
+          <div class="p-4 border rounded-lg shadow-sm bg-purple-50">
+            <p class="text-gray-700 font-medium">Payback Period (Months)</p>
+            <p class="text-3xl font-bold text-purple-500" id="payback-period">
+              0
+            </p>
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- Business Impact Section -->
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div>
-        <h3 class="text-lg font-medium text-gray-900">Business Impact</h3>
-        <p class="mt-1 text-sm text-gray-500">Provide descriptions and dollar values for impacts.</p>
-      </div>
-      <div>
-        <div id="business-impact-section" class="space-y-4">
-          <!-- Business Impact Rows -->
-        </div>
-        <button type="button" id="add-impact-btn"
-          class="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Add Business Impact</button>
-      </div>
-    </section>
-
-    <!-- Buttons Section -->
-    <section class="flex gap-4">
-      <button type="button" id="calculate-btn" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
-        Calculate ROI
-      </button>
-      <button type="reset" id="reset-btn" class="bg-gray-300 hover:bg-gray-400 text-gray-900 py-2 px-4 rounded">
-        Start Over
-      </button>
-      <button type="button" id="email-btn" class="bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-4 rounded">
-        Email Me
-      </button>
-    </section>
-
-    <!-- ROI Results Section -->
-    <div id="results-container" class="hidden mt-8 bg-white rounded-lg shadow-lg p-6">
-      <h2 class="text-2xl font-semibold text-center mb-6">ROI Results</h2>
-      
-      <!-- Grid Layout for Results -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-center">
-        <!-- Infrrd Pricing Monthly -->
-        <div class="p-4 border rounded-lg shadow-sm bg-blue-50">
-          <p class="text-gray-700 font-medium">Infrrd Usage Pricing (Monthly)</p>
-          <p class="text-3xl font-bold text-blue-500" id="infrrd-pricing">$0</p>
-        </div>
-
-        <!-- Infrrd Onboarding Fee -->
-        <div class="p-4 border rounded-lg shadow-sm bg-orange-50">
-          <p class="text-gray-700 font-medium">Infrrd Onboarding Fee (One Time)</p>
-          <p class="text-3xl font-bold text-orange-500" id="infrrd-onboarding">$0</p>
-        </div>
-
-        <!-- Total Annual Spend -->
-        <div class="p-4 border rounded-lg shadow-sm bg-gray-100">
-          <p class="text-gray-700 font-medium">Total Annual Spend</p>
-          <p class="text-3xl font-bold text-gray-800" id="total-annual-spend">$0</p>
-        </div>
-
-        <!-- Savings - Year 1 -->
-        <div class="p-4 border rounded-lg shadow-sm bg-green-50">
-          <p class="text-gray-700 font-medium">Net Savings - Year 1</p>
-          <p class="text-3xl font-bold text-green-500" id="savings-year-1">$0</p>
-        </div>
-
-        <!-- Savings - Year 2 -->
-        <div class="p-4 border rounded-lg shadow-sm bg-green-50">
-          <p class="text-gray-700 font-medium">Net Savings - Year 2</p>
-          <p class="text-3xl font-bold text-green-500" id="savings-year-2">$0</p>
-        </div>
-
-        <!-- Payback Period -->
-        <div class="p-4 border rounded-lg shadow-sm bg-purple-50">
-          <p class="text-gray-700 font-medium">Payback Period (Months)</p>
-          <p class="text-3xl font-bold text-purple-500" id="payback-period">0</p>
+        <!-- Success Message -->
+        <div class="text-center mt-8">
+          <p class="text-lg text-gray-600">
+            Here are your ROI results based on the inputs provided.
+          </p>
+          <p class="text-sm text-gray-500">
+            These savings are estimates based on current configurations.
+          </p>
         </div>
       </div>
+    </main>
 
-      <!-- Success Message -->
-      <div class="text-center mt-8">
-        <p class="text-lg text-gray-600">Here are your ROI results based on the inputs provided.</p>
-        <p class="text-sm text-gray-500">These savings are estimates based on current configurations.</p>
-      </div>
-    </div>
-  </main>
+    <script type="module">
+      let defaultDocTypes = []; // Declare globally for shared use
+      let availableImpacts = []; // Dynamically populated from Firebase
+      let tiers = []; // For Tiers
 
-  <script type="module">
-    let defaultDocTypes = []; // Declare globally for shared use
-    let availableImpacts = []; // Dynamically populated from Firebase
-    let tiers = []; // For Tiers
-
-    // Offshore Toggle Functionality
-    const offshoreToggle = document.getElementById("toggle-offshore");
-    const offshoreSection = document.getElementById("offshore-section");
-    offshoreToggle.addEventListener("change", () => {
-      offshoreSection.classList.toggle("hidden", !offshoreToggle.checked);
-    });
-
-    // Document Type Chips
-    const docTypesContainer = document.getElementById("doc-types-container");
-    const docTypesInput = document.getElementById("doc-types");
-    const docTypesDropdown = document.getElementById("doc-types-dropdown");
-    const docTypeCountBadge = document.getElementById("doc-type-count"); // Badge for count
-
-    // Import Firebase modules (ensure <script> tags are present in <head>)
-    import {
-      initializeApp
-    } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-    import {
-      getFirestore,
-      collection,
-      getDocs
-    } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
-
-    // Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyCTNI8ZOfSVRFm1w_V2kgVKlIfuMQoLFyc",
-      authDomain: "roi-calculator-5c4a4.firebaseapp.com",
-      projectId: "roi-calculator-5c4a4",
-      storageBucket: "roi-calculator-5c4a4.appspot.com",
-      messagingSenderId: "484775728997",
-      appId: "1:484775728997:web:02fcfea46b9f568418338c"
-    };
-
-    // Helper function to get numeric values safely
-    function getNumberValue(id) {
-      const value = document.getElementById(id)?.value || 0;
-      return parseFloat(value) || 0;
-    }
-
-    // Helper function to calculate tiered pricing
-    function calculateTieredPricing(annualPages) {
-      let pricing = "Out of range";
-      tiers.forEach((tier) => {
-        if (annualPages >= tier.from && annualPages <= tier.to) {
-          pricing = tier.price;
-        }
+      // Offshore Toggle Functionality
+      const offshoreToggle = document.getElementById("toggle-offshore");
+      const offshoreSection = document.getElementById("offshore-section");
+      offshoreToggle.addEventListener("change", () => {
+        offshoreSection.classList.toggle("hidden", !offshoreToggle.checked);
       });
-      return pricing === "Out of range" ? 0 : pricing;
-    }
 
-    // Function to show a progress indicator
-    function showProgress() {
-      const resultsContainer = document.getElementById("results-container");
-      resultsContainer.classList.add("hidden");
+      // Document Type Chips
+      const docTypesContainer = document.getElementById("doc-types-container");
+      const docTypesInput = document.getElementById("doc-types");
+      const docTypesDropdown = document.getElementById("doc-types-dropdown");
+      const docTypeCountBadge = document.getElementById("doc-type-count"); // Badge for count
 
-      const progress = document.createElement("div");
-      progress.id = "progress-indicator";
-      progress.className = "flex justify-center items-center my-6";
-      progress.innerHTML = `
+      // Import Firebase modules (ensure <script> tags are present in <head>)
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        getDocs,
+      } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyCTNI8ZOfSVRFm1w_V2kgVKlIfuMQoLFyc",
+        authDomain: "roi-calculator-5c4a4.firebaseapp.com",
+        projectId: "roi-calculator-5c4a4",
+        storageBucket: "roi-calculator-5c4a4.appspot.com",
+        messagingSenderId: "484775728997",
+        appId: "1:484775728997:web:02fcfea46b9f568418338c",
+      };
+
+      // Helper function to get numeric values safely
+      function getNumberValue(id) {
+        const value = document.getElementById(id)?.value || 0;
+        return parseFloat(value) || 0;
+      }
+
+      // Helper function to calculate tiered pricing
+      function calculateTieredPricing(annualPages) {
+        let pricing = "Out of range";
+        tiers.forEach((tier) => {
+          if (annualPages >= tier.from && annualPages <= tier.to) {
+            pricing = tier.price;
+          }
+        });
+        return pricing === "Out of range" ? 0 : pricing;
+      }
+
+      // Function to show a progress indicator
+      function showProgress() {
+        const resultsContainer = document.getElementById("results-container");
+        resultsContainer.classList.add("hidden");
+
+        const progress = document.createElement("div");
+        progress.id = "progress-indicator";
+        progress.className = "flex justify-center items-center my-6";
+        progress.innerHTML = `
             <div class="flex items-center space-x-2 text-blue-500">
               <svg class="animate-spin h-6 w-6 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -349,297 +525,321 @@
               <p>Calculating ROI...</p>
             </div>
           `;
-      document.body.appendChild(progress);
-    }
-
-    // Function to hide progress and show results
-    function hideProgress() {
-      const progress = document.getElementById("progress-indicator");
-      if (progress) progress.remove();
-
-      const resultsContainer = document.getElementById("results-container");
-      resultsContainer.classList.remove("hidden");
-    }
-
-    // Global error handler to catch unexpected issues
-    window.addEventListener("error", (e) => {
-      console.error("Unhandled Error:", e.message);
-    });
-
-    // Initialize Firebase App and Firestore
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    async function fetchDocumentTypes() {
-      try {
-        const querySnapshot = await getDocs(collection(db, "documentTypes"));
-        defaultDocTypes = querySnapshot.docs.map((doc) => doc.data().name);
-        populateDocTypeDropdown(); // Pass the fetched document types
-      } catch (error) {
-        console.error("Error fetching document types:", error);
-      }
-    }
-
-    // Fetch Business Impact options from Firebase
-    async function fetchBusinessImpacts() {
-      try {
-        const querySnapshot = await getDocs(collection(db, "businessImpacts"));
-        availableImpacts = querySnapshot.docs.map((doc) => doc.data().impactName); // Extract impactName
-      } catch (error) {
-        console.error("Error fetching business impacts:", error);
-      }
-    }
-
-    // Fetch tiers from Firebase
-    async function fetchTiers() {
-      try {
-        const querySnapshot = await getDocs(collection(db, "tiers"));
-        tiers = querySnapshot.docs.map((doc) => ({
-          from: doc.data().from,
-          to: doc.data().to,
-          price: doc.data().price,
-        }));
-        console.log("Tiers:", tiers);
-      } catch (error) {
-        console.error("Error fetching tiers:", error);
-      }
-    }
-
-    // Call the function immediately after page load
-    document.addEventListener("DOMContentLoaded", fetchDocumentTypes);
-    const addedDocTypes = new Set(); // Keeps track of selected document types
-    let focusedOptionIndex = -1; // Tracks focused option for dropdown navigation
-
-    function clearError(input) {
-      if (input.id === "doc-types-container") {
-        input.classList.remove("error");
-
-        const errorLabel = input.nextElementSibling;
-        if (errorLabel && errorLabel.classList.contains("error-message")) {
-          errorLabel.remove();
-        }
-      } else {
-        input.classList.remove("error");
-
-        const errorLabel = input.nextElementSibling;
-        if (errorLabel && errorLabel.classList.contains("error-message")) {
-          errorLabel.remove();
-        }
-      }
-    }
-
-    // Populate dropdown dynamically
-    function populateDocTypeDropdown() {
-      const inputValue = docTypesInput.value.toLowerCase().trim();
-
-      // Filter available options
-      const availableOptions = defaultDocTypes.filter(
-        (type) => !addedDocTypes.has(type) && type.toLowerCase().includes(inputValue)
-      );
-
-      docTypesDropdown.innerHTML = ""; // Clear previous options
-
-      // If no options are available
-      if (availableOptions.length === 0) {
-        docTypesDropdown.innerHTML = `<li class="px-3 py-2 text-gray-500">No document types available</li>`;
-      } else {
-        // Populate dropdown with available options
-        availableOptions.forEach((type) => {
-          const li = document.createElement("li");
-          li.textContent = type;
-          li.className = "cursor-pointer px-3 py-2 hover:bg-indigo-100 text-gray-700";
-          li.addEventListener("click", () => {
-            addChip(type);
-            docTypesDropdown.classList.add("hidden"); // Hide dropdown after selection
-          });
-          docTypesDropdown.appendChild(li);
-        });
+        document.body.appendChild(progress);
       }
 
-      // Show dropdown only if input has focus or user clicks inside
-      if (docTypesInput === document.activeElement && (inputValue || defaultDocTypes.length > 0)) {
-        docTypesDropdown.classList.remove("hidden");
-      } else {
-        docTypesDropdown.classList.add("hidden");
+      // Function to hide progress and show results
+      function hideProgress() {
+        const progress = document.getElementById("progress-indicator");
+        if (progress) progress.remove();
+
+        const resultsContainer = document.getElementById("results-container");
+        resultsContainer.classList.remove("hidden");
       }
-    }
 
-    // Show an error message for a specific input
-    function showError(input, message) {
-      // Handle document types container separately
-      if (input.id === "doc-types-container") {
-        input.classList.add("error"); // Add the red border
-        // Add error message below the container if not already present
-        const errorLabel = document.createElement("span");
-        errorLabel.className = "error-message text-red-500 text-xs mt-1";
-        errorLabel.textContent = message;
-
-        if (!input.nextElementSibling || !input.nextElementSibling.classList.contains("error-message")) {
-          input.insertAdjacentElement("afterend", errorLabel);
-        }
-      } else {
-        input.classList.add("error"); // Add red border for input fields
-        const errorLabel = document.createElement("span");
-        errorLabel.className = "error-message text-red-500 text-xs mt-1";
-        errorLabel.textContent = message;
-
-        if (!input.nextElementSibling || !input.nextElementSibling.classList.contains("error-message")) {
-          input.insertAdjacentElement("afterend", errorLabel);
-        }
-      }
-    }
-
-    // Add chip for selected or custom type
-    function addChip(type) {
-      if (!type.trim() || addedDocTypes.has(type)) return; // Ignore empty input or duplicates
-
-      addedDocTypes.add(type); // Add to the set of selected types
-      updateDocTypeCount(); // Update the count badge
-
-      const chip = document.createElement("span");
-      chip.className = "inline-flex items-center bg-blue-100 text-blue-800 text-sm font-medium px-3 py-0.5 rounded-full";
-      chip.innerHTML = `${type} <button class="ml-2 text-blue-500 hover:text-blue-600 focus:outline-none">&times;</button>`;
-      chip.querySelector("button").addEventListener("click", () => {
-        chip.remove(); // Remove chip from DOM
-        addedDocTypes.delete(type); // Remove from the set of selected types
-        updateDocTypeCount(); // Update the count badge
-        populateDocTypeDropdown(); // Refresh the dropdown options
-
-        // If no chips remain, validate the container
-        if (addedDocTypes.size === 0) {
-          showError(docTypesContainer, "Select at least one document type.");
-        }
+      // Global error handler to catch unexpected issues
+      window.addEventListener("error", (e) => {
+        console.error("Unhandled Error:", e.message);
       });
 
-      docTypesContainer.insertBefore(chip, docTypesInput); // Add chip before the input field
-      docTypesInput.value = ""; // Clear the input field
-      populateDocTypeDropdown(); // Refresh the dropdown options
+      // Initialize Firebase App and Firestore
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
 
-      // Clear validation error if applicable
-      clearError(docTypesContainer);
-    }
-
-    // Update document type count badge
-    function updateDocTypeCount() {
-      const count = addedDocTypes.size;
-      docTypeCountBadge.textContent = `${count} Selected`; // Update badge text
-      docTypeCountBadge.style.display = count > 0 ? "inline-block" : "none"; // Hide badge if count is 0
-    }
-
-    // Handle keyboard navigation
-    function handleDropdownNavigation(event) {
-      const dropdownItems = docTypesDropdown.querySelectorAll("li");
-      if (dropdownItems.length === 0) return;
-
-      if (event.key === "ArrowDown") {
-        event.preventDefault();
-        focusedOptionIndex = (focusedOptionIndex + 1) % dropdownItems.length; // Move focus down
-      } else if (event.key === "ArrowUp") {
-        event.preventDefault();
-        focusedOptionIndex = (focusedOptionIndex - 1 + dropdownItems.length) % dropdownItems.length; // Move focus up
-      } else if (event.key === "Enter") {
-        event.preventDefault();
-        if (focusedOptionIndex >= 0) {
-          dropdownItems[focusedOptionIndex].click(); // Select focused item
+      async function fetchDocumentTypes() {
+        try {
+          const querySnapshot = await getDocs(collection(db, "documentTypes"));
+          defaultDocTypes = querySnapshot.docs.map((doc) => doc.data().name);
+          populateDocTypeDropdown(); // Pass the fetched document types
+        } catch (error) {
+          console.error("Error fetching document types:", error);
         }
       }
 
-      // Update focus style
-      dropdownItems.forEach((item, index) => {
-        if (index === focusedOptionIndex) {
-          item.classList.add("bg-indigo-100");
+      // Fetch Business Impact options from Firebase
+      async function fetchBusinessImpacts() {
+        try {
+          const querySnapshot = await getDocs(
+            collection(db, "businessImpacts")
+          );
+          availableImpacts = querySnapshot.docs.map(
+            (doc) => doc.data().impactName
+          ); // Extract impactName
+        } catch (error) {
+          console.error("Error fetching business impacts:", error);
+        }
+      }
+
+      // Fetch tiers from Firebase
+      async function fetchTiers() {
+        try {
+          const querySnapshot = await getDocs(collection(db, "tiers"));
+          tiers = querySnapshot.docs.map((doc) => ({
+            from: doc.data().from,
+            to: doc.data().to,
+            price: doc.data().price,
+          }));
+          console.log("Tiers:", tiers);
+        } catch (error) {
+          console.error("Error fetching tiers:", error);
+        }
+      }
+
+      // Call the function immediately after page load
+      document.addEventListener("DOMContentLoaded", fetchDocumentTypes);
+      const addedDocTypes = new Set(); // Keeps track of selected document types
+      let focusedOptionIndex = -1; // Tracks focused option for dropdown navigation
+
+      function clearError(input) {
+        if (input.id === "doc-types-container") {
+          input.classList.remove("error");
+
+          const errorLabel = input.nextElementSibling;
+          if (errorLabel && errorLabel.classList.contains("error-message")) {
+            errorLabel.remove();
+          }
         } else {
-          item.classList.remove("bg-indigo-100");
-        }
-      });
-    }
+          input.classList.remove("error");
 
-    // Event Listeners
-    let debounceTimeout = null; // Initialize with `null` to ensure it’s defined
-
-    docTypesInput.addEventListener("input", () => {
-      if (debounceTimeout) {
-        clearTimeout(debounceTimeout); // Safely clear previous timeout
-      }
-
-      debounceTimeout = setTimeout(() => {
-        populateDocTypeDropdown(); // Populate the dropdown after 300ms delay
-      }, 300); // Delay duration
-    });
-    docTypesInput.addEventListener("focus", populateDocTypeDropdown); // Open dropdown on focus
-    docTypesInput.addEventListener("click", populateDocTypeDropdown); // Open dropdown on click
-
-    // Add chip on Enter
-    docTypesInput.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" && focusedOptionIndex === -1) {
-        event.preventDefault(); // Prevent form submission
-        addChip(docTypesInput.value.trim()); // Add chip for entered text
-      }
-    });
-
-    // Handle Tab key to allow moving to the next field
-    docTypesInput.addEventListener("keydown", (event) => {
-      if (event.key === "Tab") {
-        if (focusedOptionIndex !== -1) {
-          event.preventDefault(); // Prevent default tabbing
-          const dropdownItems = docTypesDropdown.querySelectorAll("li");
-          if (dropdownItems[focusedOptionIndex]) {
-            dropdownItems[focusedOptionIndex].click(); // Select the focused option
+          const errorLabel = input.nextElementSibling;
+          if (errorLabel && errorLabel.classList.contains("error-message")) {
+            errorLabel.remove();
           }
         }
       }
-    });
 
-    // Ensure input is always clickable
-    docTypesContainer.addEventListener("click", () => {
-      docTypesInput.focus(); // Focus input field when container is clicked
-    });
+      // Populate dropdown dynamically
+      function populateDocTypeDropdown() {
+        const inputValue = docTypesInput.value.toLowerCase().trim();
 
-    // Hide dropdown and add chip on blur (if value exists)
-    docTypesInput.addEventListener("blur", () => {
-      setTimeout(() => {
-        const inputValue = docTypesInput.value.trim();
-        if (inputValue) {
-          addChip(inputValue); // Add chip for remaining input value
+        // Filter available options
+        const availableOptions = defaultDocTypes.filter(
+          (type) =>
+            !addedDocTypes.has(type) && type.toLowerCase().includes(inputValue)
+        );
+
+        docTypesDropdown.innerHTML = ""; // Clear previous options
+
+        // If no options are available
+        if (availableOptions.length === 0) {
+          docTypesDropdown.innerHTML = `<li class="px-3 py-2 text-gray-500">No document types available</li>`;
+        } else {
+          // Populate dropdown with available options
+          availableOptions.forEach((type) => {
+            const li = document.createElement("li");
+            li.textContent = type;
+            li.className =
+              "cursor-pointer px-3 py-2 hover:bg-indigo-100 text-gray-700";
+            li.addEventListener("click", () => {
+              addChip(type);
+              docTypesDropdown.classList.add("hidden"); // Hide dropdown after selection
+            });
+            docTypesDropdown.appendChild(li);
+          });
         }
-        docTypesDropdown.classList.add("hidden"); // Hide dropdown
-      }, 150); // Delay to process click events
-    });
 
-    // Initialize badge count on page load
-    document.addEventListener("DOMContentLoaded", () => {
-      fetchDocumentTypes(); // Fetch document types but do not trigger dropdown.
-      fetchBusinessImpacts(); // Fetch business impact list
-      fetchTiers(); // Fetch tiers
-      updateDocTypeCount(); // Ensure the badge starts with correct count.
-
-      // Ensure dropdown remains hidden initially
-      docTypesDropdown.classList.add("hidden");
-
-      // Focus the first input field (optional, for usability)
-      const firstInput = document.getElementById("num-pages");
-      if (firstInput) {
-        firstInput.focus();
+        // Show dropdown only if input has focus or user clicks inside
+        if (
+          docTypesInput === document.activeElement &&
+          (inputValue || defaultDocTypes.length > 0)
+        ) {
+          docTypesDropdown.classList.remove("hidden");
+        } else {
+          docTypesDropdown.classList.add("hidden");
+        }
       }
-    });
 
-    // Business Impact Rows
-    const businessImpactSection = document.getElementById("business-impact-section");
-    const addImpactBtn = document.getElementById("add-impact-btn");
+      // Show an error message for a specific input
+      function showError(input, message) {
+        // Handle document types container separately
+        if (input.id === "doc-types-container") {
+          input.classList.add("error"); // Add the red border
+          // Add error message below the container if not already present
+          const errorLabel = document.createElement("span");
+          errorLabel.className = "error-message text-red-500 text-xs mt-1";
+          errorLabel.textContent = message;
 
-    function createImpactRow() {
-      const rowCount = businessImpactSection.children.length + 1; // Count rows to determine label number
+          if (
+            !input.nextElementSibling ||
+            !input.nextElementSibling.classList.contains("error-message")
+          ) {
+            input.insertAdjacentElement("afterend", errorLabel);
+          }
+        } else {
+          input.classList.add("error"); // Add red border for input fields
+          const errorLabel = document.createElement("span");
+          errorLabel.className = "error-message text-red-500 text-xs mt-1";
+          errorLabel.textContent = message;
 
-      const row = document.createElement("div");
-      row.className = "grid grid-cols-12 gap-4 items-center";
+          if (
+            !input.nextElementSibling ||
+            !input.nextElementSibling.classList.contains("error-message")
+          ) {
+            input.insertAdjacentElement("afterend", errorLabel);
+          }
+        }
+      }
 
-      row.innerHTML = `
+      // Add chip for selected or custom type
+      function addChip(type) {
+        if (!type.trim() || addedDocTypes.has(type)) return; // Ignore empty input or duplicates
+
+        addedDocTypes.add(type); // Add to the set of selected types
+        updateDocTypeCount(); // Update the count badge
+
+        const chip = document.createElement("span");
+        chip.className =
+          "inline-flex items-center bg-blue-100 text-blue-800 text-sm font-medium px-3 py-0.5 rounded-full";
+        chip.innerHTML = `${type} <button class="ml-2 text-blue-500 hover:text-blue-600 focus:outline-none">&times;</button>`;
+        chip.querySelector("button").addEventListener("click", () => {
+          chip.remove(); // Remove chip from DOM
+          addedDocTypes.delete(type); // Remove from the set of selected types
+          updateDocTypeCount(); // Update the count badge
+          populateDocTypeDropdown(); // Refresh the dropdown options
+
+          // If no chips remain, validate the container
+          if (addedDocTypes.size === 0) {
+            showError(docTypesContainer, "Select at least one document type.");
+          }
+        });
+
+        docTypesContainer.insertBefore(chip, docTypesInput); // Add chip before the input field
+        docTypesInput.value = ""; // Clear the input field
+        populateDocTypeDropdown(); // Refresh the dropdown options
+
+        // Clear validation error if applicable
+        clearError(docTypesContainer);
+      }
+
+      // Update document type count badge
+      function updateDocTypeCount() {
+        const count = addedDocTypes.size;
+        docTypeCountBadge.textContent = `${count} Selected`; // Update badge text
+        docTypeCountBadge.style.display = count > 0 ? "inline-block" : "none"; // Hide badge if count is 0
+      }
+
+      // Handle keyboard navigation
+      function handleDropdownNavigation(event) {
+        const dropdownItems = docTypesDropdown.querySelectorAll("li");
+        if (dropdownItems.length === 0) return;
+
+        if (event.key === "ArrowDown") {
+          event.preventDefault();
+          focusedOptionIndex = (focusedOptionIndex + 1) % dropdownItems.length; // Move focus down
+        } else if (event.key === "ArrowUp") {
+          event.preventDefault();
+          focusedOptionIndex =
+            (focusedOptionIndex - 1 + dropdownItems.length) %
+            dropdownItems.length; // Move focus up
+        } else if (event.key === "Enter") {
+          event.preventDefault();
+          if (focusedOptionIndex >= 0) {
+            dropdownItems[focusedOptionIndex].click(); // Select focused item
+          }
+        }
+
+        // Update focus style
+        dropdownItems.forEach((item, index) => {
+          if (index === focusedOptionIndex) {
+            item.classList.add("bg-indigo-100");
+          } else {
+            item.classList.remove("bg-indigo-100");
+          }
+        });
+      }
+
+      // Event Listeners
+      let debounceTimeout = null; // Initialize with `null` to ensure it’s defined
+
+      docTypesInput.addEventListener("input", () => {
+        if (debounceTimeout) {
+          clearTimeout(debounceTimeout); // Safely clear previous timeout
+        }
+
+        debounceTimeout = setTimeout(() => {
+          populateDocTypeDropdown(); // Populate the dropdown after 300ms delay
+        }, 300); // Delay duration
+      });
+      docTypesInput.addEventListener("focus", populateDocTypeDropdown); // Open dropdown on focus
+      docTypesInput.addEventListener("click", populateDocTypeDropdown); // Open dropdown on click
+
+      // Add chip on Enter
+      docTypesInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" && focusedOptionIndex === -1) {
+          event.preventDefault(); // Prevent form submission
+          addChip(docTypesInput.value.trim()); // Add chip for entered text
+        }
+      });
+
+      // Handle Tab key to allow moving to the next field
+      docTypesInput.addEventListener("keydown", (event) => {
+        if (event.key === "Tab") {
+          if (focusedOptionIndex !== -1) {
+            event.preventDefault(); // Prevent default tabbing
+            const dropdownItems = docTypesDropdown.querySelectorAll("li");
+            if (dropdownItems[focusedOptionIndex]) {
+              dropdownItems[focusedOptionIndex].click(); // Select the focused option
+            }
+          }
+        }
+      });
+
+      // Ensure input is always clickable
+      docTypesContainer.addEventListener("click", () => {
+        docTypesInput.focus(); // Focus input field when container is clicked
+      });
+
+      // Hide dropdown and add chip on blur (if value exists)
+      docTypesInput.addEventListener("blur", () => {
+        setTimeout(() => {
+          const inputValue = docTypesInput.value.trim();
+          if (inputValue) {
+            addChip(inputValue); // Add chip for remaining input value
+          }
+          docTypesDropdown.classList.add("hidden"); // Hide dropdown
+        }, 150); // Delay to process click events
+      });
+
+      // Initialize badge count on page load
+      document.addEventListener("DOMContentLoaded", () => {
+        fetchDocumentTypes(); // Fetch document types but do not trigger dropdown.
+        fetchBusinessImpacts(); // Fetch business impact list
+        fetchTiers(); // Fetch tiers
+        updateDocTypeCount(); // Ensure the badge starts with correct count.
+
+        // Ensure dropdown remains hidden initially
+        docTypesDropdown.classList.add("hidden");
+
+        // Focus the first input field (optional, for usability)
+        const firstInput = document.getElementById("num-pages");
+        if (firstInput) {
+          firstInput.focus();
+        }
+      });
+
+      // Business Impact Rows
+      const businessImpactSection = document.getElementById(
+        "business-impact-section"
+      );
+      const addImpactBtn = document.getElementById("add-impact-btn");
+
+      function createImpactRow() {
+        const rowCount = businessImpactSection.children.length + 1; // Count rows to determine label number
+
+        const row = document.createElement("div");
+        row.className = "grid grid-cols-12 gap-4 items-center";
+
+        row.innerHTML = `
             <!-- Impact Dropdown -->
             <div class="col-span-7">
               <label class="block text-sm font-medium text-gray-700">Impact ${rowCount} <span class="text-red-600">*</span></label>
               <select class="impact-select block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm">
                 <option value="" disabled selected>Select an Impact</option>
-                ${availableImpacts.map((impact) => `<option value="${impact}">${impact}</option>`).join("")}
+                ${availableImpacts
+                  .map(
+                    (impact) => `<option value="${impact}">${impact}</option>`
+                  )
+                  .join("")}
               </select>
             </div>
 
@@ -658,384 +858,458 @@
             </div>
           `;
 
-      // Input elements within the row
-      const impactSelect = row.querySelector(".impact-select");
-      const impactValueInput = row.querySelector(".impact-value");
-      const removeBtn = row.querySelector(".remove-impact-row");
+        // Input elements within the row
+        const impactSelect = row.querySelector(".impact-select");
+        const impactValueInput = row.querySelector(".impact-value");
+        const removeBtn = row.querySelector(".remove-impact-row");
 
-      // Event listener to clear errors on valid selection/input
-      impactSelect.addEventListener("change", () => clearError(impactSelect));
-      impactValueInput.addEventListener("input", () => clearError(impactValueInput));
+        // Event listener to clear errors on valid selection/input
+        impactSelect.addEventListener("change", () => clearError(impactSelect));
+        impactValueInput.addEventListener("input", () =>
+          clearError(impactValueInput)
+        );
 
-      // Remove button functionality
-      removeBtn.addEventListener("click", () => {
-        row.remove();
-        updateImpactLabels(); // Re-number labels after row removal
-      });
+        // Remove button functionality
+        removeBtn.addEventListener("click", () => {
+          row.remove();
+          updateImpactLabels(); // Re-number labels after row removal
+        });
 
-      // Append row to the section
-      businessImpactSection.appendChild(row);
-    }
-
-    // Function to update Impact and Value in USD labels dynamically
-    function updateImpactLabels() {
-      const rows = businessImpactSection.children;
-      Array.from(rows).forEach((row, index) => {
-        const impactLabel = row.querySelector("label:nth-child(1)");
-        const valueLabel = row.querySelector("label:nth-child(2)");
-        if (impactLabel) impactLabel.textContent = `Impact ${index + 1} *`;
-        if (valueLabel) valueLabel.textContent = `Value in USD ${index + 1} *`;
-      });
-    }
-
-    addImpactBtn.addEventListener("click", createImpactRow);
-
-    // Start Over functionality
-    const resetBtn = document.getElementById("reset-btn");
-
-    resetBtn.addEventListener("click", () => {
-      // Inline implementation of clearAllErrors
-      function clearAllErrors() {
-        document.querySelectorAll(".error").forEach((el) => el.classList.remove("error"));
-        document.querySelectorAll(".error-message").forEach((el) => el.remove());
+        // Append row to the section
+        businessImpactSection.appendChild(row);
       }
 
-      clearAllErrors(); // Clear all validation errors
+      // Function to update Impact and Value in USD labels dynamically
+      function updateImpactLabels() {
+        const rows = businessImpactSection.children;
+        Array.from(rows).forEach((row, index) => {
+          const impactLabel = row.querySelector("label:nth-child(1)");
+          const valueLabel = row.querySelector("label:nth-child(2)");
+          if (impactLabel) impactLabel.textContent = `Impact ${index + 1} *`;
+          if (valueLabel)
+            valueLabel.textContent = `Value in USD ${index + 1} *`;
+        });
+      }
 
-      // Clear all document type chips
-      docTypesContainer.querySelectorAll("span").forEach((chip) => chip.remove()); // Remove all chips
-      addedDocTypes.clear(); // Clear the set of added document types
-      updateDocTypeCount(); // Reset the count badge
+      addImpactBtn.addEventListener("click", createImpactRow);
 
-      // Reset input field for document types
-      docTypesInput.value = "";
+      // Start Over functionality
+      const resetBtn = document.getElementById("reset-btn");
 
-      // Ensure dropdown is cleared and hidden
-      docTypesDropdown.innerHTML = "";
-      docTypesDropdown.classList.add("hidden");
+      resetBtn.addEventListener("click", () => {
+        // Inline implementation of clearAllErrors
+        function clearAllErrors() {
+          document
+            .querySelectorAll(".error")
+            .forEach((el) => el.classList.remove("error"));
+          document
+            .querySelectorAll(".error-message")
+            .forEach((el) => el.remove());
+        }
 
-      // Re-fetch document types and reinitialize the dropdown
-      fetchDocumentTypes().then(() => {
-        populateDocTypeDropdown(); // Reinitialize the dropdown
-      });
+        clearAllErrors(); // Clear all validation errors
 
-      // Reset all other input fields
-      const inputs = document.querySelectorAll("input");
-      inputs.forEach((input) => {
-        if (input.id === "usa-ft-time" || input.id === "off-ft-time") {
-          input.value = "100"; // Set default value to 100 for percentage fields
-        } else {
-          input.value = ""; // Reset other inputs to blank
+        // Clear all document type chips
+        docTypesContainer
+          .querySelectorAll("span")
+          .forEach((chip) => chip.remove()); // Remove all chips
+        addedDocTypes.clear(); // Clear the set of added document types
+        updateDocTypeCount(); // Reset the count badge
+
+        // Reset input field for document types
+        docTypesInput.value = "";
+
+        // Ensure dropdown is cleared and hidden
+        docTypesDropdown.innerHTML = "";
+        docTypesDropdown.classList.add("hidden");
+
+        // Re-fetch document types and reinitialize the dropdown
+        fetchDocumentTypes().then(() => {
+          populateDocTypeDropdown(); // Reinitialize the dropdown
+        });
+
+        // Reset all other input fields
+        const inputs = document.querySelectorAll("input");
+        inputs.forEach((input) => {
+          if (input.id === "usa-ft-time" || input.id === "off-ft-time") {
+            input.value = "100"; // Set default value to 100 for percentage fields
+          } else {
+            input.value = ""; // Reset other inputs to blank
+          }
+        });
+
+        // Reset dropdowns (like Business Impact)
+        const selects = document.querySelectorAll("select");
+        selects.forEach((select) => (select.selectedIndex = 0));
+
+        // Clear all dynamically added Business Impact rows
+        businessImpactSection.innerHTML = "";
+
+        // Hide offshore section
+        offshoreSection.classList.add("hidden");
+        offshoreToggle.checked = false;
+
+        // Scroll to the top of the page
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+
+        // Focus the first input field (Monthly Pages)
+        const firstInput = document.getElementById("num-pages");
+        if (firstInput) {
+          firstInput.focus();
         }
       });
 
-      // Reset dropdowns (like Business Impact)
-      const selects = document.querySelectorAll("select");
-      selects.forEach((select) => (select.selectedIndex = 0));
-
-      // Clear all dynamically added Business Impact rows
-      businessImpactSection.innerHTML = "";
-
-      // Hide offshore section
-      offshoreSection.classList.add("hidden");
-      offshoreToggle.checked = false;
-
-      // Scroll to the top of the page
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
-
-      // Focus the first input field (Monthly Pages)
-      const firstInput = document.getElementById("num-pages");
-      if (firstInput) {
-        firstInput.focus();
-      }
-    });
-
-    // Focus the first input field on page load
-    document.addEventListener("DOMContentLoaded", () => {
-      const firstInput = document.getElementById("num-pages");
-      if (firstInput) {
-        firstInput.focus();
-      }
-    });
-
-    // Validation code for input field
-    document.addEventListener("DOMContentLoaded", () => {
-      const calculateBtn = document.getElementById('calculate-btn');
-      const offshoreToggle = document.getElementById('toggle-offshore');
-      const offshoreSection = document.getElementById('offshore-section');
-
-      // Function to calculate ROI and update results
-      function calculateROI() {
-        showProgress(); // Show the progress indicator
-
-        setTimeout(() => {
-          const annualPages = getNumberValue("num-pages") * 12;
-
-          // Total Monthly Spend
-          const usaFT = getNumberValue("usa-ft");
-          const usaFTTime = getNumberValue("usa-ft-time");
-          const usaFTRate = getNumberValue("usa-ft-rate");
-
-          const usaPT = getNumberValue("usa-pt");
-          const usaPTTime = getNumberValue("usa-pt-time");
-          const usaPTRate = getNumberValue("usa-pt-rate");
-
-          const offshoreFT = getNumberValue("off-ft");
-          const offshoreFTTime = getNumberValue("off-ft-time");
-          const offshoreFTRate = getNumberValue("off-ft-rate");
-
-          const offshorePT = getNumberValue("off-pt");
-          const offshorePTTime = getNumberValue("off-pt-time");
-          const offshorePTRate = getNumberValue("off-pt-rate");
-
-          const totalMonthlySpend =
-            (usaFT * usaFTTime * usaFTRate +
-              usaPT * usaPTTime * usaPTRate +
-              offshoreFT * offshoreFTTime * offshoreFTRate +
-              offshorePT * offshorePTTime * offshorePTRate) *
-            168;
-
-          const operationalOverhead = totalMonthlySpend * 0.1;
-          const totalMonthlySpendWithOverhead = totalMonthlySpend + operationalOverhead;
-          const totalAnnualSpend = totalMonthlySpendWithOverhead * 12;
-
-          // Business Impact
-          let businessImpact = 0;
-          document.querySelectorAll("#business-impact-section > div").forEach((row) => {
-            const impactValue = row.querySelector("input").value;
-            if (impactValue) businessImpact += parseFloat(impactValue);
-          });
-
-          const totalAnnualSpendWithImpact = totalAnnualSpend + businessImpact;
-
-          // Infrrd Pricing
-          const infrrdPrice = calculateTieredPricing(annualPages);
-          const infrrdOnboarding = addedDocTypes.size * 500; // Replace 500 with dynamic Firebase value if available
-
-          // Net Savings
-          const netSavingsYear1 = totalAnnualSpendWithImpact - (infrrdPrice * 12 + infrrdOnboarding);
-          const netSavingsYear2 = totalAnnualSpendWithImpact - infrrdPrice * 12;
-
-          // Payback Period
-          const paybackPeriod = Math.ceil((infrrdOnboarding / (totalAnnualSpendWithImpact / 12)) * 10) / 10;
-
-          // Update results in the UI
-          document.getElementById("infrrd-pricing").textContent = `$${infrrdPrice.toLocaleString()}`;
-          document.getElementById("infrrd-onboarding").textContent = `$${infrrdOnboarding.toLocaleString()}`;
-          document.getElementById("total-annual-spend").textContent = `$${totalAnnualSpendWithImpact.toLocaleString()}`;
-          document.getElementById("savings-year-1").textContent = `$${netSavingsYear1.toLocaleString()}`;
-          document.getElementById("savings-year-2").textContent = `$${netSavingsYear2.toLocaleString()}`;
-          document.getElementById("payback-period").textContent = `${paybackPeriod} Months`;
-
-          hideProgress(); // Hide the progress indicator
-        }, 2000); // Simulate a 2-second delay
-      }
-
-      // Event listener for Calculate ROI button
-      calculateBtn.addEventListener("click", (event) => {
-        event.preventDefault();
-
-        let isValid = true;
-        clearAllErrors();
-
-        const fields = [
-          { id: "num-pages", name: "Monthly pages", value: getNumberValue("num-pages"), rules: { isInt: { min: 1 } }, error: "Enter a valid monthly volume." },
-          { id: "usa-ft", name: "Full-Time Members", value: getNumberValue("usa-ft"), rules: { isInt: { min: 1 } }, error: "Enter at least 1 team member." },
-          { id: "usa-ft-time", name: "% time spent", value: getNumberValue("usa-ft-time"), rules: { isInt: { min: 0, max: 100 } }, error: "Time spent must be between 0 and 100%." },
-          { id: "usa-ft-rate", name: "Hourly Rate (USD)", value: getNumberValue("usa-ft-rate"), rules: { isFloat: { min: 0.01 } }, error: "Hourly rate must be greater than $0." },
-        ];
-
-        if (addedDocTypes.size === 0) {
-          isValid = false;
-          showError(docTypesContainer, "Select at least one document type.");
-        }
-
-        if (isValid) {
-          calculateROI();
-        } else {
-          alert("Please fix the errors before proceeding.");
+      // Focus the first input field on page load
+      document.addEventListener("DOMContentLoaded", () => {
+        const firstInput = document.getElementById("num-pages");
+        if (firstInput) {
+          firstInput.focus();
         }
       });
 
-      // Handle Calculate ROI button click
-      calculateBtn.addEventListener("click", (event) => {
-        event.preventDefault(); // Prevent default form submission
+      // Validation code for input field
+      document.addEventListener("DOMContentLoaded", () => {
+        const calculateBtn = document.getElementById("calculate-btn");
+        const offshoreToggle = document.getElementById("toggle-offshore");
+        const offshoreSection = document.getElementById("offshore-section");
 
-        let isValid = true;
-        clearAllErrors();
+        // Function to calculate ROI and update results
+        function calculateROI() {
+          showProgress(); // Show the progress indicator
 
-        const fields = [{
-            id: "num-pages",
-            name: "Monthly pages",
-            value: document.getElementById("num-pages").value,
-            rules: {
-              isInt: {
-                min: 1
-              }
-            },
-            error: "Enter a valid monthly volume."
-          },
-          {
-            id: "usa-ft",
-            name: "Full-Time Members",
-            value: document.getElementById("usa-ft").value,
-            rules: {
-              isInt: {
-                min: 1
-              }
-            },
-            error: "Enter at least 1 team member."
-          },
-          {
-            id: "usa-ft-time",
-            name: "% time spent",
-            value: document.getElementById("usa-ft-time").value,
-            rules: {
-              isInt: {
-                min: 0,
-                max: 100
-              }
-            },
-            error: "Time spent must be between 0 and 100%."
-          },
-          {
-            id: "usa-ft-rate",
-            name: "Hourly Rate (USD)",
-            value: document.getElementById("usa-ft-rate").value,
-            rules: {
-              isFloat: {
-                min: 0.01
-              }
-            },
-            error: "Hourly rate must be greater than $0."
-          },
-        ];
+          setTimeout(() => {
+            const annualPages = getNumberValue("num-pages") * 12;
 
-        // Validate at least one document type is selected
-        if (addedDocTypes.size === 0) {
-          isValid = false;
-          showError(docTypesContainer, "Select at least one document type.");
-        } else {
-          clearError(docTypesContainer);
+            // Total Monthly Spend
+            const usaFT = getNumberValue("usa-ft");
+            const usaFTTime = getNumberValue("usa-ft-time");
+            const usaFTRate = getNumberValue("usa-ft-rate");
+
+            const usaPT = getNumberValue("usa-pt");
+            const usaPTTime = getNumberValue("usa-pt-time");
+            const usaPTRate = getNumberValue("usa-pt-rate");
+
+            const offshoreFT = getNumberValue("off-ft");
+            const offshoreFTTime = getNumberValue("off-ft-time");
+            const offshoreFTRate = getNumberValue("off-ft-rate");
+
+            const offshorePT = getNumberValue("off-pt");
+            const offshorePTTime = getNumberValue("off-pt-time");
+            const offshorePTRate = getNumberValue("off-pt-rate");
+
+            const totalMonthlySpend =
+              (usaFT * usaFTTime * usaFTRate +
+                usaPT * usaPTTime * usaPTRate +
+                offshoreFT * offshoreFTTime * offshoreFTRate +
+                offshorePT * offshorePTTime * offshorePTRate) *
+              168;
+
+            const operationalOverhead = totalMonthlySpend * 0.1;
+            const totalMonthlySpendWithOverhead =
+              totalMonthlySpend + operationalOverhead;
+            const totalAnnualSpend = totalMonthlySpendWithOverhead * 12;
+
+            // Business Impact
+            let businessImpact = 0;
+            document
+              .querySelectorAll("#business-impact-section > div")
+              .forEach((row) => {
+                const impactValue = row.querySelector("input").value;
+                if (impactValue) businessImpact += parseFloat(impactValue);
+              });
+
+            const totalAnnualSpendWithImpact =
+              totalAnnualSpend + businessImpact;
+
+            // Infrrd Pricing
+            const infrrdPrice = calculateTieredPricing(annualPages);
+            const infrrdOnboarding = addedDocTypes.size * 500; // Replace 500 with dynamic Firebase value if available
+
+            // Net Savings
+            const netSavingsYear1 =
+              totalAnnualSpendWithImpact -
+              (infrrdPrice * 12 + infrrdOnboarding);
+            const netSavingsYear2 =
+              totalAnnualSpendWithImpact - infrrdPrice * 12;
+
+            // Payback Period
+            const paybackPeriod =
+              Math.ceil(
+                (infrrdOnboarding / (totalAnnualSpendWithImpact / 12)) * 10
+              ) / 10;
+
+            // Update results in the UI
+            document.getElementById(
+              "infrrd-pricing"
+            ).textContent = `$${infrrdPrice.toLocaleString()}`;
+            document.getElementById(
+              "infrrd-onboarding"
+            ).textContent = `$${infrrdOnboarding.toLocaleString()}`;
+            document.getElementById(
+              "total-annual-spend"
+            ).textContent = `$${totalAnnualSpendWithImpact.toLocaleString()}`;
+            document.getElementById(
+              "savings-year-1"
+            ).textContent = `$${netSavingsYear1.toLocaleString()}`;
+            document.getElementById(
+              "savings-year-2"
+            ).textContent = `$${netSavingsYear2.toLocaleString()}`;
+            document.getElementById(
+              "payback-period"
+            ).textContent = `${paybackPeriod} Months`;
+
+            hideProgress(); // Hide the progress indicator
+          }, 2000); // Simulate a 2-second delay
         }
 
-        if (offshoreToggle.checked) {
-          const offshoreFields = [{
-              id: "off-ft",
-              name: "Offshore Full-Time Members",
-              value: document.getElementById("off-ft").value,
-              rules: {
-                isInt: {
-                  min: 1
-                }
-              },
-              error: "Enter at least 1 offshore member."
+        // Event listener for Calculate ROI button
+        calculateBtn.addEventListener("click", (event) => {
+          event.preventDefault();
+
+          let isValid = true;
+          clearAllErrors();
+
+          const fields = [
+            {
+              id: "num-pages",
+              name: "Monthly pages",
+              value: getNumberValue("num-pages"),
+              rules: { isInt: { min: 1 } },
+              error: "Enter a valid monthly volume.",
             },
             {
-              id: "off-ft-time",
-              name: "Offshore % time",
-              value: document.getElementById("off-ft-time").value,
+              id: "usa-ft",
+              name: "Full-Time Members",
+              value: getNumberValue("usa-ft"),
+              rules: { isInt: { min: 1 } },
+              error: "Enter at least 1 team member.",
+            },
+            {
+              id: "usa-ft-time",
+              name: "% time spent",
+              value: getNumberValue("usa-ft-time"),
+              rules: { isInt: { min: 0, max: 100 } },
+              error: "Time spent must be between 0 and 100%.",
+            },
+            {
+              id: "usa-ft-rate",
+              name: "Hourly Rate (USD)",
+              value: getNumberValue("usa-ft-rate"),
+              rules: { isFloat: { min: 0.01 } },
+              error: "Hourly rate must be greater than $0.",
+            },
+          ];
+
+          if (addedDocTypes.size === 0) {
+            isValid = false;
+            showError(docTypesContainer, "Select at least one document type.");
+          }
+
+          if (isValid) {
+            calculateROI();
+          } else {
+            alert("Please fix the errors before proceeding.");
+          }
+        });
+
+        // Handle Calculate ROI button click
+        calculateBtn.addEventListener("click", (event) => {
+          event.preventDefault(); // Prevent default form submission
+
+          let isValid = true;
+          clearAllErrors();
+
+          const fields = [
+            {
+              id: "num-pages",
+              name: "Monthly pages",
+              value: document.getElementById("num-pages").value,
+              rules: {
+                isInt: {
+                  min: 1,
+                },
+              },
+              error: "Enter a valid monthly volume.",
+            },
+            {
+              id: "usa-ft",
+              name: "Full-Time Members",
+              value: document.getElementById("usa-ft").value,
+              rules: {
+                isInt: {
+                  min: 1,
+                },
+              },
+              error: "Enter at least 1 team member.",
+            },
+            {
+              id: "usa-ft-time",
+              name: "% time spent",
+              value: document.getElementById("usa-ft-time").value,
               rules: {
                 isInt: {
                   min: 0,
-                  max: 100
-                }
+                  max: 100,
+                },
               },
-              error: "Time spent must be between 0 and 100%."
+              error: "Time spent must be between 0 and 100%.",
             },
             {
-              id: "off-ft-rate",
-              name: "Offshore Hourly Rate (USD)",
-              value: document.getElementById("off-ft-rate").value,
+              id: "usa-ft-rate",
+              name: "Hourly Rate (USD)",
+              value: document.getElementById("usa-ft-rate").value,
               rules: {
                 isFloat: {
-                  min: 0.01
-                }
+                  min: 0.01,
+                },
               },
-              error: "Offshore rate must be greater than $0."
+              error: "Hourly rate must be greater than $0.",
             },
           ];
-          fields.push(...offshoreFields);
+
+          // Validate at least one document type is selected
+          if (addedDocTypes.size === 0) {
+            isValid = false;
+            showError(docTypesContainer, "Select at least one document type.");
+          } else {
+            clearError(docTypesContainer);
+          }
+
+          if (offshoreToggle.checked) {
+            const offshoreFields = [
+              {
+                id: "off-ft",
+                name: "Offshore Full-Time Members",
+                value: document.getElementById("off-ft").value,
+                rules: {
+                  isInt: {
+                    min: 1,
+                  },
+                },
+                error: "Enter at least 1 offshore member.",
+              },
+              {
+                id: "off-ft-time",
+                name: "Offshore % time",
+                value: document.getElementById("off-ft-time").value,
+                rules: {
+                  isInt: {
+                    min: 0,
+                    max: 100,
+                  },
+                },
+                error: "Time spent must be between 0 and 100%.",
+              },
+              {
+                id: "off-ft-rate",
+                name: "Offshore Hourly Rate (USD)",
+                value: document.getElementById("off-ft-rate").value,
+                rules: {
+                  isFloat: {
+                    min: 0.01,
+                  },
+                },
+                error: "Offshore rate must be greater than $0.",
+              },
+            ];
+            fields.push(...offshoreFields);
+          }
+
+          fields.forEach((field) => {
+            const input = document.getElementById(field.id);
+            let error = "";
+
+            if (
+              field.rules.isInt &&
+              !validator.isInt(field.value, field.rules.isInt)
+            ) {
+              error = field.error;
+            } else if (
+              field.rules.isFloat &&
+              !validator.isFloat(field.value, field.rules.isFloat)
+            ) {
+              error = field.error;
+            }
+
+            if (error) {
+              isValid = false;
+              showError(input, error);
+            }
+          });
+
+          // Business Impact Validation
+          const impactRows = document.querySelectorAll(
+            "#business-impact-section > div"
+          );
+          impactRows.forEach((row, index) => {
+            const impactSelect = row.querySelector("select");
+            const impactInput = row.querySelector("input");
+
+            if (!impactSelect.value) {
+              isValid = false;
+              showError(impactSelect, `Impact ${index + 1} is required.`);
+            }
+
+            if (
+              !validator.isFloat(impactInput.value, {
+                min: 0.01,
+              })
+            ) {
+              isValid = false;
+              showError(impactInput, `Value must be greater than $0.`);
+            }
+          });
+
+          if (isValid) {
+            calculateROI(); // Call calculateROI when inputs are valid
+          } else {
+            alert("Please fix the errors before proceeding.");
+          }
+        });
+
+        // Attach listeners to clear validation errors on typing
+        const inputs = document.querySelectorAll("input");
+        inputs.forEach((input) => {
+          input.addEventListener("input", () => {
+            clearError(input);
+          });
+        });
+
+        // Clear all error messages
+        function clearAllErrors() {
+          document
+            .querySelectorAll(".error")
+            .forEach((el) => el.classList.remove("error"));
+          document
+            .querySelectorAll(".error-message")
+            .forEach((el) => el.remove());
         }
 
-        fields.forEach((field) => {
-          const input = document.getElementById(field.id);
-          let error = "";
+        // Clear errors specific to offshore fields
+        function clearOffshoreErrors() {
+          ["off-ft", "off-ft-time", "off-ft-rate"].forEach((id) => {
+            const input = document.getElementById(id);
+            clearError(input);
+          });
+        }
 
-          if (field.rules.isInt && !validator.isInt(field.value, field.rules.isInt)) {
-            error = field.error;
-          } else if (field.rules.isFloat && !validator.isFloat(field.value, field.rules.isFloat)) {
-            error = field.error;
+        // Show an error message for the document types container
+        function showErrorForContainer(container, message) {
+          const errorLabel = document.createElement("span");
+          errorLabel.className = "error-message text-red-500 text-xs mt-1";
+          errorLabel.textContent = message;
+
+          if (
+            !container.nextElementSibling ||
+            !container.nextElementSibling.classList.contains("error-message")
+          ) {
+            container.insertAdjacentElement("afterend", errorLabel);
           }
-
-          if (error) {
-            isValid = false;
-            showError(input, error);
-          }
-        });
-
-        // Business Impact Validation
-        const impactRows = document.querySelectorAll("#business-impact-section > div");
-        impactRows.forEach((row, index) => {
-          const impactSelect = row.querySelector("select");
-          const impactInput = row.querySelector("input");
-
-          if (!impactSelect.value) {
-            isValid = false;
-            showError(impactSelect, `Impact ${index + 1} is required.`);
-          }
-
-          if (!validator.isFloat(impactInput.value, {
-              min: 0.01
-            })) {
-            isValid = false;
-            showError(impactInput, `Value must be greater than $0.`);
-          }
-        });
-
-        if (isValid) {
-          calculateROI(); // Call calculateROI when inputs are valid
-        } else {
-          alert("Please fix the errors before proceeding.");
         }
       });
-
-      // Attach listeners to clear validation errors on typing
-      const inputs = document.querySelectorAll("input");
-      inputs.forEach((input) => {
-        input.addEventListener("input", () => {
-          clearError(input);
-        });
-      });
-
-      // Clear all error messages
-      function clearAllErrors() {
-        document.querySelectorAll(".error").forEach((el) => el.classList.remove("error"));
-        document.querySelectorAll(".error-message").forEach((el) => el.remove());
-      }
-
-      // Clear errors specific to offshore fields
-      function clearOffshoreErrors() {
-        ["off-ft", "off-ft-time", "off-ft-rate"].forEach((id) => {
-          const input = document.getElementById(id);
-          clearError(input);
-        });
-      }
-
-      // Show an error message for the document types container
-      function showErrorForContainer(container, message) {
-        const errorLabel = document.createElement("span");
-        errorLabel.className = "error-message text-red-500 text-xs mt-1";
-        errorLabel.textContent = message;
-
-        if (!container.nextElementSibling || !container.nextElementSibling.classList.contains("error-message")) {
-          container.insertAdjacentElement("afterend", errorLabel);
-        }
-      }
-    });
-  </script>
-</body>
+    </script>
+  </body>
 </html>
