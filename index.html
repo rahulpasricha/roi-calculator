@@ -1065,56 +1065,6 @@
           }, 2000); // Simulate a 2-second delay
         }
 
-        // Event listener for Calculate ROI button
-        calculateBtn.addEventListener("click", (event) => {
-          event.preventDefault();
-
-          let isValid = true;
-          clearAllErrors();
-
-          const fields = [
-            {
-              id: "num-pages",
-              name: "Monthly pages",
-              value: getNumberValue("num-pages"),
-              rules: { isInt: { min: 1 } },
-              error: "Enter a valid monthly volume.",
-            },
-            {
-              id: "usa-ft",
-              name: "Full-Time Members",
-              value: getNumberValue("usa-ft"),
-              rules: { isInt: { min: 1 } },
-              error: "Enter at least 1 team member.",
-            },
-            {
-              id: "usa-ft-time",
-              name: "% time spent",
-              value: getNumberValue("usa-ft-time"),
-              rules: { isInt: { min: 0, max: 100 } },
-              error: "Time spent must be between 0 and 100%.",
-            },
-            {
-              id: "usa-ft-rate",
-              name: "Hourly Rate (USD)",
-              value: getNumberValue("usa-ft-rate"),
-              rules: { isFloat: { min: 0.01 } },
-              error: "Hourly rate must be greater than $0.",
-            },
-          ];
-
-          if (addedDocTypes.size === 0) {
-            isValid = false;
-            showError(docTypesContainer, "Select at least one document type.");
-          }
-
-          if (isValid) {
-            calculateROI();
-          } else {
-            alert("Please fix the errors before proceeding.");
-          }
-        });
-
         // Handle Calculate ROI button click
         calculateBtn.addEventListener("click", (event) => {
           event.preventDefault(); // Prevent default form submission
