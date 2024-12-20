@@ -458,19 +458,18 @@
             </p>
           </div>
         </div>
-
-        <!-- Progress Modal Dialog -->
-        <div id="progress-modal" class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
-          <div class="bg-white p-6 rounded shadow-md flex items-center space-x-4">
-            <svg class="animate-spin h-6 w-6 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-            </svg>
-            <p class="text-gray-700">Calculating ROI, please wait...</p>
-          </div>
-        </div>
-
       </main>
+    </div>
+
+    <!-- Progress Modal Dialog -->
+    <div id="progress-modal" class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
+      <div class="bg-white p-6 rounded shadow-md flex items-center space-x-4">
+        <svg class="animate-spin h-6 w-6 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+        </svg>
+        <p class="text-gray-700">Calculating ROI, please wait...</p>
+      </div>
     </div>
 
     <script type="module">
@@ -1023,21 +1022,17 @@
               168;
 
             const operationalOverhead = totalMonthlySpend * 0.1;
-            const totalMonthlySpendWithOverhead =
-              totalMonthlySpend + operationalOverhead;
+            const totalMonthlySpendWithOverhead = totalMonthlySpend + operationalOverhead;
             const totalAnnualSpend = totalMonthlySpendWithOverhead * 12;
 
             // Business Impact
             let businessImpact = 0;
-            document
-              .querySelectorAll("#business-impact-section > div")
-              .forEach((row) => {
-                const impactValue = row.querySelector("input").value;
-                if (impactValue) businessImpact += parseFloat(impactValue);
-              });
+            document.querySelectorAll("#business-impact-section > div").forEach((row) => {
+              const impactValue = row.querySelector("input").value;
+              if (impactValue) businessImpact += parseFloat(impactValue);
+            });
 
-            const totalAnnualSpendWithImpact =
-              totalAnnualSpend + businessImpact;
+            const totalAnnualSpendWithImpact = totalAnnualSpend + businessImpact;
 
             // Infrrd Pricing
             const infrrdPrice = calculateTieredPricing(annualPages);
@@ -1045,38 +1040,26 @@
 
             // Net Savings
             const netSavingsYear1 =
-              totalAnnualSpendWithImpact -
-              (infrrdPrice * 12 + infrrdOnboarding);
-            const netSavingsYear2 =
-              totalAnnualSpendWithImpact - infrrdPrice * 12;
+              totalAnnualSpendWithImpact - (infrrdPrice * 12 + infrrdOnboarding);
+            const netSavingsYear2 = totalAnnualSpendWithImpact - infrrdPrice * 12;
 
             // Payback Period
-            const paybackPeriod =
-              Math.ceil(
-                (infrrdOnboarding / (totalAnnualSpendWithImpact / 12)) * 10
-              ) / 10;
+            const paybackPeriod = Math.ceil((infrrdOnboarding / (totalAnnualSpendWithImpact / 12)) * 10) / 10;
 
             // Update results in the UI
-            document.getElementById(
-              "infrrd-pricing"
-            ).textContent = `$${infrrdPrice.toLocaleString()}`;
-            document.getElementById(
-              "infrrd-onboarding"
-            ).textContent = `$${infrrdOnboarding.toLocaleString()}`;
-            document.getElementById(
-              "total-annual-spend"
-            ).textContent = `$${totalAnnualSpendWithImpact.toLocaleString()}`;
-            document.getElementById(
-              "savings-year-1"
-            ).textContent = `$${netSavingsYear1.toLocaleString()}`;
-            document.getElementById(
-              "savings-year-2"
-            ).textContent = `$${netSavingsYear2.toLocaleString()}`;
-            document.getElementById(
-              "payback-period"
-            ).textContent = `${paybackPeriod} Months`;
+            document.getElementById("infrrd-pricing").textContent = `$${infrrdPrice.toLocaleString()}`;
+            document.getElementById("infrrd-onboarding").textContent = `$${infrrdOnboarding.toLocaleString()}`;
+            document.getElementById("total-annual-spend").textContent = `$${totalAnnualSpendWithImpact.toLocaleString()}`;
+            document.getElementById("savings-year-1").textContent = `$${netSavingsYear1.toLocaleString()}`;
+            document.getElementById("savings-year-2").textContent = `$${netSavingsYear2.toLocaleString()}`;
+            document.getElementById("payback-period").textContent = `${paybackPeriod} Months`;
 
             hideProgress(); // Hide the progress indicator
+
+            // Show the results container
+            const resultsContainer = document.getElementById("results-container");
+            resultsContainer.classList.remove("hidden");
+            resultsContainer.scrollIntoView({ behavior: "smooth" });
           }, 2000); // Simulate a 2-second delay
         }
 
