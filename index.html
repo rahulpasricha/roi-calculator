@@ -992,12 +992,12 @@
 
         // Function to calculate ROI and update results
         function calculateROI() {
-          showProgress(); // Show the progress indicator
+          showProgress(); // Show progress indicator
 
           setTimeout(() => {
             const annualPages = getNumberValue("num-pages") * 12;
 
-            // Total Monthly Spend
+            // Team Costs
             const usaFT = getNumberValue("usa-ft");
             const usaFTTime = getNumberValue("usa-ft-time");
             const usaFTRate = getNumberValue("usa-ft-rate");
@@ -1023,9 +1023,10 @@
 
             const operationalOverhead = totalMonthlySpend * 0.1;
             const totalMonthlySpendWithOverhead = totalMonthlySpend + operationalOverhead;
+
             const totalAnnualSpend = totalMonthlySpendWithOverhead * 12;
 
-            // Business Impact
+            // Business Impacts
             let businessImpact = 0;
             document.querySelectorAll("#business-impact-section > div").forEach((row) => {
               const impactValue = row.querySelector("input").value;
@@ -1035,16 +1036,19 @@
             const totalAnnualSpendWithImpact = totalAnnualSpend + businessImpact;
 
             // Infrrd Pricing
-            const infrrdPrice = calculateTieredPricing(annualPages);
-            const infrrdOnboarding = addedDocTypes.size * 500; // Replace 500 with dynamic Firebase value if available
+            const infrrdPrice = (annualPages * 0.2) / 12; // Recurring Monthly Pricing
+            const onboardingFeePerType = 500;
+            const infrrdOnboarding = addedDocTypes.size * onboardingFeePerType;
 
             // Net Savings
             const netSavingsYear1 =
               totalAnnualSpendWithImpact - (infrrdPrice * 12 + infrrdOnboarding);
-            const netSavingsYear2 = totalAnnualSpendWithImpact - infrrdPrice * 12;
+            const netSavingsYear2 =
+              totalAnnualSpendWithImpact - infrrdPrice * 12;
 
             // Payback Period
-            const paybackPeriod = Math.ceil((infrrdOnboarding / (totalAnnualSpendWithImpact / 12)) * 10) / 10;
+            const monthlySavings = totalAnnualSpendWithImpact / 12 - infrrdPrice;
+            const paybackPeriod = Math.ceil((infrrdOnboarding / monthlySavings) * 10) / 10;
 
             // Update results in the UI
             document.getElementById("infrrd-pricing").textContent = `$${infrrdPrice.toLocaleString()}`;
@@ -1060,7 +1064,7 @@
             const resultsContainer = document.getElementById("results-container");
             resultsContainer.classList.remove("hidden");
             resultsContainer.scrollIntoView({ behavior: "smooth" });
-          }, 2000); // Simulate a 2-second delay
+          }, 2000); // Simulated delay for calculation
         }
 
         // Handle Calculate ROI button click
