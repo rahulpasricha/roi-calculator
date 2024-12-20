@@ -70,406 +70,408 @@
     </style>
   </head>
   <body class="bg-gradient-to-br from-gray-50 via-white to-gray-100">
-    <!-- Header -->
-    <header
-      class="bg-gradient-to-r from-green-500 via-blue-500 to-indigo-700 shadow-lg"
-    >
-      <div
-        class="max-w-7xl mx-auto py-4 px-6 flex justify-between items-center"
+    <div id="form-container">
+      <!-- Header -->
+      <header
+        class="bg-gradient-to-r from-green-500 via-blue-500 to-indigo-700 shadow-lg"
       >
-        <h1 class="text-2xl font-bold text-white">ROI Calculator</h1>
-        <p class="text-white text-sm">
-          Analyze Costs & Savings with Intelligent Document Processing
-        </p>
-      </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-6 py-12 space-y-12">
-      <!-- General Inputs -->
-      <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <h3 class="text-lg font-medium text-gray-900">General Inputs</h3>
-          <p class="mt-1 text-sm text-gray-500">
-            Provide details about monthly pages and document types. Fields
-            marked with <span class="text-red-600">*</span> are mandatory.
+        <div
+          class="max-w-7xl mx-auto py-4 px-6 flex justify-between items-center"
+        >
+          <h1 class="text-2xl font-bold text-white">ROI Calculator</h1>
+          <p class="text-white text-sm">
+            Analyze Costs & Savings with Intelligent Document Processing
           </p>
         </div>
-        <div class="space-y-6">
+      </header>
+
+      <!-- Main Content -->
+      <main class="max-w-7xl mx-auto px-6 py-12 space-y-12">
+        <!-- General Inputs -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label
-              for="num-pages"
-              class="block text-sm font-medium text-gray-700"
-              >Average # of Monthly Pages
-              <span class="text-red-600">*</span></label
-            >
-            <input
-              type="number"
-              id="num-pages"
-              name="num-pages"
-              required
-              class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            />
+            <h3 class="text-lg font-medium text-gray-900">General Inputs</h3>
+            <p class="mt-1 text-sm text-gray-500">
+              Provide details about monthly pages and document types. Fields
+              marked with <span class="text-red-600">*</span> are mandatory.
+            </p>
           </div>
-          <div>
-            <div class="flex items-center justify-between">
+          <div class="space-y-6">
+            <div>
               <label
-                for="doc-types"
+                for="num-pages"
                 class="block text-sm font-medium text-gray-700"
-                >Document Types <span class="text-red-600">*</span></label
+                >Average # of Monthly Pages
+                <span class="text-red-600">*</span></label
               >
-              <span
-                id="doc-type-count"
-                class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
-              >
-                0 Selected
-              </span>
-            </div>
-            <div
-              id="doc-types-container"
-              class="flex items-center flex-wrap gap-2 border border-gray-300 rounded-md bg-white px-3 py-1.5 shadow-sm"
-            >
               <input
-                id="doc-types"
-                placeholder="Type or select document types"
-                class="flex-grow bg-transparent outline-none text-sm text-gray-900 placeholder-gray-400"
+                type="number"
+                id="num-pages"
+                name="num-pages"
+                required
+                class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               />
             </div>
-            <ul
-              id="doc-types-dropdown"
-              class="absolute z-10 mt-1 w-full max-w-[300px] bg-white border border-gray-300 rounded-md shadow-lg max-h-40 overflow-y-auto hidden"
-            >
-              <!-- Suggestions dynamically inserted -->
-            </ul>
+            <div>
+              <div class="flex items-center justify-between">
+                <label
+                  for="doc-types"
+                  class="block text-sm font-medium text-gray-700"
+                  >Document Types <span class="text-red-600">*</span></label
+                >
+                <span
+                  id="doc-type-count"
+                  class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                >
+                  0 Selected
+                </span>
+              </div>
+              <div
+                id="doc-types-container"
+                class="flex items-center flex-wrap gap-2 border border-gray-300 rounded-md bg-white px-3 py-1.5 shadow-sm"
+              >
+                <input
+                  id="doc-types"
+                  placeholder="Type or select document types"
+                  class="flex-grow bg-transparent outline-none text-sm text-gray-900 placeholder-gray-400"
+                />
+              </div>
+              <ul
+                id="doc-types-dropdown"
+                class="absolute z-10 mt-1 w-full max-w-[300px] bg-white border border-gray-300 rounded-md shadow-lg max-h-40 overflow-y-auto hidden"
+              >
+                <!-- Suggestions dynamically inserted -->
+              </ul>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- Data Entry Section -->
-      <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <h3 class="text-lg font-medium text-gray-900">Data Entry Inputs</h3>
-          <p class="mt-1 text-sm text-gray-500">
-            Provide team configuration details for USA and Offshore data entry
-            teams.
-          </p>
-        </div>
-        <div class="space-y-6">
-          <!-- USA Data Entry -->
+        <!-- Data Entry Section -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <h4 class="text-md font-semibold text-gray-900 mb-4">
-              USA Data Entry (Default)
-            </h4>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label
-                  for="usa-ft"
-                  class="block text-sm font-medium text-gray-700"
-                  >Full-Time Members <span class="text-red-600">*</span></label
-                >
-                <input
-                  type="number"
-                  id="usa-ft"
-                  class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
+            <h3 class="text-lg font-medium text-gray-900">Data Entry Inputs</h3>
+            <p class="mt-1 text-sm text-gray-500">
+              Provide team configuration details for USA and Offshore data entry
+              teams.
+            </p>
+          </div>
+          <div class="space-y-6">
+            <!-- USA Data Entry -->
+            <div>
+              <h4 class="text-md font-semibold text-gray-900 mb-4">
+                USA Data Entry (Default)
+              </h4>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label
+                    for="usa-ft"
+                    class="block text-sm font-medium text-gray-700"
+                    >Full-Time Members <span class="text-red-600">*</span></label
+                  >
+                  <input
+                    type="number"
+                    id="usa-ft"
+                    class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  />
+                </div>
+                <div>
+                  <label
+                    for="usa-ft-time"
+                    class="block text-sm font-medium text-gray-700"
+                    >% Time Spent <span class="text-red-600">*</span></label
+                  >
+                  <input
+                    type="number"
+                    id="usa-ft-time"
+                    value="100"
+                    class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  />
+                </div>
+                <div>
+                  <label
+                    for="usa-ft-rate"
+                    class="block text-sm font-medium text-gray-700"
+                    >Hourly Rate (USD) <span class="text-red-600">*</span></label
+                  >
+                  <input
+                    type="number"
+                    id="usa-ft-rate"
+                    class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  />
+                </div>
+                <!-- Part-Time Members -->
+                <div>
+                  <label
+                    for="usa-pt"
+                    class="block text-sm font-medium text-gray-700"
+                    >Part-Time Members</label
+                  >
+                  <input
+                    type="number"
+                    id="usa-pt"
+                    class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  />
+                </div>
+                <div>
+                  <label
+                    for="usa-pt-time"
+                    class="block text-sm font-medium text-gray-700"
+                    >% Time Spent</label
+                  >
+                  <input
+                    type="number"
+                    id="usa-pt-time"
+                    class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  />
+                </div>
+                <div>
+                  <label
+                    for="usa-pt-rate"
+                    class="block text-sm font-medium text-gray-700"
+                    >Hourly Rate (USD)</label
+                  >
+                  <input
+                    type="number"
+                    id="usa-pt-rate"
+                    class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  />
+                </div>
               </div>
-              <div>
-                <label
-                  for="usa-ft-time"
-                  class="block text-sm font-medium text-gray-700"
-                  >% Time Spent <span class="text-red-600">*</span></label
-                >
-                <input
-                  type="number"
-                  id="usa-ft-time"
-                  value="100"
-                  class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
-              <div>
-                <label
-                  for="usa-ft-rate"
-                  class="block text-sm font-medium text-gray-700"
-                  >Hourly Rate (USD) <span class="text-red-600">*</span></label
-                >
-                <input
-                  type="number"
-                  id="usa-ft-rate"
-                  class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
-              <!-- Part-Time Members -->
-              <div>
-                <label
-                  for="usa-pt"
-                  class="block text-sm font-medium text-gray-700"
-                  >Part-Time Members</label
-                >
-                <input
-                  type="number"
-                  id="usa-pt"
-                  class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
-              <div>
-                <label
-                  for="usa-pt-time"
-                  class="block text-sm font-medium text-gray-700"
-                  >% Time Spent</label
-                >
-                <input
-                  type="number"
-                  id="usa-pt-time"
-                  class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
-              <div>
-                <label
-                  for="usa-pt-rate"
-                  class="block text-sm font-medium text-gray-700"
-                  >Hourly Rate (USD)</label
-                >
-                <input
-                  type="number"
-                  id="usa-pt-rate"
-                  class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
+            </div>
+
+            <!-- Offshore Toggle -->
+            <div class="flex items-center mt-4">
+              <input
+                type="checkbox"
+                id="toggle-offshore"
+                class="mr-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+              />
+              <label for="toggle-offshore" class="text-sm text-gray-700"
+                >I also have data entry Offshore</label
+              >
+            </div>
+
+            <!-- Offshore Data Entry -->
+            <div id="offshore-section" class="hidden mt-6 space-y-4">
+              <h4 class="text-md font-semibold text-gray-900 mb-4">
+                Offshore Data Entry
+              </h4>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label
+                    for="off-ft"
+                    class="block text-sm font-medium text-gray-700"
+                    >Full-Time Members <span class="text-red-600">*</span></label
+                  >
+                  <input
+                    type="number"
+                    id="off-ft"
+                    class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  />
+                </div>
+                <div>
+                  <label
+                    for="off-ft-time"
+                    class="block text-sm font-medium text-gray-700"
+                    >% Time Spent <span class="text-red-600">*</span></label
+                  >
+                  <input
+                    type="number"
+                    id="off-ft-time"
+                    value="100"
+                    class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  />
+                </div>
+                <div>
+                  <label
+                    for="off-ft-rate"
+                    class="block text-sm font-medium text-gray-700"
+                    >Hourly Rate (USD) <span class="text-red-600">*</span></label
+                  >
+                  <input
+                    type="number"
+                    id="off-ft-rate"
+                    class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  />
+                </div>
+                <!-- Part-Time Members -->
+                <div>
+                  <label
+                    for="off-pt"
+                    class="block text-sm font-medium text-gray-700"
+                    >Part-Time Members</label
+                  >
+                  <input
+                    type="number"
+                    id="off-pt"
+                    class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  />
+                </div>
+                <div>
+                  <label
+                    for="off-pt-time"
+                    class="block text-sm font-medium text-gray-700"
+                    >% Time Spent</label
+                  >
+                  <input
+                    type="number"
+                    id="off-pt-time"
+                    class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  />
+                </div>
+                <div>
+                  <label
+                    for="off-pt-rate"
+                    class="block text-sm font-medium text-gray-700"
+                    >Hourly Rate (USD)</label
+                  >
+                  <input
+                    type="number"
+                    id="off-pt-rate"
+                    class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  />
+                </div>
               </div>
             </div>
           </div>
+        </section>
 
-          <!-- Offshore Toggle -->
-          <div class="flex items-center mt-4">
-            <input
-              type="checkbox"
-              id="toggle-offshore"
-              class="mr-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-            />
-            <label for="toggle-offshore" class="text-sm text-gray-700"
-              >I also have data entry Offshore</label
+        <!-- Business Impact Section -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="text-lg font-medium text-gray-900">Business Impact</h3>
+            <p class="mt-1 text-sm text-gray-500">
+              Provide descriptions and dollar values for impacts.
+            </p>
+          </div>
+          <div>
+            <div id="business-impact-section" class="space-y-4">
+              <!-- Business Impact Rows -->
+            </div>
+            <button
+              type="button"
+              id="add-impact-btn"
+              class="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
             >
+              Add Business Impact
+            </button>
           </div>
+        </section>
 
-          <!-- Offshore Data Entry -->
-          <div id="offshore-section" class="hidden mt-6 space-y-4">
-            <h4 class="text-md font-semibold text-gray-900 mb-4">
-              Offshore Data Entry
-            </h4>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label
-                  for="off-ft"
-                  class="block text-sm font-medium text-gray-700"
-                  >Full-Time Members <span class="text-red-600">*</span></label
-                >
-                <input
-                  type="number"
-                  id="off-ft"
-                  class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
-              <div>
-                <label
-                  for="off-ft-time"
-                  class="block text-sm font-medium text-gray-700"
-                  >% Time Spent <span class="text-red-600">*</span></label
-                >
-                <input
-                  type="number"
-                  id="off-ft-time"
-                  value="100"
-                  class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
-              <div>
-                <label
-                  for="off-ft-rate"
-                  class="block text-sm font-medium text-gray-700"
-                  >Hourly Rate (USD) <span class="text-red-600">*</span></label
-                >
-                <input
-                  type="number"
-                  id="off-ft-rate"
-                  class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
-              <!-- Part-Time Members -->
-              <div>
-                <label
-                  for="off-pt"
-                  class="block text-sm font-medium text-gray-700"
-                  >Part-Time Members</label
-                >
-                <input
-                  type="number"
-                  id="off-pt"
-                  class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
-              <div>
-                <label
-                  for="off-pt-time"
-                  class="block text-sm font-medium text-gray-700"
-                  >% Time Spent</label
-                >
-                <input
-                  type="number"
-                  id="off-pt-time"
-                  class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
-              <div>
-                <label
-                  for="off-pt-rate"
-                  class="block text-sm font-medium text-gray-700"
-                  >Hourly Rate (USD)</label
-                >
-                <input
-                  type="number"
-                  id="off-pt-rate"
-                  class="mt-1 block w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 shadow-sm text-base text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Business Impact Section -->
-      <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <h3 class="text-lg font-medium text-gray-900">Business Impact</h3>
-          <p class="mt-1 text-sm text-gray-500">
-            Provide descriptions and dollar values for impacts.
-          </p>
-        </div>
-        <div>
-          <div id="business-impact-section" class="space-y-4">
-            <!-- Business Impact Rows -->
-          </div>
+        <!-- Buttons Section -->
+        <section class="flex gap-4">
           <button
             type="button"
-            id="add-impact-btn"
-            class="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+            id="calculate-btn"
+            class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
           >
-            Add Business Impact
+            Calculate ROI
           </button>
-        </div>
-      </section>
+          <button
+            type="reset"
+            id="reset-btn"
+            class="bg-gray-300 hover:bg-gray-400 text-gray-900 py-2 px-4 rounded"
+          >
+            Start Over
+          </button>
+          <button
+            type="button"
+            id="email-btn"
+            class="bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-4 rounded"
+          >
+            Email Me
+          </button>
+        </section>
 
-      <!-- Buttons Section -->
-      <section class="flex gap-4">
-        <button
-          type="button"
-          id="calculate-btn"
-          class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+        <!-- ROI Results Section -->
+        <div
+          id="results-container"
+          class="hidden mt-8 bg-white rounded-lg shadow-lg p-6"
         >
-          Calculate ROI
-        </button>
-        <button
-          type="reset"
-          id="reset-btn"
-          class="bg-gray-300 hover:bg-gray-400 text-gray-900 py-2 px-4 rounded"
-        >
-          Start Over
-        </button>
-        <button
-          type="button"
-          id="email-btn"
-          class="bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-4 rounded"
-        >
-          Email Me
-        </button>
-      </section>
+          <h2 class="text-2xl font-semibold text-center mb-6">ROI Results</h2>
 
-      <!-- ROI Results Section -->
-      <div
-        id="results-container"
-        class="hidden mt-8 bg-white rounded-lg shadow-lg p-6"
-      >
-        <h2 class="text-2xl font-semibold text-center mb-6">ROI Results</h2>
+          <!-- Grid Layout for Results -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-center">
+            <!-- Infrrd Pricing Monthly -->
+            <div class="p-4 border rounded-lg shadow-sm bg-blue-50">
+              <p class="text-gray-700 font-medium">
+                Infrrd Usage Pricing (Monthly)
+              </p>
+              <p class="text-3xl font-bold text-blue-500" id="infrrd-pricing">
+                $0
+              </p>
+            </div>
 
-        <!-- Grid Layout for Results -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-center">
-          <!-- Infrrd Pricing Monthly -->
-          <div class="p-4 border rounded-lg shadow-sm bg-blue-50">
-            <p class="text-gray-700 font-medium">
-              Infrrd Usage Pricing (Monthly)
-            </p>
-            <p class="text-3xl font-bold text-blue-500" id="infrrd-pricing">
-              $0
-            </p>
+            <!-- Infrrd Onboarding Fee -->
+            <div class="p-4 border rounded-lg shadow-sm bg-orange-50">
+              <p class="text-gray-700 font-medium">
+                Infrrd Onboarding Fee (One Time)
+              </p>
+              <p
+                class="text-3xl font-bold text-orange-500"
+                id="infrrd-onboarding"
+              >
+                $0
+              </p>
+            </div>
+
+            <!-- Total Annual Spend -->
+            <div class="p-4 border rounded-lg shadow-sm bg-gray-100">
+              <p class="text-gray-700 font-medium">Total Annual Spend</p>
+              <p class="text-3xl font-bold text-gray-800" id="total-annual-spend">
+                $0
+              </p>
+            </div>
+
+            <!-- Savings - Year 1 -->
+            <div class="p-4 border rounded-lg shadow-sm bg-green-50">
+              <p class="text-gray-700 font-medium">Net Savings - Year 1</p>
+              <p class="text-3xl font-bold text-green-500" id="savings-year-1">
+                $0
+              </p>
+            </div>
+
+            <!-- Savings - Year 2 -->
+            <div class="p-4 border rounded-lg shadow-sm bg-green-50">
+              <p class="text-gray-700 font-medium">Net Savings - Year 2</p>
+              <p class="text-3xl font-bold text-green-500" id="savings-year-2">
+                $0
+              </p>
+            </div>
+
+            <!-- Payback Period -->
+            <div class="p-4 border rounded-lg shadow-sm bg-purple-50">
+              <p class="text-gray-700 font-medium">Payback Period (Months)</p>
+              <p class="text-3xl font-bold text-purple-500" id="payback-period">
+                0
+              </p>
+            </div>
           </div>
 
-          <!-- Infrrd Onboarding Fee -->
-          <div class="p-4 border rounded-lg shadow-sm bg-orange-50">
-            <p class="text-gray-700 font-medium">
-              Infrrd Onboarding Fee (One Time)
+          <!-- Success Message -->
+          <div class="text-center mt-8">
+            <p class="text-lg text-gray-600">
+              Here are your ROI results based on the inputs provided.
             </p>
-            <p
-              class="text-3xl font-bold text-orange-500"
-              id="infrrd-onboarding"
-            >
-              $0
-            </p>
-          </div>
-
-          <!-- Total Annual Spend -->
-          <div class="p-4 border rounded-lg shadow-sm bg-gray-100">
-            <p class="text-gray-700 font-medium">Total Annual Spend</p>
-            <p class="text-3xl font-bold text-gray-800" id="total-annual-spend">
-              $0
-            </p>
-          </div>
-
-          <!-- Savings - Year 1 -->
-          <div class="p-4 border rounded-lg shadow-sm bg-green-50">
-            <p class="text-gray-700 font-medium">Net Savings - Year 1</p>
-            <p class="text-3xl font-bold text-green-500" id="savings-year-1">
-              $0
-            </p>
-          </div>
-
-          <!-- Savings - Year 2 -->
-          <div class="p-4 border rounded-lg shadow-sm bg-green-50">
-            <p class="text-gray-700 font-medium">Net Savings - Year 2</p>
-            <p class="text-3xl font-bold text-green-500" id="savings-year-2">
-              $0
-            </p>
-          </div>
-
-          <!-- Payback Period -->
-          <div class="p-4 border rounded-lg shadow-sm bg-purple-50">
-            <p class="text-gray-700 font-medium">Payback Period (Months)</p>
-            <p class="text-3xl font-bold text-purple-500" id="payback-period">
-              0
+            <p class="text-sm text-gray-500">
+              These savings are estimates based on current configurations.
             </p>
           </div>
         </div>
 
-        <!-- Success Message -->
-        <div class="text-center mt-8">
-          <p class="text-lg text-gray-600">
-            Here are your ROI results based on the inputs provided.
-          </p>
-          <p class="text-sm text-gray-500">
-            These savings are estimates based on current configurations.
-          </p>
+        <!-- Progress Modal Dialog -->
+        <div id="progress-modal" class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
+          <div class="bg-white p-6 rounded shadow-md flex items-center space-x-4">
+            <svg class="animate-spin h-6 w-6 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+            <p class="text-gray-700">Calculating ROI, please wait...</p>
+          </div>
         </div>
-      </div>
 
-       <!-- Progress Modal Dialog -->
-      <div id="progress-modal" class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
-        <div class="bg-white p-6 rounded shadow-md flex items-center space-x-4">
-          <svg class="animate-spin h-6 w-6 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-          </svg>
-          <p class="text-gray-700">Calculating ROI, please wait...</p>
-        </div>
-      </div>
-
-    </main>
+      </main>
+    </div>
 
     <script type="module">
       let defaultDocTypes = []; // Declare globally for shared use
@@ -524,18 +526,30 @@
         return pricing === "Out of range" ? 0 : pricing;
       }
 
-      // Function to show a progress indicator
       function showProgress() {
-        document.getElementById("form-container").classList.add("blur-background");
+        const formContainer = document.getElementById("form-container");
         const progressModal = document.getElementById("progress-modal");
-        progressModal.classList.remove("hidden");
+
+        if (formContainer) {
+          formContainer.classList.add("blur-background");
+        }
+
+        if (progressModal) {
+          progressModal.classList.remove("hidden");
+        }
       }
 
-      // Function to hide a progress indicator
       function hideProgress() {
-        document.getElementById("form-container").classList.remove("blur-background");
+        const formContainer = document.getElementById("form-container");
         const progressModal = document.getElementById("progress-modal");
-        progressModal.classList.add("hidden");
+
+        if (formContainer) {
+          formContainer.classList.remove("blur-background");
+        }
+
+        if (progressModal) {
+          progressModal.classList.add("hidden");
+        }
       }
 
       // Global error handler to catch unexpected issues
