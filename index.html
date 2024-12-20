@@ -563,7 +563,10 @@
       async function fetchDocumentTypes() {
         try {
           const querySnapshot = await getDocs(collection(db, "documentTypes"));
-          defaultDocTypes = querySnapshot.docs.map((doc) => doc.data().name);
+          defaultDocTypes = querySnapshot.docs.map((doc) => ({
+            name: doc.data().name,
+            onboardingFee: doc.data().onboardingFee || 0, // Default to 0 if not set
+          }));
           populateDocTypeDropdown(); // Pass the fetched document types
         } catch (error) {
           console.error("Error fetching document types:", error);
@@ -992,80 +995,85 @@
 
         // Function to calculate ROI and update results
         function calculateROI() {
-  showProgress(); // Show progress indicator
+          showProgress(); // Show progress indicator
 
-  setTimeout(() => {
-    // Annual Pages Calculation
-    const annualPages = getNumberValue("num-pages") * 12;
+          setTimeout(() => {
+            // Annual Pages Calculation
+            const annualPages = getNumberValue("num-pages") * 12;
 
-    // Team Costs (convert percentage inputs to decimals)
-    const usaFT = getNumberValue("usa-ft");
-    const usaFTTime = getNumberValue("usa-ft-time") / 100; // Convert % to decimal
-    const usaFTRate = getNumberValue("usa-ft-rate");
+            // Team Costs (convert percentage inputs to decimals)
+            const usaFT = getNumberValue("usa-ft");
+            const usaFTTime = getNumberValue("usa-ft-time") / 100; // Convert % to decimal
+            const usaFTRate = getNumberValue("usa-ft-rate");
 
-    const usaPT = getNumberValue("usa-pt");
-    const usaPTTime = getNumberValue("usa-pt-time") / 100; // Convert % to decimal
-    const usaPTRate = getNumberValue("usa-pt-rate");
+            const usaPT = getNumberValue("usa-pt");
+            const usaPTTime = getNumberValue("usa-pt-time") / 100; // Convert % to decimal
+            const usaPTRate = getNumberValue("usa-pt-rate");
 
-    const offshoreFT = getNumberValue("off-ft");
-    const offshoreFTTime = getNumberValue("off-ft-time") / 100; // Convert % to decimal
-    const offshoreFTRate = getNumberValue("off-ft-rate");
+            const offshoreFT = getNumberValue("off-ft");
+            const offshoreFTTime = getNumberValue("off-ft-time") / 100; // Convert % to decimal
+            const offshoreFTRate = getNumberValue("off-ft-rate");
 
-    const offshorePT = getNumberValue("off-pt");
-    const offshorePTTime = getNumberValue("off-pt-time") / 100; // Convert % to decimal
-    const offshorePTRate = getNumberValue("off-pt-rate");
+            const offshorePT = getNumberValue("off-pt");
+            const offshorePTTime = getNumberValue("off-pt-time") / 100; // Convert % to decimal
+            const offshorePTRate = getNumberValue("off-pt-rate");
 
-    // Corrected Monthly Spend Calculation
-    const totalMonthlySpend =
-      (usaFT * usaFTTime * usaFTRate +
-        usaPT * usaPTTime * usaPTRate +
-        offshoreFT * offshoreFTTime * offshoreFTRate +
-        offshorePT * offshorePTTime * offshorePTRate) *
-      168; // Assuming 168 hours/month per full-time employee
+            // Corrected Monthly Spend Calculation
+            const totalMonthlySpend =
+              (usaFT * usaFTTime * usaFTRate +
+                usaPT * usaPTTime * usaPTRate +
+                offshoreFT * offshoreFTTime * offshoreFTRate +
+                offshorePT * offshorePTTime * offshorePTRate) *
+              168; // Assuming 168 hours/month per full-time employee
 
-    const operationalOverhead = totalMonthlySpend * 0.1; // 10% overhead
-    const totalMonthlySpendWithOverhead = totalMonthlySpend + operationalOverhead;
-    const totalAnnualSpend = totalMonthlySpendWithOverhead * 12;
+            const operationalOverhead = totalMonthlySpend * 0.1; // 10% overhead
+            const totalMonthlySpendWithOverhead = totalMonthlySpend + operationalOverhead;
+            const totalAnnualSpend = totalMonthlySpendWithOverhead * 12;
 
-    // Business Impacts
-    let businessImpact = 0;
-    document.querySelectorAll("#business-impact-section > div").forEach((row) => {
-      const impactValue = row.querySelector("input").value;
-      if (impactValue) businessImpact += parseFloat(impactValue);
-    });
+            // Business Impacts
+            let businessImpact = 0;
+            document.querySelectorAll("#business-impact-section > div").forEach((row) => {
+              const impactValue = row.querySelector("input").value;
+              if (impactValue) businessImpact += parseFloat(impactValue);
+            });
 
-    const totalAnnualSpendWithImpact = totalAnnualSpend + businessImpact;
+            const totalAnnualSpendWithImpact = totalAnnualSpend + businessImpact;
 
-    // Infrrd Pricing
-    const infrrdPrice = (annualPages * 0.2) / 12; // Recurring Monthly Pricing
-    const onboardingFeePerType = 500;
-    const infrrdOnboarding = addedDocTypes.size * onboardingFeePerType;
+            // Infrrd Pricing
+            const infrrdPrice = (annualPages * 0.2) / 12; // Recurring Monthly Pricing
 
-    // Net Savings
-    const netSavingsYear1 =
-      totalAnnualSpendWithImpact - (infrrdPrice * 12 + infrrdOnboarding);
-    const netSavingsYear2 = totalAnnualSpendWithImpact - infrrdPrice * 12; // Excludes onboarding fee
+            // Infrrd Onboarding Fees
+            let infrrdOnboarding = 0;
+            addedDocTypes.forEach((type) => {
+              const selectedDoc = defaultDocTypes.find((doc) => doc.name === type);
+              infrrdOnboarding += selectedDoc?.onboardingFee || 0; // Add fee for each selected doc type
+            });
 
-    // Payback Period
-    const monthlySavings = totalAnnualSpendWithImpact / 12 - infrrdPrice;
-    const paybackPeriod = Math.ceil((infrrdOnboarding / monthlySavings) * 10) / 10;
+            // Net Savings
+            const netSavingsYear1 =
+              totalAnnualSpendWithImpact - (infrrdPrice * 12 + infrrdOnboarding);
+            const netSavingsYear2 = totalAnnualSpendWithImpact - infrrdPrice * 12; // Excludes onboarding fee
 
-    // Update results in the UI
-    document.getElementById("infrrd-pricing").textContent = `$${infrrdPrice.toLocaleString()}`;
-    document.getElementById("infrrd-onboarding").textContent = `$${infrrdOnboarding.toLocaleString()}`;
-    document.getElementById("total-annual-spend").textContent = `$${totalAnnualSpendWithImpact.toLocaleString()}`;
-    document.getElementById("savings-year-1").textContent = `$${netSavingsYear1.toLocaleString()}`;
-    document.getElementById("savings-year-2").textContent = `$${netSavingsYear2.toLocaleString()}`;
-    document.getElementById("payback-period").textContent = `${paybackPeriod} Months`;
+            // Payback Period
+            const monthlySavings = totalAnnualSpendWithImpact / 12 - infrrdPrice;
+            const paybackPeriod = Math.ceil((infrrdOnboarding / monthlySavings) * 10) / 10;
 
-    hideProgress(); // Hide the progress indicator
+            // Update results in the UI
+            document.getElementById("infrrd-pricing").textContent = `$${infrrdPrice.toLocaleString()}`;
+            document.getElementById("infrrd-onboarding").textContent = `$${infrrdOnboarding.toLocaleString()}`;
+            document.getElementById("total-annual-spend").textContent = `$${totalAnnualSpendWithImpact.toLocaleString()}`;
+            document.getElementById("savings-year-1").textContent = `$${netSavingsYear1.toLocaleString()}`;
+            document.getElementById("savings-year-2").textContent = `$${netSavingsYear2.toLocaleString()}`;
+            document.getElementById("payback-period").textContent = `${paybackPeriod} Months`;
 
-    // Show the results container
-    const resultsContainer = document.getElementById("results-container");
-    resultsContainer.classList.remove("hidden");
-    resultsContainer.scrollIntoView({ behavior: "smooth" });
-  }, 2000); // Simulated delay for calculation
-}
+            hideProgress(); // Hide the progress indicator
+
+            // Show the results container
+            const resultsContainer = document.getElementById("results-container");
+            resultsContainer.classList.remove("hidden");
+            resultsContainer.scrollIntoView({ behavior: "smooth" });
+          }, 2000); // Simulated delay for calculation
+        }
 
         // Handle Calculate ROI button click
         calculateBtn.addEventListener("click", (event) => {
