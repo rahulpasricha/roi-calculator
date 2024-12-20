@@ -999,33 +999,33 @@
             const annualPages = getNumberValue("num-pages") * 12;
             console.log("Annual Pages:", annualPages);
 
-            // Team Costs
+            // Team Costs (convert percentage inputs to decimals)
             const usaFT = getNumberValue("usa-ft");
-            const usaFTTime = getNumberValue("usa-ft-time");
+            const usaFTTime = getNumberValue("usa-ft-time") / 100; // Convert % to decimal
             const usaFTRate = getNumberValue("usa-ft-rate");
 
             const usaPT = getNumberValue("usa-pt");
-            const usaPTTime = getNumberValue("usa-pt-time");
+            const usaPTTime = getNumberValue("usa-pt-time") / 100; // Convert % to decimal
             const usaPTRate = getNumberValue("usa-pt-rate");
 
             const offshoreFT = getNumberValue("off-ft");
-            const offshoreFTTime = getNumberValue("off-ft-time");
+            const offshoreFTTime = getNumberValue("off-ft-time") / 100; // Convert % to decimal
             const offshoreFTRate = getNumberValue("off-ft-rate");
 
             const offshorePT = getNumberValue("off-pt");
-            const offshorePTTime = getNumberValue("off-pt-time");
+            const offshorePTTime = getNumberValue("off-pt-time") / 100; // Convert % to decimal
             const offshorePTRate = getNumberValue("off-pt-rate");
 
+            // Corrected Monthly Spend Calculation (factoring in percentages)
             const totalMonthlySpend =
               (usaFT * usaFTTime * usaFTRate +
                 usaPT * usaPTTime * usaPTRate +
                 offshoreFT * offshoreFTTime * offshoreFTRate +
                 offshorePT * offshorePTTime * offshorePTRate) *
-              168;
-
+              168; // Assuming 168 hours/month per full-time employee
             console.log("Total Monthly Spend (without overhead):", totalMonthlySpend);
 
-            const operationalOverhead = totalMonthlySpend * 0.1;
+            const operationalOverhead = totalMonthlySpend * 0.1; // 10% overhead
             console.log("Operational Overhead:", operationalOverhead);
 
             const totalMonthlySpendWithOverhead = totalMonthlySpend + operationalOverhead;
