@@ -63,6 +63,10 @@
         border-color: #e53e3e; /* Red border for error */
         border-width: 2px;
       }
+
+      .blur-background {
+        filter: blur(4px);
+      }
     </style>
   </head>
   <body class="bg-gradient-to-br from-gray-50 via-white to-gray-100">
@@ -453,6 +457,18 @@
           </p>
         </div>
       </div>
+
+       <!-- Progress Modal Dialog -->
+      <div id="progress-modal" class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
+        <div class="bg-white p-6 rounded shadow-md flex items-center space-x-4">
+          <svg class="animate-spin h-6 w-6 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+          </svg>
+          <p class="text-gray-700">Calculating ROI, please wait...</p>
+        </div>
+      </div>
+
     </main>
 
     <script type="module">
@@ -510,31 +526,16 @@
 
       // Function to show a progress indicator
       function showProgress() {
-        const resultsContainer = document.getElementById("results-container");
-        resultsContainer.classList.add("hidden");
-
-        const progress = document.createElement("div");
-        progress.id = "progress-indicator";
-        progress.className = "flex justify-center items-center my-6";
-        progress.innerHTML = `
-            <div class="flex items-center space-x-2 text-blue-500">
-              <svg class="animate-spin h-6 w-6 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-              </svg>
-              <p>Calculating ROI...</p>
-            </div>
-          `;
-        document.body.appendChild(progress);
+        document.getElementById("form-container").classList.add("blur-background");
+        const progressModal = document.getElementById("progress-modal");
+        progressModal.classList.remove("hidden");
       }
 
-      // Function to hide progress and show results
+      // Function to hide a progress indicator
       function hideProgress() {
-        const progress = document.getElementById("progress-indicator");
-        if (progress) progress.remove();
-
-        const resultsContainer = document.getElementById("results-container");
-        resultsContainer.classList.remove("hidden");
+        document.getElementById("form-container").classList.remove("blur-background");
+        const progressModal = document.getElementById("progress-modal");
+        progressModal.classList.add("hidden");
       }
 
       // Global error handler to catch unexpected issues
