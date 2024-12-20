@@ -995,7 +995,9 @@
           showProgress(); // Show progress indicator
 
           setTimeout(() => {
+            // Annual Pages Calculation
             const annualPages = getNumberValue("num-pages") * 12;
+            console.log("Annual Pages:", annualPages);
 
             // Team Costs
             const usaFT = getNumberValue("usa-ft");
@@ -1021,10 +1023,16 @@
                 offshorePT * offshorePTTime * offshorePTRate) *
               168;
 
+            console.log("Total Monthly Spend (without overhead):", totalMonthlySpend);
+
             const operationalOverhead = totalMonthlySpend * 0.1;
+            console.log("Operational Overhead:", operationalOverhead);
+
             const totalMonthlySpendWithOverhead = totalMonthlySpend + operationalOverhead;
+            console.log("Total Monthly Spend (with overhead):", totalMonthlySpendWithOverhead);
 
             const totalAnnualSpend = totalMonthlySpendWithOverhead * 12;
+            console.log("Total Annual Spend (excluding business impact):", totalAnnualSpend);
 
             // Business Impacts
             let businessImpact = 0;
@@ -1032,23 +1040,33 @@
               const impactValue = row.querySelector("input").value;
               if (impactValue) businessImpact += parseFloat(impactValue);
             });
+            console.log("Business Impact Total:", businessImpact);
 
             const totalAnnualSpendWithImpact = totalAnnualSpend + businessImpact;
+            console.log("Total Annual Spend (including business impact):", totalAnnualSpendWithImpact);
 
             // Infrrd Pricing
             const infrrdPrice = (annualPages * 0.2) / 12; // Recurring Monthly Pricing
+            console.log("Infrrd Price (Monthly):", infrrdPrice);
+
             const onboardingFeePerType = 500;
             const infrrdOnboarding = addedDocTypes.size * onboardingFeePerType;
+            console.log("Infrrd Onboarding Fee:", infrrdOnboarding);
 
             // Net Savings
             const netSavingsYear1 =
               totalAnnualSpendWithImpact - (infrrdPrice * 12 + infrrdOnboarding);
             const netSavingsYear2 =
               totalAnnualSpendWithImpact - infrrdPrice * 12;
+            console.log("Net Savings (Year 1):", netSavingsYear1);
+            console.log("Net Savings (Year 2):", netSavingsYear2);
 
             // Payback Period
             const monthlySavings = totalAnnualSpendWithImpact / 12 - infrrdPrice;
+            console.log("Monthly Savings:", monthlySavings);
+
             const paybackPeriod = Math.ceil((infrrdOnboarding / monthlySavings) * 10) / 10;
+            console.log("Payback Period (Months):", paybackPeriod);
 
             // Update results in the UI
             document.getElementById("infrrd-pricing").textContent = `$${infrrdPrice.toLocaleString()}`;
